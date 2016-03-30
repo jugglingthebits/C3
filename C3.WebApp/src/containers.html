@@ -1,0 +1,13 @@
+<template>
+    <require from="./container"></require>
+    
+    <section>
+        <h2>Container Diagram</h2>
+        
+        <svg width="600" height="600">
+            <svg repeat.for="container of containers" >
+                <compose view-model.bind="container" containerless></compose>
+            </svg>
+        </svg>
+    </section>
+</template>

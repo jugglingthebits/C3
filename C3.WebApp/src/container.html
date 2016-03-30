@@ -1,0 +1,21 @@
+<template>
+    <svg x.bind="X" y.bind="Y" 
+         width="200" height="200" viewBox="0 0 100 100"
+         element.ref="Svg">
+        <rect 
+                x="5" y="5" width="90" height="90"
+                rx="1" ry="1" fill="grey" 
+                stroke="grey" stroke-width="1"
+                fill-opacity="0.1" stroke-opacity="0.9" />
+        <text x="8" y="15" 
+                font-size="8">
+                ${Name}
+        </text>
+        <foreignObject requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+                        x="8" y="20" width="80" height="80">
+            <div style="height: 70px; font-size: 8px; overflow: hidden">
+                ${Description}    
+            </div>
+        </foreignObject>
+    </svg>     
+</template>
