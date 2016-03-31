@@ -2,11 +2,12 @@
     <svg x.bind="X" y.bind="Y" 
          width="200" height="200" viewBox="0 0 100 100"
          element.ref="Svg">
-        <rect 
-                x="5" y="5" width="90" height="90"
-                rx="1" ry="1" fill="grey" 
-                stroke="grey" stroke-width="1"
-                fill-opacity="0.1" stroke-opacity="0.9" />
+        <rect
+            class="outline ${IsSelected ? 'selected' : ''}" 
+            x="5" y="5" width="90" height="90"
+            rx="1" ry="1" fill="grey" 
+            stroke="grey"
+            fill-opacity="0.1" stroke-opacity="0.9" />
         <text x="8" y="15" 
                 font-size="8">
                 ${Name}

@@ -2,7 +2,7 @@
 
 import {bindable} from "aurelia-framework";
 import 'hammerjs/hammer.js';
-
+import { EventAggregator } from 'aurelia-event-aggregator';
 
 import {LogManager} from 'aurelia-framework';
 let logger = LogManager.getLogger('container');
@@ -25,6 +25,7 @@ export class Container {
     Y: number;
     Name: string;
     Description: string;
+    IsSelected: boolean;
     
     Svg: SVGElement;
     
@@ -40,6 +41,7 @@ export class Container {
             self.dragMode = DragMode.Pan;
             self.startX = self.X;
             self.startY = self.Y;
+            self.IsSelected = true;
         });
         hammertime.on('pan', function(event: HammerInput) {
             logger.debug('pan event: ' + event.type);
@@ -53,6 +55,12 @@ export class Container {
             self.dragMode = DragMode.None;
             self.startX = undefined;
             self.startY = undefined;
+            self.IsSelected = false;
+        });
+        
+        hammertime.on('tap', function(event: HammerInput) {
+            logger.debug('event: ' + event.type);
+            self.IsSelected = true;
         });
     }
 }
