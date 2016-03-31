@@ -22,7 +22,11 @@ export class Container {
             if (!this.IsSelected)
                 return;
             this.X = this.startX + data.deltaX;
+            if (this.X < 0)
+                this.X = 0;
             this.Y = this.startY + data.deltaY;
+            if (this.Y < 0)
+                this.Y = 0;
         });
         
         this.eventAggregator.subscribe("panEnd", () => {
