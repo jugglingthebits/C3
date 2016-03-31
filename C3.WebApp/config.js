@@ -11,6 +11,7 @@ System.config({
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0-beta.1.2.0",
     "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0-beta.1.2.0",
     "aurelia-framework": "npm:aurelia-framework@1.0.0-beta.1.2.1",
+    "aurelia-event-aggregator": "npm:aurelia-event-aggregator@1.0.0-beta.1.2.0",
     "aurelia-history-browser": "npm:aurelia-history-browser@1.0.0-beta.1.2.0",
     "aurelia-i18n": "npm:aurelia-i18n@0.5.0",
     "aurelia-loader-default": "npm:aurelia-loader-default@1.0.0-beta.1.2.0",

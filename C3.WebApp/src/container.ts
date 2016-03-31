@@ -1,8 +1,9 @@
 /// <reference path="../typings/browser.d.ts" />
 
+import {autoinject} from 'aurelia-framework';
 import {bindable} from "aurelia-framework";
 import 'hammerjs/hammer.js';
-import { EventAggregator } from 'aurelia-event-aggregator';
+import {EventAggregator} from 'aurelia-event-aggregator';
 
 import {LogManager} from 'aurelia-framework';
 let logger = LogManager.getLogger('container');
@@ -12,13 +13,9 @@ enum DragMode {
     Pan
 }
 
+@autoinject
 export class Container {
-    constructor(x: number, y: number, 
-                name: string, description: string){
-        this.X = x;
-        this.Y = y;
-        this.Name = name;
-        this.Description = description;
+    constructor(private eventAggregator: EventAggregator) {
     }
     
     X: number;
@@ -41,7 +38,7 @@ export class Container {
             self.dragMode = DragMode.Pan;
             self.startX = self.X;
             self.startY = self.Y;
-            self.IsSelected = true;
+            self.eventAggregator.publish("containerPan", self);
         });
         hammertime.on('pan', function(event: HammerInput) {
             logger.debug('pan event: ' + event.type);
@@ -55,12 +52,11 @@ export class Container {
             self.dragMode = DragMode.None;
             self.startX = undefined;
             self.startY = undefined;
-            self.IsSelected = false;
         });
         
         hammertime.on('tap', function(event: HammerInput) {
             logger.debug('event: ' + event.type);
-            self.IsSelected = true;
+            self.eventAggregator.publish("containerTap", self);
         });
     }
 }
