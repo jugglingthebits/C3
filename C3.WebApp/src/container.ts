@@ -8,14 +8,29 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {LogManager} from 'aurelia-framework';
 let logger = LogManager.getLogger('container');
 
-enum DragMode {
-    None,
-    Pan
-}
-
 @autoinject
 export class Container {
     constructor(private eventAggregator: EventAggregator) {
+        this.eventAggregator.subscribe("panStart", () => {
+            if (!this.IsSelected)
+                return;
+            this.startX = this.X;
+            this.startY = this.Y;
+        });
+        
+        this.eventAggregator.subscribe("pan", data => {
+            if (!this.IsSelected)
+                return;
+            this.X = this.startX + data.deltaX;
+            this.Y = this.startY + data.deltaY;
+        });
+        
+        this.eventAggregator.subscribe("panEnd", () => {
+            if (!this.IsSelected)
+                return;
+            this.startX = undefined;
+            this.startY = undefined;
+        });
     }
     
     X: number;
@@ -26,7 +41,6 @@ export class Container {
     
     Svg: SVGElement;
     
-    private dragMode: DragMode = DragMode.None;
     private startX: number; 
     private startY: number;
     
@@ -35,28 +49,35 @@ export class Container {
         var hammertime = new Hammer(this.Svg);
         hammertime.on('panstart', (event: HammerInput) => {
             logger.debug('pan event: ' + event.type);
-            self.dragMode = DragMode.Pan;
-            self.startX = self.X;
-            self.startY = self.Y;
-            self.eventAggregator.publish("containerPan", self);
+
+            if (!self.IsSelected && !event.srcEvent.ctrlKey) {
+                self.eventAggregator.publish("unselectAll");
+            }
+            self.IsSelected = true;
+            self.eventAggregator.publish("panStart");
         });
         hammertime.on('pan', function(event: HammerInput) {
             logger.debug('pan event: ' + event.type);
-            if (self.dragMode === DragMode.None)
-                return;
-            self.X = self.startX + event.deltaX;
-            self.Y = self.startY + event.deltaY;
+            
+            var data = {deltaX: event.deltaX, deltaY: event.deltaY};
+            self.eventAggregator.publish("pan", data);
         });
         hammertime.on('panend', function(event: HammerInput) {
             logger.debug('pan event: ' + event.type);
-            self.dragMode = DragMode.None;
-            self.startX = undefined;
-            self.startY = undefined;
+            
+            self.eventAggregator.publish("panEnd");
         });
         
         hammertime.on('tap', function(event: HammerInput) {
             logger.debug('event: ' + event.type);
-            self.eventAggregator.publish("containerTap", self);
+            
+            if (event.srcEvent.ctrlKey) {
+                self.IsSelected = !self.IsSelected;
+            }
+            else {
+                self.eventAggregator.publish("unselectAll");
+                self.IsSelected = true;
+            }
         });
     }
 }
