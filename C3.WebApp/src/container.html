@@ -1,6 +1,7 @@
 <template>
     <svg x.bind="X" y.bind="Y" 
-         width="200" height="200" viewBox="0 0 100 100"
+         width.bind="Width" height.bind="Height" 
+         viewBox="0 0 100 100"
          element.ref="Svg" cursor="default">
         <rect
             class="outline ${IsSelected ? 'selected' : ''}" 
