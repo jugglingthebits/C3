@@ -13,9 +13,9 @@ let logger = LogManager.getLogger('ContainerDiagram');
 
 @autoinject
 export class Containers {
-    selection: SelectionBox;
+    selectionBox: SelectionBox;
     containers: Container[];
-    private svg2: SVGElement;
+    private containerDiagramRootElement: SVGElement;
     private isPanning: boolean;
     
     constructor(private http: HttpClient, private eventAggregator: EventAggregator) {
@@ -65,7 +65,7 @@ export class Containers {
     
     attached(): void {
         var self: Containers = this;
-        var hammertime = new Hammer(this.svg2);
+        var hammertime = new Hammer(this.containerDiagramRootElement);
         
         hammertime.on('panstart', (event: HammerInput) => {
             logger.debug('pan event: ' + event.type);
@@ -88,9 +88,11 @@ export class Containers {
                 return;
             }
             else {
-                self.selection = DIContainer.instance.get(SelectionBox);
-                self.selection.x = event.pointers[0].offsetX;
-                self.selection.y = event.pointers[0].offsetY;
+                self.unselectAll();
+                self.selectionBox = DIContainer.instance.get(SelectionBox);
+                self.selectionBox.x = event.pointers[0].offsetX;
+                self.selectionBox.y = event.pointers[0].offsetY;
+                self.selectionBox.startPan();
             }
         });
         
@@ -105,8 +107,15 @@ export class Containers {
                 }
             }
             else {
-                self.selection.width = event.deltaX;
-                self.selection.height = event.deltaY;
+                self.selectionBox.pan(event.deltaX, event.deltaY);
+                
+                /*for(var c of self.containers) {
+                    if (self.selection.contains(self.selection.x, self.selection.y, 
+                                                self.selection.width, self.selection.height)) {
+                        c.isSelected = true;
+                    }
+                }*/
+                
             }
         });
         
@@ -122,7 +131,7 @@ export class Containers {
                 self.isPanning = false;
             }
             else {
-                self.selection = null;
+                self.selectionBox = null;
             }
         });
         
