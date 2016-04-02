@@ -13,9 +13,10 @@ let logger = LogManager.getLogger('ContainerDiagram');
 
 @autoinject
 export class Containers {
-    Svg2: SVGElement;
-    Selection: SelectionBox;
-    Containers: Container[];
+    selection: SelectionBox;
+    containers: Container[];
+    private svg2: SVGElement;
+    private isPanning: boolean;
     
     constructor(private http: HttpClient, private eventAggregator: EventAggregator) {
         //TODO: Where to move this to?
@@ -27,25 +28,25 @@ export class Containers {
     };
     
     private unselectAll(): void {
-        for(var c of this.Containers) {
-            c.IsSelected = false;
+        for(var c of this.containers) {
+            c.isSelected = false;
         };
     }
     
     private createContainers(): void {
         var container1: Container = DIContainer.instance.get(Container);
-        container1.X = 10;
-        container1.Y = 10;
-        container1.Name = "abc";
-        container1.Description = "Lorem ipsum dolor sit amet";
+        container1.x = 10;
+        container1.y = 10;
+        container1.name = "abc";
+        container1.description = "Lorem ipsum dolor sit amet";
         
         var container2 = DIContainer.instance.get(Container);
-        container2.X = 200;
-        container2.Y = 200;
-        container2.Name = "def";
-        container2.Description = "Lorem ipsum dolor sit amet";
+        container2.x = 200;
+        container2.y = 200;
+        container2.name = "def";
+        container2.description = "Lorem ipsum dolor sit amet";
         
-        this.Containers = [
+        this.containers = [
             container1, 
             container2    
         ];
@@ -54,87 +55,88 @@ export class Containers {
     }
     
     private getContainerHit(x: number, y: number): Container {
-        for(var c of this.Containers) {
-            if (c.IsHit(x, y)) {
+        for(var c of this.containers) {
+            if (c.isHit(x, y)) {
                 return c;
             }
         }
         return null;
     }
     
-    private isPanning: boolean;
-    
     attached(): void {
         var self: Containers = this;
-        var hammertime = new Hammer(this.Svg2);
+        var hammertime = new Hammer(this.svg2);
+        
         hammertime.on('panstart', (event: HammerInput) => {
             logger.debug('pan event: ' + event.type);
             
             let containerHit = self.getContainerHit(event.pointers[0].offsetX, event.pointers[0].offsetY);
             if (containerHit !== null) {
-                if (!containerHit.IsSelected) {
+                if (!containerHit.isSelected) {
                     if (!event.srcEvent.ctrlKey) {
                         self.unselectAll();
                     }
-                    containerHit.IsSelected = true;
+                    containerHit.isSelected = true;
                 }
                 
-                for(var c of self.Containers) {
-                    if (c.IsSelected) {
-                        c.StartPan();
+                for(var c of self.containers) {
+                    if (c.isSelected) {
+                        c.startPan();
                     }
                 }
                 self.isPanning = true;
                 return;
             }
             else {
-                self.Selection = DIContainer.instance.get(SelectionBox);
-                self.Selection.X = event.center.x;
-                self.Selection.Y = event.center.y;
+                self.selection = DIContainer.instance.get(SelectionBox);
+                self.selection.x = event.pointers[0].offsetX;
+                self.selection.y = event.pointers[0].offsetY;
             }
         });
+        
         hammertime.on('pan', function(event: HammerInput) {
             logger.debug('pan event: ' + event.type);
             
             if (self.isPanning) {
-                for (var c of self.Containers) {
-                    if (c.IsSelected) {
-                        c.Pan(event.deltaX, event.deltaY)
+                for (var c of self.containers) {
+                    if (c.isSelected) {
+                        c.pan(event.deltaX, event.deltaY)
                     }
                 }
             }
             else {
-                self.Selection.Width = event.deltaX;
-                self.Selection.Height = event.deltaY;
+                self.selection.width = event.deltaX;
+                self.selection.height = event.deltaY;
             }
         });
+        
         hammertime.on('panend', function(event: HammerInput) {
             logger.debug('pan event: ' + event.type);
             
             if (self.isPanning) {
-                for(var c of self.Containers) {
-                    if (c.IsSelected) {
-                        c.EndPan();
+                for(var c of self.containers) {
+                    if (c.isSelected) {
+                        c.endPan();
                     }
                 }
                 self.isPanning = false;
             }
             else {
-                self.Selection = null;
+                self.selection = null;
             }
         });
         
         hammertime.on('tap', function(event: HammerInput) {
             logger.debug('event: ' + event.type);
 
-            for(var c of self.Containers) {
-                if (c.IsHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
+            for(var c of self.containers) {
+                if (c.isHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
                     if (event.srcEvent.ctrlKey) {
-                        c.IsSelected = !c.IsSelected;
+                        c.isSelected = !c.isSelected;
                     }
                     else {
                         self.unselectAll();
-                        c.IsSelected = true;
+                        c.isSelected = true;
                     }
                     return;
                 }

@@ -3,18 +3,14 @@ import {bindable} from "aurelia-framework";
 
 @autoinject
 export class SelectionBox {
-    constructor() {
-        this.Width = 0;
-        this.Height = 0;
-    }
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    svg3: SVGElement;
 
-    X: number;
-    Y: number;
-    Width: number;
-    Height: number;
-    Svg3: SVGElement;
-        
-    attached(): void {
-        
+    constructor() {
+        this.width = 0;
+        this.height = 0;
     }
 }

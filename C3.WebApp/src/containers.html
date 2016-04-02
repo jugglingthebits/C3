@@ -3,12 +3,12 @@
         <h2>Container Diagram</h2>
         
         <svg width="600" height="600"
-             element.ref="Svg2">
-            <svg repeat.for="container of Containers" >
+             element.ref="svg2" cursor="default">
+            <svg repeat.for="container of containers" >
                 <compose view-model.bind="container" containerless></compose>
             </svg>
             
-            <compose view-model.bind="Selection" containerless></compose>
+            <compose view-model.bind="selection" containerless></compose>
         </svg>
     </section>
 </template>

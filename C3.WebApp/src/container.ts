@@ -10,46 +10,44 @@ let logger = LogManager.getLogger('Container');
 
 @autoinject
 export class Container {
-    constructor(private eventAggregator: EventAggregator) {
-        this.Width = 200;
-        this.Height = 200;
-    }
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    name: string;
+    description: string;
+    isSelected: boolean;
     
-    X: number;
-    Y: number;
-    Width: number;
-    Height: number;
-    
-    Name: string;
-    Description: string;
-    IsSelected: boolean;
-    
-    Svg: SVGElement;
-    
+    private svg: SVGElement;
     private startX: number; 
     private startY: number;
+
+    constructor(private eventAggregator: EventAggregator) {
+        this.width = 200;
+        this.height = 200;
+    }
     
-    IsHit(x: number, y: number): boolean {
-        var hit = x >= this.X && x < this.X + this.Width &&
-                  y >= this.Y && y < this.Y + this.Height;
+    isHit(x: number, y: number): boolean {
+        var hit = x >= this.x && x < this.x + this.width &&
+                  y >= this.y && y < this.y + this.height;
         return hit;
     }
     
-    StartPan(): void {
-        this.startX = this.X;
-        this.startY = this.Y;
+    startPan(): void {
+        this.startX = this.x;
+        this.startY = this.y;
     }
     
-    Pan(deltaX: number, deltaY: number): void {
-        this.X = this.startX + deltaX;
-        if (this.X < 0)
-            this.X = 0;
-        this.Y = this.startY + deltaY;
-        if (this.Y < 0)
-            this.Y = 0;
+    pan(deltaX: number, deltaY: number): void {
+        this.x = this.startX + deltaX;
+        if (this.x < 0)
+            this.x = 0;
+        this.y = this.startY + deltaY;
+        if (this.y < 0)
+            this.y = 0;
     }
     
-    EndPan() {
+    endPan() {
         this.startX = undefined;
         this.startY = undefined;
     }
