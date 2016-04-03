@@ -18,7 +18,7 @@ export class Container {
     description: string;
     isSelected: boolean;
     
-    private svg: SVGElement;
+    private containerNodeElement: SVGElement;
     private startX: number; 
     private startY: number;
 

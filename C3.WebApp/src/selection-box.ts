@@ -7,7 +7,6 @@ export class SelectionBox {
     y: number;
     width: number;
     height: number;
-    private selectionBoxRootElement: SVGElement;
     private startX: number;
     private startY: number;
     
@@ -39,9 +38,9 @@ export class SelectionBox {
         }
     }
     
-    /*contains(x: number, y: number, width: number, height: number): boolean {
+    containsRect(x: number, y: number, width: number, height: number): boolean {
         let contains = x >= this.x && x+width < this.x+this.width &&
                        y >= this.y && y+height < this.y+this.height;
         return contains;
-    }*/
+    }
 }

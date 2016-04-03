@@ -15,7 +15,7 @@ let logger = LogManager.getLogger('ContainerDiagram');
 export class Containers {
     selectionBox: SelectionBox;
     containers: Container[];
-    private containerDiagramRootElement: SVGElement;
+    private containerDiagramElement: SVGElement;
     private isPanning: boolean;
     
     constructor(private http: HttpClient, private eventAggregator: EventAggregator) {
@@ -65,7 +65,7 @@ export class Containers {
     
     attached(): void {
         var self: Containers = this;
-        var hammertime = new Hammer(this.containerDiagramRootElement);
+        var hammertime = new Hammer(this.containerDiagramElement);
         
         hammertime.on('panstart', (event: HammerInput) => {
             logger.debug('pan event: ' + event.type);
@@ -108,14 +108,9 @@ export class Containers {
             }
             else {
                 self.selectionBox.pan(event.deltaX, event.deltaY);
-                
-                /*for(var c of self.containers) {
-                    if (self.selection.contains(self.selection.x, self.selection.y, 
-                                                self.selection.width, self.selection.height)) {
-                        c.isSelected = true;
-                    }
-                }*/
-                
+                for(var c of self.containers) {
+                    c.isSelected = self.selectionBox.containsRect(c.x, c.y, c.width, c.height);
+                }
             }
         });
         
