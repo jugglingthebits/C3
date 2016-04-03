@@ -4,8 +4,8 @@
         
         <svg width="600" height="600"
              element.ref="containerDiagramElement" cursor="default">
-            <svg repeat.for="container of containers" >
-                <compose view-model.bind="container" containerless></compose>
+            <svg repeat.for="containerNode of containerNodes" >
+                <compose view-model.bind="containerNode" containerless></compose>
             </svg>
             
             <compose view-model.bind="selectionBox" containerless></compose>

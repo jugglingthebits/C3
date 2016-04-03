@@ -1,7 +1,7 @@
 import {autoinject} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
 import 'fetch';
-import {Container} from './container';
+import {ContainerNode} from './container-node';
 import {bindable} from "aurelia-framework";
 import {Container as DIContainer} from 'aurelia-dependency-injection';
 import {EventAggregator} from 'aurelia-event-aggregator';
@@ -14,13 +14,13 @@ let logger = LogManager.getLogger('ContainerDiagram');
 @autoinject
 export class ContainerDiagram {
     selectionBox: SelectionBox;
-    containers: Container[];
+    containerNodes: ContainerNode[];
     private containerDiagramElement: SVGElement;
     private isPanning: boolean;
     
     constructor(private http: HttpClient, private eventAggregator: EventAggregator) {
         //TODO: Where to move this to?
-        DIContainer.instance.registerTransient(Container);
+        DIContainer.instance.registerTransient(ContainerNode);
         
         this.eventAggregator.subscribe("unselectAll", () => this.unselectAll());
         
@@ -28,25 +28,25 @@ export class ContainerDiagram {
     };
     
     private unselectAll(): void {
-        for(var c of this.containers) {
+        for(var c of this.containerNodes) {
             c.isSelected = false;
         };
     }
     
     private createContainers(): void {
-        var container1: Container = DIContainer.instance.get(Container);
+        var container1: ContainerNode = DIContainer.instance.get(ContainerNode);
         container1.x = 10;
         container1.y = 10;
         container1.name = "abc";
         container1.description = "Lorem ipsum dolor sit amet";
         
-        var container2 = DIContainer.instance.get(Container);
+        var container2 = DIContainer.instance.get(ContainerNode);
         container2.x = 200;
         container2.y = 200;
         container2.name = "def";
         container2.description = "Lorem ipsum dolor sit amet";
         
-        this.containers = [
+        this.containerNodes = [
             container1, 
             container2    
         ];
@@ -54,8 +54,8 @@ export class ContainerDiagram {
         this.isPanning = false;
     }
     
-    private getContainerHit(x: number, y: number): Container {
-        for(var c of this.containers) {
+    private getContainerHit(x: number, y: number): ContainerNode {
+        for(var c of this.containerNodes) {
             if (c.isHit(x, y)) {
                 return c;
             }
@@ -64,7 +64,7 @@ export class ContainerDiagram {
     }
     
     attached(): void {
-        var self: Containers = this;
+        var self: ContainerDiagram = this;
         var hammertime = new Hammer(this.containerDiagramElement);
         
         hammertime.on('panstart', (event: HammerInput) => {
@@ -79,7 +79,7 @@ export class ContainerDiagram {
                     containerHit.isSelected = true;
                 }
                 
-                for(var c of self.containers) {
+                for(var c of self.containerNodes) {
                     if (c.isSelected) {
                         c.startPan();
                     }
@@ -100,7 +100,7 @@ export class ContainerDiagram {
             logger.debug('pan event: ' + event.type);
             
             if (self.isPanning) {
-                for (var c of self.containers) {
+                for (var c of self.containerNodes) {
                     if (c.isSelected) {
                         c.pan(event.deltaX, event.deltaY)
                     }
@@ -108,7 +108,7 @@ export class ContainerDiagram {
             }
             else {
                 self.selectionBox.pan(event.deltaX, event.deltaY);
-                for(var c of self.containers) {
+                for(var c of self.containerNodes) {
                     c.isSelected = self.selectionBox.containsRect(c.x, c.y, c.width, c.height);
                 }
             }
@@ -118,7 +118,7 @@ export class ContainerDiagram {
             logger.debug('pan event: ' + event.type);
             
             if (self.isPanning) {
-                for(var c of self.containers) {
+                for(var c of self.containerNodes) {
                     if (c.isSelected) {
                         c.endPan();
                     }
@@ -133,7 +133,7 @@ export class ContainerDiagram {
         hammertime.on('tap', function(event: HammerInput) {
             logger.debug('event: ' + event.type);
 
-            for(var c of self.containers) {
+            for(var c of self.containerNodes) {
                 if (c.isHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
                     if (event.srcEvent.ctrlKey) {
                         c.isSelected = !c.isSelected;

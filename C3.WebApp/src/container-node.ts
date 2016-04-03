@@ -9,7 +9,7 @@ import {LogManager} from 'aurelia-framework';
 let logger = LogManager.getLogger('Container');
 
 @autoinject
-export class Container {
+export class ContainerNode {
     x: number;
     y: number;
     width: number;

@@ -6,7 +6,7 @@ export class App {
   configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'C3';
     config.map([
-      { route: ['', 'containers'], name: 'containers', moduleId: 'containers', nav: true, title: 'Containers'}
+      { route: ['', 'container-diagram'], name: 'container-diagram', moduleId: 'container-diagram', nav: true, title: 'Container Diagram'}
     ]);
 
     this.router = router;
