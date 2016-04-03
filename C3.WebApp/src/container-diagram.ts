@@ -12,7 +12,7 @@ import {SelectionBox} from 'selection-box';
 let logger = LogManager.getLogger('ContainerDiagram');
 
 @autoinject
-export class Containers {
+export class ContainerDiagram {
     selectionBox: SelectionBox;
     containers: Container[];
     private containerDiagramElement: SVGElement;
