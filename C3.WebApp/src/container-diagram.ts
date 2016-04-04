@@ -64,91 +64,103 @@ export class ContainerDiagram {
     }
     
     attached(): void {
+        this.attachHammerEventHandler();
+    }
+    
+    private attachHammerEventHandler() {
         var self: ContainerDiagram = this;
         var hammertime = new Hammer(this.containerDiagramElement);
         
         hammertime.on('panstart', (event: HammerInput) => {
-            logger.debug('pan event: ' + event.type);
-            
-            let containerHit = self.getContainerHit(event.pointers[0].offsetX, event.pointers[0].offsetY);
-            if (containerHit !== null) {
-                if (!containerHit.isSelected) {
-                    if (!event.srcEvent.ctrlKey) {
-                        self.unselectAll();
-                    }
-                    containerHit.isSelected = true;
-                }
-                
-                for(var c of self.containerNodes) {
-                    if (c.isSelected) {
-                        c.startPan();
-                    }
-                }
-                self.isPanning = true;
-                return;
-            }
-            else {
-                self.unselectAll();
-                self.selectionBox = DIContainer.instance.get(SelectionBox);
-                self.selectionBox.x = event.pointers[0].offsetX;
-                self.selectionBox.y = event.pointers[0].offsetY;
-                self.selectionBox.startPan();
-            }
+            self.onPanStart(event);
         });
         
         hammertime.on('pan', function(event: HammerInput) {
-            logger.debug('pan event: ' + event.type);
-            
-            if (self.isPanning) {
-                for (var c of self.containerNodes) {
-                    if (c.isSelected) {
-                        c.pan(event.deltaX, event.deltaY)
-                    }
-                }
-            }
-            else {
-                self.selectionBox.pan(event.deltaX, event.deltaY);
-                for(var c of self.containerNodes) {
-                    c.isSelected = self.selectionBox.containsRect(c.x, c.y, c.width, c.height);
-                }
-            }
+            self.onPan(event);
         });
         
         hammertime.on('panend', function(event: HammerInput) {
-            logger.debug('pan event: ' + event.type);
-            
-            if (self.isPanning) {
-                for(var c of self.containerNodes) {
-                    if (c.isSelected) {
-                        c.endPan();
-                    }
-                }
-                self.isPanning = false;
-            }
-            else {
-                self.selectionBox = null;
-            }
+            self.onPanEnd(event);
         });
         
         hammertime.on('tap', function(event: HammerInput) {
-            logger.debug('event: ' + event.type);
-
-            for(var c of self.containerNodes) {
-                if (c.isHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
-                    if (event.srcEvent.ctrlKey) {
-                        c.isSelected = !c.isSelected;
-                    }
-                    else {
-                        self.unselectAll();
-                        c.isSelected = true;
-                    }
-                    return;
+            self.onTap(event);
+        });
+    }
+    
+    private onPanStart(event: HammerInput) {
+        let containerHit = this.getContainerHit(event.pointers[0].offsetX, event.pointers[0].offsetY);
+        if (containerHit !== null) {
+            if (!containerHit.isSelected) {
+                if (!event.srcEvent.ctrlKey) {
+                    this.unselectAll();
                 }
+                containerHit.isSelected = true;
             }
             
-            // no container hit
-            self.unselectAll();
-        });
+            for(var c of this.containerNodes) {
+                if (c.isSelected) {
+                    c.startPan();
+                }
+            }
+            this.isPanning = true;
+            return;
+        }
+        else {
+            this.unselectAll();
+            this.selectionBox = DIContainer.instance.get(SelectionBox);
+            this.selectionBox.x = event.pointers[0].offsetX;
+            this.selectionBox.y = event.pointers[0].offsetY;
+            this.selectionBox.startPan();
+        }
+    }
+    
+    private onPan(event: HammerInput) {
+        if (this.isPanning) {
+            for (var c of this.containerNodes) {
+                if (c.isSelected) {
+                    c.pan(event.deltaX, event.deltaY)
+                }
+            }
+        }
+        else {
+            this.selectionBox.pan(event.deltaX, event.deltaY);
+            for(var c of this.containerNodes) {
+                c.isSelected = this.selectionBox.containsRect(c.x, c.y, c.width, c.height);
+            }
+        }
+    }
+    
+    private onPanEnd(event: HammerInput) {
+        if (this.isPanning) {
+            for(var c of this.containerNodes) {
+                if (c.isSelected) {
+                    c.endPan();
+                }
+            }
+            this.isPanning = false;
+        }
+        else {
+            this.selectionBox = null;
+        }
+    }
+    
+    private onTap(event: HammerInput) {
+        for(var c of this.containerNodes) {
+            if (c.isHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
+                if (event.srcEvent.ctrlKey) {
+                    c.isSelected = !c.isSelected;
+                }
+                else {
+                    this.unselectAll();
+                    c.isSelected = true;
+                }
+                return;
+            }
+        }
+        
+        // no container hit
+        this.unselectAll();
     }
     
     //TODO: Move to service.
