@@ -1,15 +1,17 @@
 import {autoinject} from 'aurelia-framework';
 import {SystemNode} from 'system-node';
 import {SelectionBox} from 'selection-box';
+import {ActorNode} from 'actorNode';
 import 'hammerjs/hammer.js';
 
 @autoinject
 export class SystemContextDiagram {
     id: string;
     name: string;
-    
-    private selectionBox: SelectionBox;
+
+    private actorNodes: ActorNode[];    
     private systemNodes: SystemNode[];
+    private selectionBox: SelectionBox;
     private systemContextDiagramElement: SVGElement;
     private isPanning: boolean;
     
