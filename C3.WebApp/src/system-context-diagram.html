@@ -1,2 +1,13 @@
 <template>
+    <h2>System Context Diagram: ${name}</h2>
+    
+    <svg width="600" height="600"
+         element.ref="systemContextDiagramElement" cursor="default">
+        <svg repeat.for="systemNode of systemNodes">
+            <compose view-model.bind="systemNode" containerless></compose>
+        </svg>
+        
+        <compose view-model.bind="selectionBox" containerless></compose>
+    </svg>
+
 </template>

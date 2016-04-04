@@ -1,7 +1,7 @@
 import {autoinject} from 'aurelia-framework';
 
 @autoinject
-export class ContainerNode {
+export class SystemNode {
     x: number;
     y: number;
     width: number;
@@ -9,7 +9,9 @@ export class ContainerNode {
     name: string;
     description: string;
     isSelected: boolean;
+    isExternalSystem: boolean;
     
+    private systemNodeElement: SVGElement;
     private startX: number; 
     private startY: number;
 

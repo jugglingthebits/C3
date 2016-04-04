@@ -1,28 +1,19 @@
 import {autoinject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-fetch-client';
-import 'fetch';
-import {ContainerNode} from './container-node';
-import {bindable} from "aurelia-framework";
 import {Container as DIContainer} from 'aurelia-dependency-injection';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import 'hammerjs/hammer.js';
-import {LogManager} from 'aurelia-framework';
+import {ContainerNode} from './container-node';
 import {SelectionBox} from 'selection-box';
-
-let logger = LogManager.getLogger('ContainerDiagram');
+import 'hammerjs/hammer.js';
 
 @autoinject
 export class ContainerDiagram {
-    selectionBox: SelectionBox;
-    containerNodes: ContainerNode[];
+    private selectionBox: SelectionBox;
+    private containerNodes: ContainerNode[];
     private containerDiagramElement: SVGElement;
     private isPanning: boolean;
     
-    constructor(private http: HttpClient, private eventAggregator: EventAggregator) {
+    constructor() {
         //TODO: Where to move this to?
         DIContainer.instance.registerTransient(ContainerNode);
-        
-        this.eventAggregator.subscribe("unselectAll", () => this.unselectAll());
         
         this.createContainers();
     };
@@ -108,7 +99,7 @@ export class ContainerDiagram {
         }
         else {
             this.unselectAll();
-            this.selectionBox = DIContainer.instance.get(SelectionBox);
+            this.selectionBox = new SelectionBox();
             this.selectionBox.x = event.pointers[0].offsetX;
             this.selectionBox.y = event.pointers[0].offsetY;
             this.selectionBox.startPan();
