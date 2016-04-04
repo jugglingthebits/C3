@@ -7,6 +7,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace C3.Services
 {
@@ -28,6 +29,14 @@ namespace C3.Services
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddSingleton(provider => _openDatabase());
+        }
+
+        private IMongoDatabase _openDatabase()
+        {
+            var client = new MongoClient("mongodb://localhost");
+            return client.GetDatabase("C3");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +50,8 @@ namespace C3.Services
             app.UseStaticFiles();
 
             app.UseMvc();
+
+            
         }
 
         // Entry point for the application.
