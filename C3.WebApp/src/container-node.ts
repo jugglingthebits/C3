@@ -1,12 +1,4 @@
-/// <reference path="../typings/browser.d.ts" />
-
 import {autoinject} from 'aurelia-framework';
-import {bindable} from "aurelia-framework";
-import 'hammerjs/hammer.js';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {LogManager} from 'aurelia-framework';
-
-let logger = LogManager.getLogger('Container');
 
 @autoinject
 export class ContainerNode {
@@ -22,7 +14,7 @@ export class ContainerNode {
     private startX: number; 
     private startY: number;
 
-    constructor(private eventAggregator: EventAggregator) {
+    constructor() {
         this.width = 200;
         this.height = 200;
     }

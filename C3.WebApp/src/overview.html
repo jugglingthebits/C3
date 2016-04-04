@@ -1,0 +1,13 @@
+<template>
+    <section>
+        <h2>Overview</h2>
+        
+        <ul>
+            <li repeat.for="diagram of systemContextDiagrams">
+                <a route-href="route: system-context-diagram; params.bind: {id: diagram.id}">
+                    ${diagram.name}
+                </a>
+            </li>
+        </ul>
+    </section>
+</template>
