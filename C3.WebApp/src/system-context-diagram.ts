@@ -31,7 +31,13 @@ export class SystemContextDiagram extends DiagramBase {
         actorNode1.y = 100;
         actorNode1.name = "actor 1";
         
-        this.systemNodes = [systemNode1];
+        let externalSystem1 = new SystemNode();
+        externalSystem1.x = 20;
+        externalSystem1.y = 250;
+        externalSystem1.name = "External System 1";
+        externalSystem1.isExternalSystem = true;
+                
+        this.systemNodes = [systemNode1, externalSystem1];
         this.actorNodes = [actorNode1];
     }
     
