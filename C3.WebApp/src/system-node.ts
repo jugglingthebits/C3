@@ -5,7 +5,7 @@ import {NodeBase} from 'node-base';
 export class SystemNode extends NodeBase {
     name: string;
     description: string;
-    isExternalSystem: boolean;
+    isExternalSystem = false;
     
     constructor() {
         super();
