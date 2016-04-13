@@ -6,6 +6,9 @@
         <svg repeat.for="systemNode of systemNodes">
             <compose view-model.bind="systemNode" containerless></compose>
         </svg>
+        <svg repeat.for="actorNode of actorNodes">
+            <compose view-model.bind="actorNode" containerless></compose>
+        </svg>
         
         <compose view-model.bind="selectionBox" containerless></compose>
     </svg>

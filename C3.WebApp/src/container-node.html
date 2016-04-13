@@ -1,8 +1,10 @@
 <template>
+    <require from="system-node.css"></require>
+    
     <svg x.bind="x" y.bind="y" 
          width.bind="width" height.bind="height" 
          viewBox="0 0 100 100"
-         class="container-node">
+         class="node-base">
         <rect
             class="outline ${isSelected ? 'selected' : ''}" 
             x="5" y="5" width="90" height="90"

@@ -12,8 +12,8 @@ export class Overview {
     
     private generateSystemContextDiagrams() {
         let diagram1 = new SystemContextDiagram();
-        diagram1.id = "scook";
-        diagram1.name = "scook";
+        diagram1.id = "system 1";
+        diagram1.name = "system 1";
         let diagram2 = new SystemContextDiagram();
         diagram2.id = "some_other_system";
         diagram2.name = "Some other system";
