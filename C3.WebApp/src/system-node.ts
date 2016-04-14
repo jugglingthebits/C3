@@ -3,6 +3,7 @@ import {NodeBase} from 'node-base';
 
 @autoinject
 export class SystemNode extends NodeBase {
+    id: string;
     name: string;
     description: string;
     isExternalSystem = false;

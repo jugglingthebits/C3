@@ -6,6 +6,8 @@ import 'hammerjs/hammer.js';
 
 @autoinject
 export class ContainerDiagram {
+    id: string;
+    
     private selectionBox: SelectionBox;
     private containerNodes: ContainerNode[];
     private containerDiagramElement: SVGElement;
@@ -17,6 +19,11 @@ export class ContainerDiagram {
         
         this.createContainers();
     };
+    
+    activate(params): void {
+        this.id = params.id;
+        //TODO: Load diagram.
+    }
     
     private unselectAll(): void {
         for(var c of this.containerNodes) {

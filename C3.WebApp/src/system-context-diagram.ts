@@ -22,19 +22,21 @@ export class SystemContextDiagram extends DiagramBase {
     
     private createExampleNodes() {
         let systemNode1 = new SystemNode();
-        systemNode1.name = "system 1"
+        systemNode1.id = "System1";
+        systemNode1.name = "System 1";
         systemNode1.x = 20;
         systemNode1.y = 20;
         
         let actorNode1 = new ActorNode();
         actorNode1.x = 100;
         actorNode1.y = 100;
-        actorNode1.name = "actor 1";
+        actorNode1.name = "Actor 1";
         
         let externalSystem1 = new SystemNode();
+        externalSystem1.id = "ExternalSystem1";
+        externalSystem1.name = "External System 1";
         externalSystem1.x = 20;
         externalSystem1.y = 250;
-        externalSystem1.name = "External System 1";
         externalSystem1.isExternalSystem = true;
                 
         this.systemNodes = [systemNode1, externalSystem1];
@@ -43,6 +45,11 @@ export class SystemContextDiagram extends DiagramBase {
     
     attached(): void {
         this.attachHammerEventHandler(this.systemContextDiagramElement);
+    }
+    
+    activate(params): void {
+        this.id = params.id;
+        //TODO: Load diagram.
     }
     
     getNodes(): NodeBase[] {
