@@ -19,4 +19,8 @@ export class Overview {
         diagram2.name = "Some other system";
         this.systemContextDiagrams = [diagram1, diagram2];
     }
+    
+    private delete(): void {
+        //TODO
+    }
 }

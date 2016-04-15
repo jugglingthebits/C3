@@ -1,13 +1,26 @@
 <template>
-    <section>
-        <h2>Overview</h2>
-        
-        <ul>
-            <li repeat.for="diagram of systemContextDiagrams">
-                <a route-href="route: system-context-diagram; params.bind: {id: diagram.id}">
-                    ${diagram.name}
-                </a>
-            </li>
-        </ul>
+    <require from="overview.css"></require>
+    
+    <section class="overview">
+        <table>
+            <thead>
+                <tr>
+                    <td>System</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="diagram of systemContextDiagrams">
+                    <td>
+                        <a route-href="route: system-context-diagram; params.bind: {id: diagram.id}">
+                            ${diagram.name}
+                        </a>
+                    </td>
+                    <td>
+                        <i class="fa fa-trash" aria-hidden="true" click.trigger="delete()"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 </template>
