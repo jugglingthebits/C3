@@ -1,8 +1,11 @@
 import {autoinject} from 'aurelia-framework';
+import 'fetch';
+import {HttpClient} from 'aurelia-fetch-client';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
 import {DiagramBase} from './diagram-base';
 import {NodeBase} from './node-base';
+import {SystemContextDiagramModel} from './model';
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
@@ -48,13 +51,48 @@ export class SystemContextDiagram extends DiagramBase {
     }
     
     activate(params): void {
-        this.id = params.id;
-        //TODO: Load diagram.
+        this.loadFromId(params.id);
+    }
+    
+    private loadFromId(id: number) {
+        let httpClient = new HttpClient();
+        httpClient.configure(config => config.withBaseUrl('api')
+                                             .rejectErrorResponses());
+
+        httpClient.fetch(`/system/${id}`)
+            .then(response => <Promise<SystemContextDiagramModel>>response.json())
+            .then(model => {
+                this.updateFromModel(model);
+            });
     }
     
     getNodes(): NodeBase[] {
         let nodes = (<NodeBase[]>this.systemNodes)
              .concat(<NodeBase[]>this.actorNodes);
         return nodes;
+    }
+    
+    updateFromModel(model: SystemContextDiagramModel): void {
+        this.id = model.id;
+        this.name = model.name;
+        this.actorNodes = model.actorNodes.map(nodeModel => {
+            let node = new ActorNode();
+            node.updateFromModel(nodeModel);
+            return node;
+        });
+        this.systemNodes = model.systemNodes.map(nodeModel => {
+            let node = new SystemNode();
+            node.updateFromModel(nodeModel);
+            return node;
+        });
+    }
+    
+    copyToModel(): SystemContextDiagramModel {
+        let model = <SystemContextDiagramModel>{};
+        model.id = this.id;
+        model.name = this.name;
+        model.actorNodes = this.actorNodes.map(node => node.copyToModel());
+        model.systemNodes = this.systemNodes.map(node => node.copyToModel());
+        return model;
     }
 }

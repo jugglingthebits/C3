@@ -1,6 +1,9 @@
 import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
+import 'fetch';
+import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagram} from './system-context-diagram';
+import {SystemContextDiagramModel} from './model';
 
 @autoinject
 export class Overview {
@@ -8,6 +11,10 @@ export class Overview {
     
     constructor(private router: Router) {
         this.generateSystemContextDiagrams();
+    }
+    
+    activate(): void {
+        this.loadSystemContextDiagrams();
     }
     
     private generateSystemContextDiagrams() {
@@ -22,5 +29,17 @@ export class Overview {
     
     private delete(): void {
         //TODO
+    }
+    
+    private loadSystemContextDiagrams() {
+        let httpClient = new HttpClient();
+        httpClient.configure(config => config.withBaseUrl('api')
+                                             .rejectErrorResponses());
+
+        httpClient.fetch('/system')
+            .then(response => <Promise<SystemContextDiagramModel[]>>response.json())
+            .then(data => {
+                this.systemContextDiagrams = data.map(m => SystemContextDiagram.fromJson(m));
+            });
     }
 }
