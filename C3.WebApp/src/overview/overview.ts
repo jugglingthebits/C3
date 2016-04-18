@@ -1,6 +1,6 @@
 import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
-import {SystemContextDiagram} from './system-context-diagram';
+import {SystemContextDiagram} from '../system-context-diagram/system-context-diagram';
 
 @autoinject
 export class Overview {

@@ -1,9 +1,11 @@
-import {NodeBase} from 'node-base';
+import {NodeBase} from '../common/node-base';
 
-export class ContainerNode extends NodeBase {
+export class SystemNode extends NodeBase {
+    id: string;
     name: string;
     description: string;
-
+    isExternalSystem = false;
+    
     constructor() {
         super();
         this.width = 200;

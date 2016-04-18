@@ -1,10 +1,8 @@
-import {NodeBase} from 'node-base';
+import {NodeBase} from '../common/node-base';
 
-export class SystemNode extends NodeBase {
-    id: string;
+export class ActorNode extends NodeBase {
     name: string;
     description: string;
-    isExternalSystem = false;
     
     constructor() {
         super();

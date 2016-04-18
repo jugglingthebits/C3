@@ -1,8 +1,8 @@
 import {autoinject} from 'aurelia-framework';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
-import {DiagramBase} from './diagram-base';
-import {NodeBase} from './node-base';
+import {DiagramBase} from '../common/diagram-base';
+import {NodeBase} from '../common/node-base';
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {

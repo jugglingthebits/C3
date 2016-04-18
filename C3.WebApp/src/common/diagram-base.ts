@@ -1,5 +1,5 @@
 import {NodeBase} from './node-base';
-import {SelectionBox} from 'selection-box';
+import {SelectionBox} from './selection-box';
 import 'hammerjs/hammer.js';
 
 export abstract class DiagramBase {

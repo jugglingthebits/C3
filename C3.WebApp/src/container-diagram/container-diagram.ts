@@ -1,7 +1,7 @@
 import {autoinject} from 'aurelia-framework';
 import {Container as DIContainer} from 'aurelia-dependency-injection';
 import {ContainerNode} from './container-node';
-import {SelectionBox} from 'selection-box';
+import {SelectionBox} from '../common/selection-box';
 import 'hammerjs/hammer.js';
 
 @autoinject
