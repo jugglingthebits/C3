@@ -14,9 +14,6 @@ export class ContainerDiagram {
     private isPanning: boolean;
     
     constructor() {
-        //TODO: Where to move this to?
-        DIContainer.instance.registerTransient(ContainerNode);
-        
         this.createContainers();
     };
     
@@ -32,13 +29,13 @@ export class ContainerDiagram {
     }
     
     private createContainers(): void {
-        var container1: ContainerNode = DIContainer.instance.get(ContainerNode);
+        var container1 = new ContainerNode();
         container1.x = 10;
         container1.y = 10;
         container1.name = "abc";
         container1.description = "Lorem ipsum dolor sit amet";
         
-        var container2 = DIContainer.instance.get(ContainerNode);
+        var container2 = new ContainerNode();
         container2.x = 200;
         container2.y = 200;
         container2.name = "def";
