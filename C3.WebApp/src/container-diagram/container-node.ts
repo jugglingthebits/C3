@@ -1,7 +1,5 @@
-import {autoinject} from 'aurelia-framework';
-import {NodeBase} from 'node-base';
+import {NodeBase} from '../common/node-base';
 
-@autoinject
 export class ContainerNode extends NodeBase {
     name: string;
     description: string;

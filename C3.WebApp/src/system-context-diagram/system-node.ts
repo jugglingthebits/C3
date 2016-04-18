@@ -1,8 +1,7 @@
 import {autoinject} from 'aurelia-framework';
-import {NodeBase} from 'node-base';
-import {SystemNodeModel} from 'model';
+import {SystemNodeModel} from '../model';
+import {NodeBase} from '../common/node-base';
 
-@autoinject
 export class SystemNode extends NodeBase {
     id: string;
     name: string;

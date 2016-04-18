@@ -1,30 +1,70 @@
-import {NodeBase} from './node-base';
-import {SelectionBox} from 'selection-box';
+import {autoinject} from 'aurelia-framework';
+import {Container as DIContainer} from 'aurelia-dependency-injection';
+import {ContainerNode} from './container-node';
+import {SelectionBox} from '../common/selection-box';
 import 'hammerjs/hammer.js';
 
-export abstract class DiagramBase {
-    abstract getNodes(): NodeBase[];
-    private isPanning: boolean;
+@autoinject
+export class ContainerDiagram {
+    id: string;
+    
     private selectionBox: SelectionBox;
-
+    private containerNodes: ContainerNode[];
+    private containerDiagramElement: SVGElement;
+    private isPanning: boolean;
+    
+    constructor() {
+        this.createContainers();
+    };
+    
+    activate(params): void {
+        this.id = params.id;
+        //TODO: Load diagram.
+    }
+    
     private unselectAll(): void {
-        for(var c of this.getNodes()) {
+        for(var c of this.containerNodes) {
             c.isSelected = false;
         };
     }
     
-    private getContainerHit(x: number, y: number): NodeBase {
-        for(var c of this.getNodes()) {
+    private createContainers(): void {
+        var container1 = new ContainerNode();
+        container1.x = 10;
+        container1.y = 10;
+        container1.name = "abc";
+        container1.description = "Lorem ipsum dolor sit amet";
+        
+        var container2 = new ContainerNode();
+        container2.x = 200;
+        container2.y = 200;
+        container2.name = "def";
+        container2.description = "Lorem ipsum dolor sit amet";
+        
+        this.containerNodes = [
+            container1, 
+            container2    
+        ];
+        
+        this.isPanning = false;
+    }
+    
+    private getContainerHit(x: number, y: number): ContainerNode {
+        for(var c of this.containerNodes) {
             if (c.isHit(x, y)) {
                 return c;
             }
         }
         return null;
     }
-
-    protected attachHammerEventHandler(element: SVGElement) {
-        var self: DiagramBase = this;
-        var hammertime = new Hammer(element);
+    
+    attached(): void {
+        this.attachHammerEventHandler();
+    }
+    
+    private attachHammerEventHandler() {
+        var self: ContainerDiagram = this;
+        var hammertime = new Hammer(this.containerDiagramElement);
         
         hammertime.on('panstart', (event: HammerInput) => {
             self.onPanStart(event);
@@ -53,7 +93,7 @@ export abstract class DiagramBase {
                 containerHit.isSelected = true;
             }
             
-            for(var c of this.getNodes()) {
+            for(var c of this.containerNodes) {
                 if (c.isSelected) {
                     c.startPan();
                 }
@@ -72,7 +112,7 @@ export abstract class DiagramBase {
     
     private onPan(event: HammerInput) {
         if (this.isPanning) {
-            for (var c of this.getNodes()) {
+            for (var c of this.containerNodes) {
                 if (c.isSelected) {
                     c.pan(event.deltaX, event.deltaY)
                 }
@@ -80,7 +120,7 @@ export abstract class DiagramBase {
         }
         else {
             this.selectionBox.pan(event.deltaX, event.deltaY);
-            for(var c of this.getNodes()) {
+            for(var c of this.containerNodes) {
                 c.isSelected = this.selectionBox.containsRect(c.x, c.y, c.width, c.height);
             }
         }
@@ -88,7 +128,7 @@ export abstract class DiagramBase {
     
     private onPanEnd(event: HammerInput) {
         if (this.isPanning) {
-            for(var c of this.getNodes()) {
+            for(var c of this.containerNodes) {
                 if (c.isSelected) {
                     c.endPan();
                 }
@@ -101,7 +141,7 @@ export abstract class DiagramBase {
     }
     
     private onTap(event: HammerInput) {
-        for(var c of this.getNodes()) {
+        for(var c of this.containerNodes) {
             if (c.isHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
                 if (event.srcEvent.ctrlKey) {
                     c.isSelected = !c.isSelected;
@@ -118,4 +158,10 @@ export abstract class DiagramBase {
         this.unselectAll();
     }
     
+    //TODO: Move to service.
+    /*activate() {
+        return this.http.fetch('api/containers')
+                   .then(response => response.json())
+                   .then(containers => this.containers = containers);
+    }*/
 }

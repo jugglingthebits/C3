@@ -2,8 +2,8 @@ import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
-import {SystemContextDiagram} from './system-context-diagram';
-import {SystemContextDiagramModel} from './model';
+import {SystemContextDiagram} from '../system-context-diagram/system-context-diagram';
+import {SystemContextDiagramModel} from '../model';
 
 @autoinject
 export class Overview {
@@ -39,7 +39,11 @@ export class Overview {
         httpClient.fetch('/system')
             .then(response => <Promise<SystemContextDiagramModel[]>>response.json())
             .then(data => {
-                this.systemContextDiagrams = data.map(m => SystemContextDiagram.fromJson(m));
+                this.systemContextDiagrams = data.map(m => {
+                    let diagram = new SystemContextDiagram();
+                    diagram.updateFromModel(m);
+                    return diagram;
+                });
             });
     }
 }

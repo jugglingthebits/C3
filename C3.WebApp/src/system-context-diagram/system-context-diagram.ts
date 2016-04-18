@@ -3,9 +3,9 @@ import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
-import {DiagramBase} from './diagram-base';
-import {NodeBase} from './node-base';
-import {SystemContextDiagramModel} from './model';
+import {SystemContextDiagramModel} from '../model';
+import {DiagramBase} from '../common/diagram-base';
+import {NodeBase} from '../common/node-base';
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
