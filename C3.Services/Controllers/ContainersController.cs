@@ -1,25 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Http;
 using MongoDB.Driver;
 using C3.Services.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace C3.Services.Controllers
 {
     [Route("api/[controller]")]
     public class ContainersController : Controller
     {
-        private ContainerNode[] _exampleContainers;
-        private IMongoCollection<ContainerNode> _collection;
+        private readonly JsonSerializerSettings formatting;
+        private readonly ContainerNode[] exampleContainers;
+        private readonly IMongoCollection<ContainerNode> collection;
 
         public ContainersController(IMongoDatabase database)
         {
-            _collection = database.GetCollection<ContainerNode>("containers");
+            formatting = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
 
-            _exampleContainers = new[]
+            collection = database.GetCollection<ContainerNode>("containers");
+
+            exampleContainers = new[]
             {
                 new ContainerNode(),
                 new ContainerNode()
@@ -32,10 +36,7 @@ namespace C3.Services.Controllers
         {
             //var result = _collection.Find(new BsonDocument()).ToList();
 
-            var formatting = new Newtonsoft.Json.JsonSerializerSettings() {
-                Formatting = Newtonsoft.Json.Formatting.Indented
-            };
-            return Json(_exampleContainers, formatting);
+            return Json(exampleContainers, formatting);
         }
 
         // GET api/values/5
@@ -52,7 +53,7 @@ namespace C3.Services.Controllers
             if (!ModelState.IsValid)
                 return new HttpStatusCodeResult(400);
 
-            _collection.InsertOne(value);
+            collection.InsertOne(value);
             return new HttpStatusCodeResult(200);
         }
 
