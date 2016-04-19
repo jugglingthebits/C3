@@ -3,7 +3,7 @@ import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
-import {SystemContextDiagramModel} from '../model';
+import {SystemContextDiagramModel} from '../common/model';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
 

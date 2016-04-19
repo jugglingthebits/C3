@@ -3,7 +3,7 @@ import {Router} from 'aurelia-router';
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagram} from '../system-context-diagram/system-context-diagram';
-import {SystemContextDiagramModel} from '../model';
+import {SystemContextDiagramModel} from '../common/model';
 
 @autoinject
 export class Overview {

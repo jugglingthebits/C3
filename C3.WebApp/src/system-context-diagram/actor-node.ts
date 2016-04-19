@@ -1,4 +1,4 @@
-import {ActorNodeModel} from '../model';
+import {ActorNodeModel} from '../common/model';
 import {NodeBase} from '../common/node-base';
 
 export class ActorNode extends NodeBase {
