@@ -14,7 +14,8 @@ export class Overview {
     }
     
     activate(): void {
-        this.loadSystemContextDiagrams();
+        // TODO
+        //this.loadSystemContextDiagrams();
     }
     
     private generateSystemContextDiagrams() {

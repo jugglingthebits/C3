@@ -51,7 +51,8 @@ export class SystemContextDiagram extends DiagramBase {
     }
     
     activate(params): void {
-        this.loadFromId(params.id);
+        // TODO
+        //this.loadFromId(params.id); 
     }
     
     private loadFromId(id: number) {
