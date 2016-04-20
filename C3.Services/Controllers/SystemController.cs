@@ -31,7 +31,7 @@ namespace C3.Services.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public JsonResult Get(int id)
         {
             var exampleSystem = new {Id = "123", Name = "system from server" };
             return Json(exampleSystem, formatting);

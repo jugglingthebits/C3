@@ -3,8 +3,11 @@ var browserSync = require('browser-sync');
 var proxy = require('http-proxy-middleware');
 
 var apiProxy = proxy('/api', {
-  target: 'http://localhost:5000', 
-  logLevel: 'debug'
+  target: 'http://localhost:5000',
+  logLevel: 'debug',
+    // Workaround for a problem in kestrel with reverse proxies. 
+    // See https://github.com/aspnet/KestrelHttpServer/issues/468.
+  headers: {'Connection': 'keep-alive'} 
 });
 
 // this task utilizes the browsersync plugin
