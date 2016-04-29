@@ -2,38 +2,30 @@ import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
-import {SystemContextDiagram} from '../system-context-diagram/system-context-diagram';
 import {SystemContextDiagramModel} from '../common/model';
+import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 
 @autoinject
 export class Overview {
-    private systemContextDiagrams: SystemContextDiagram[]; 
+    private systemContextDiagrams: SystemContextDiagramModel[]; 
     
-    constructor(private router: Router) {
-        this.generateSystemContextDiagrams();
+    constructor(private router: Router, private systemContextDiagramService: SystemContextDiagramService ) {
     }
     
     activate(): void {
         // TODO
-        //this.loadSystemContextDiagrams();
+        this.loadSystemContextDiagrams();
     }
     
-    private generateSystemContextDiagrams() {
-        let diagram1 = new SystemContextDiagram();
-        diagram1.id = "system 1";
-        diagram1.name = "system 1";
-        let diagram2 = new SystemContextDiagram();
-        diagram2.id = "some_other_system";
-        diagram2.name = "Some other system";
-        this.systemContextDiagrams = [diagram1, diagram2];
-    }
     
     private delete(): void {
         //TODO
     }
     
     private loadSystemContextDiagrams() {
-        let httpClient = new HttpClient();
+        this.systemContextDiagrams = this.systemContextDiagramService.getAll();
+        
+        /*let httpClient = new HttpClient();
         httpClient.configure(config => config.withBaseUrl('api')
                                              .rejectErrorResponses());
 
@@ -45,6 +37,6 @@ export class Overview {
                     diagram.updateFromModel(m);
                     return diagram;
                 });
-            });
+            });*/
     }
 }
