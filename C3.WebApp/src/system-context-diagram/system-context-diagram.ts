@@ -14,7 +14,7 @@ export class SystemContextDiagram extends DiagramBase {
 
     private actorNodes: ActorNode[];    
     private systemNodes: SystemNode[];
-    private systemContextDiagramElement: SVGElement;
+    private systemContextDiagramSection: HTMLElement;
     
     constructor() {
         super();
@@ -47,7 +47,7 @@ export class SystemContextDiagram extends DiagramBase {
     }
     
     attached(): void {
-        this.attachHammerEventHandler(this.systemContextDiagramElement);
+        this.attachHammerEventHandler(this.systemContextDiagramSection);
     }
     
     activate(params): void {

@@ -1,18 +1,19 @@
 <template>
     <require from="./system-context-diagram.css"></require>
     
-    <h2>System Context Diagram: ${name}</h2>
+    <section class="system-context-diagram col s12"
+             element.ref="systemContextDiagramSection">
     
-    <svg class="system-context-diagram"
-         element.ref="systemContextDiagramElement" cursor="default">
-        <svg repeat.for="systemNode of systemNodes">
-            <compose view-model.bind="systemNode" containerless></compose>
+        <svg class="diagram">
+            <svg repeat.for="systemNode of systemNodes">
+                <compose view-model.bind="systemNode" containerless></compose>
+            </svg>
+            <svg repeat.for="actorNode of actorNodes">
+                <compose view-model.bind="actorNode" containerless></compose>
+            </svg>
+            
+            <compose view-model.bind="selectionBox" containerless></compose>
         </svg>
-        <svg repeat.for="actorNode of actorNodes">
-            <compose view-model.bind="actorNode" containerless></compose>
-        </svg>
-        
-        <compose view-model.bind="selectionBox" containerless></compose>
-    </svg>
-
+    
+    </section>
 </template>

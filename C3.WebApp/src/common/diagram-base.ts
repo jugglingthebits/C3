@@ -22,7 +22,7 @@ export abstract class DiagramBase {
         return null;
     }
 
-    protected attachHammerEventHandler(element: SVGElement) {
+    protected attachHammerEventHandler(element: HTMLElement) {
         var self: DiagramBase = this;
         var hammertime = new Hammer(element);
         
