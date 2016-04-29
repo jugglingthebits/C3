@@ -1,9 +1,11 @@
 <template>
-    <section>
+    <require from="./container-diagram.css"></require>
+    
+    <section class="container-diagram col s12"
+             element.ref="containerDiagramSection">
         <h2>Container Diagram</h2>
         
-        <svg width="600" height="600"
-             element.ref="containerDiagramElement" cursor="default">
+        <svg class="diagram">
             <svg repeat.for="containerNode of containerNodes" >
                 <compose view-model.bind="containerNode" containerless></compose>
             </svg>
