@@ -34,13 +34,13 @@
           </ul>
         </li>
         
-        <li class="dropdown">
+        <li if.bind="currentContainerDiagram" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 ${currentContainerDiagram.name} <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
                 <li repeat.for="diagram of containerDiagrams">
-                    <a route-href="route: container-diagram; params.bind: {id: diagram.id}"">${diagram.name}</a>
+                    <a route-href="route: container-diagram; params.bind: {systemContextDiagramId: currentSystemContextDiagram.id, id: diagram.id}"">${diagram.name}</a>
                 </li>
             </ul>
         </li>

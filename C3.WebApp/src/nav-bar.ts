@@ -7,26 +7,33 @@ import {SystemContextDiagramService, ContainerDiagramService} from 'services/dia
 @autoinject
 export class NavBar {
     private systemContextDiagrams: SystemContextDiagramModel[] = [];
-    private currentSystemContextDiagram: SystemContextDiagramModel;
+    private currentSystemContextDiagram: SystemContextDiagramModel = null;
 
     private containerDiagrams: ContainerDiagramModel[] = [];
-    private currentContainerDiagram: ContainerDiagramModel;
+    private currentContainerDiagram: ContainerDiagramModel = null;
     
     constructor(private router: Router, 
                 private eventAggregator: EventAggregator,
                 private systemContextDiagramService: SystemContextDiagramService,
                 private containerDiagramService: ContainerDiagramService) {
                     
-        eventAggregator.subscribe("SystemContextDiagramModelChanged", (diagram: SystemContextDiagramModel) => {
-            this.currentSystemContextDiagram = diagram;
+        eventAggregator.subscribe("SystemContextDiagramModelChanged", (id: string) => {
+            this.currentSystemContextDiagram = this.systemContextDiagrams.find(d => d.id === id);
+            this.currentContainerDiagram = null;
         });
-        eventAggregator.subscribe("ContainerDiagramModelChanged", (diagram: ContainerDiagramModel) => {
-            this.currentContainerDiagram = diagram;
+        eventAggregator.subscribe("ContainerDiagramModelChanged", (id: string) => {
+            this.currentContainerDiagram = this.containerDiagrams.find(d => d.id === id);
         });
     }
 
     attached(): void {
-        this.systemContextDiagrams = this.systemContextDiagramService.getAll();
-        this.containerDiagrams = this.containerDiagramService.getAll();
+        this.systemContextDiagramService.getAll()
+            .then(diagrams => {
+                this.systemContextDiagrams = diagrams;
+            });
+        this.containerDiagramService.getAll()
+            .then(diagrams => {
+                this.containerDiagrams = diagrams;
+            });
     }
 }

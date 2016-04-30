@@ -10,7 +10,7 @@ export class App {
               nav: true, title: 'Overview' },
             { route: 'system-context-diagram/:id', name: 'system-context-diagram', 
               moduleId: 'system-context-diagram/system-context-diagram', title: 'System Context Diagram' },
-            { route: 'container-diagram/:id', name: 'container-diagram', 
+            { route: 'system-context-diagram/:systemContextDiagramId/container-diagram/:id', name: 'container-diagram', 
               moduleId: 'container-diagram/container-diagram', title: 'Container Diagram' }
         ]);
 

@@ -3,7 +3,7 @@ import {Router} from 'aurelia-router';
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel} from '../common/model';
-import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
+import {SystemContextDiagramService} from '../services/diagram-services'; 
 
 @autoinject
 export class Overview {
@@ -23,7 +23,10 @@ export class Overview {
     }
     
     private loadSystemContextDiagrams() {
-        this.systemContextDiagrams = this.systemContextDiagramService.getAll();
+        this.systemContextDiagramService.getAll()
+            .then(diagrams => {
+                this.systemContextDiagrams = diagrams;
+            });
         
         /*let httpClient = new HttpClient();
         httpClient.configure(config => config.withBaseUrl('api')

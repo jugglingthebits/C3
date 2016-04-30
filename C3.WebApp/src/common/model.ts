@@ -20,6 +20,7 @@ export interface SystemContextDiagramModel extends DiagramModel {
 export interface SystemNodeModel extends NodeModel {
     description: string;
     isExternalSystem: boolean;
+    containerDiagramId: string;
 }
 
 export interface ActorNodeModel extends NodeModel {
@@ -29,7 +30,6 @@ export interface ContainerDiagramModel extends DiagramModel {
     containerNodes: ContainerNodeModel[];
 }
 
-export interface ContainerNodeModel {
+export interface ContainerNodeModel extends NodeModel {
+    description: string;
 }
-
-export class SystemContextDiagramModelChanged {}

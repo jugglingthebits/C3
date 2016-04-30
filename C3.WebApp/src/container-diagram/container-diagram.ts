@@ -11,39 +11,23 @@ import 'hammerjs/hammer.js';
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
-    private containerDiagramModel: ContainerDiagramModel;
+    id: string;
+    name: string;
     private containerNodes: ContainerNode[];
     private containerDiagramSection: HTMLElement;
     
     constructor(private eventAggregator: EventAggregator,
                 private containerDiagramService: ContainerDiagramService) {
         super();
-        this.createContainers();
     };
     
     activate(params): void {
-        this.containerDiagramModel = this.containerDiagramService.getAll()
-                                         .find(m => m.id === params.id);
-        this.eventAggregator.publish("ContainerDiagramModelChanged", this.containerDiagramModel);
-    }
-    
-    private createContainers(): void {
-        var container1 = new ContainerNode();
-        container1.x = 10;
-        container1.y = 10;
-        container1.name = "abc";
-        container1.description = "Lorem ipsum dolor sit amet";
-        
-        var container2 = new ContainerNode();
-        container2.x = 200;
-        container2.y = 200;
-        container2.name = "def";
-        container2.description = "Lorem ipsum dolor sit amet";
-        
-        this.containerNodes = [
-            container1, 
-            container2    
-        ];
+        this.containerDiagramService.getAll()
+            .then(diagrams => {
+                let containerDiagramModel = diagrams.find(m => m.id === params.id);
+                this.updateFromModel(containerDiagramModel);                                         
+                this.eventAggregator.publish("ContainerDiagramModelChanged", containerDiagramModel.id);
+            });
     }
     
     attached(): void {
@@ -55,10 +39,21 @@ export class ContainerDiagram extends DiagramBase {
         return nodes;
     }
     
-    //TODO: Move to service.
-    /*activate() {
-        return this.http.fetch('api/containers')
-                   .then(response => response.json())
-                   .then(containers => this.containers = containers);
-    }*/
+    updateFromModel(model: ContainerDiagramModel): void {
+        this.id = model.id;
+        this.name = model.name;
+        this.containerNodes = model.containerNodes.map(nodeModel => {
+            let node = new ContainerNode();
+            node.updateFromModel(nodeModel);
+            return node;
+        });
+    }
+    
+    copyToModel(): ContainerDiagramModel {
+        let model = <ContainerDiagramModel>{};
+        model.id = this.id;
+        model.name = this.name;
+        model.containerNodes = this.containerNodes.map(node => node.copyToModel());
+        return model;
+    }
 }
