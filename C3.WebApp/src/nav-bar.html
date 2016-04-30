@@ -15,18 +15,34 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
+        <!--<li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
           <a data-toggle="collapse" data-target="#bs-example-navbar-collapse-1.in" href.bind="row.href">${row.title}</a>
+        </li>-->
+        
+        <li>
+            <a route-href="route: overview">Overview</a>
         </li>
         
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${currentSystemContextDiagram.name} <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              ${currentSystemContextDiagram.name} <span class="caret"></span>
+          </a>
           <ul class="dropdown-menu">
             <li repeat.for="diagram of systemContextDiagrams">
                 <a route-href="route: system-context-diagram; params.bind: {id: diagram.id}"">${diagram.name}</a>
             </li>
-            <!--<li role="separator" class="divider"></li>-->
           </ul>
+        </li>
+        
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                ${currentContainerDiagram.name} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li repeat.for="diagram of containerDiagrams">
+                    <a route-href="route: container-diagram; params.bind: {id: diagram.id}"">${diagram.name}</a>
+                </li>
+            </ul>
         </li>
       </ul>
 

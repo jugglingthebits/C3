@@ -5,10 +5,10 @@ import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
-import {SystemContextDiagramModel, SystemContextDiagramModelChanged} from '../common/model';
+import {SystemContextDiagramModel} from '../common/model';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
-import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
+import {SystemContextDiagramService} from '../services/diagram-services'; 
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {

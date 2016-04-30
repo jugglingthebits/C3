@@ -1,26 +1,30 @@
 import {autoinject} from 'aurelia-framework';
 import {Container as DIContainer} from 'aurelia-dependency-injection';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
 import {ContainerNode} from './container-node';
 import {SelectionBox} from '../common/selection-box';
+import {ContainerDiagramModel} from '../common/model';
+import {ContainerDiagramService} from '../services/diagram-services';
 import 'hammerjs/hammer.js';
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
-    id: string;
-    
+    private containerDiagramModel: ContainerDiagramModel;
     private containerNodes: ContainerNode[];
     private containerDiagramSection: HTMLElement;
     
-    constructor() {
+    constructor(private eventAggregator: EventAggregator,
+                private containerDiagramService: ContainerDiagramService) {
         super();
         this.createContainers();
     };
     
     activate(params): void {
-        this.id = params.id;
-        //TODO: Load diagram.
+        this.containerDiagramModel = this.containerDiagramService.getAll()
+                                         .find(m => m.id === params.id);
+        this.eventAggregator.publish("ContainerDiagramModelChanged", this.containerDiagramModel);
     }
     
     private createContainers(): void {
