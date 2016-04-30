@@ -1,22 +1,28 @@
 import {autoinject} from 'aurelia-framework';
+import {Router} from 'aurelia-router';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
-import {SystemContextDiagramModel} from '../common/model';
+import {SystemContextDiagramModel, SystemContextDiagramModelChanged} from '../common/model';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
+import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
     id: string;
     name: string;
-
+    
+    private systemContextDiagramModel: SystemContextDiagramModel;
     private actorNodes: ActorNode[];    
     private systemNodes: SystemNode[];
     private systemContextDiagramSection: HTMLElement;
     
-    constructor() {
+    constructor(private eventAggregator: EventAggregator, 
+                private router: Router,
+                private systemContextDiagramService: SystemContextDiagramService) {
         super();
         this.name = 'system 1';
         
@@ -53,6 +59,10 @@ export class SystemContextDiagram extends DiagramBase {
     activate(params): void {
         // TODO
         //this.loadFromId(params.id); 
+        
+        this.systemContextDiagramModel = this.systemContextDiagramService.getAll()
+                                             .find(m => m.id === params.id);
+        this.eventAggregator.publish("SystemContextDiagramModelChanged", this.systemContextDiagramModel);
     }
     
     private loadFromId(id: number) {

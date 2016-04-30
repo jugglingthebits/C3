@@ -31,3 +31,5 @@ export interface ContainerDiagramModel extends DiagramModel {
 
 export interface ContainerNodeModel {
 }
+
+export class SystemContextDiagramModelChanged {}
