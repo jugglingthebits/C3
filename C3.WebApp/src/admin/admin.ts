@@ -6,7 +6,7 @@ import {SystemContextDiagramModel} from '../common/model';
 import {SystemContextDiagramService} from '../services/diagram-services'; 
 
 @autoinject
-export class Overview {
+export class Admin {
     private systemContextDiagrams: SystemContextDiagramModel[]; 
     
     constructor(private router: Router, private systemContextDiagramService: SystemContextDiagramService ) {
