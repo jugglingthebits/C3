@@ -31,7 +31,7 @@ export class SystemContextDiagram extends DiagramBase {
         this.systemContextDiagramService.getAll().then(diagrams => {
             let systemContextDiagramModel = diagrams.find(m => m.id === params.id);            
             this.updateFromModel(systemContextDiagramModel);                                             
-            this.eventAggregator.publish("SystemContextDiagramModelChanged", systemContextDiagramModel.id);
+            this.eventAggregator.publish("SystemContextDiagramModelChanged", systemContextDiagramModel);
         });
     }
     

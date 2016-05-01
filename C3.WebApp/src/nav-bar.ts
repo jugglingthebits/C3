@@ -17,12 +17,12 @@ export class NavBar {
                 private systemContextDiagramService: SystemContextDiagramService,
                 private containerDiagramService: ContainerDiagramService) {
                     
-        eventAggregator.subscribe("SystemContextDiagramModelChanged", (id: string) => {
-            this.currentSystemContextDiagram = this.systemContextDiagrams.find(d => d.id === id);
+        eventAggregator.subscribe("SystemContextDiagramModelChanged", (model: SystemContextDiagramModel) => {
+            this.currentSystemContextDiagram = model;
             this.currentContainerDiagram = null;
         });
-        eventAggregator.subscribe("ContainerDiagramModelChanged", (id: string) => {
-            this.currentContainerDiagram = this.containerDiagrams.find(d => d.id === id);
+        eventAggregator.subscribe("ContainerDiagramModelChanged", (model: ContainerDiagramModel) => {
+            this.currentContainerDiagram = model;
         });
     }
 

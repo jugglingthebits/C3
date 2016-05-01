@@ -6,7 +6,7 @@ import {NodeBase} from '../common/node-base';
 import {ContainerNode} from './container-node';
 import {SelectionBox} from '../common/selection-box';
 import {ContainerDiagramModel} from '../common/model';
-import {ContainerDiagramService} from '../services/diagram-services';
+import {SystemContextDiagramService, ContainerDiagramService} from '../services/diagram-services';
 import 'hammerjs/hammer.js';
 
 @autoinject
@@ -17,16 +17,22 @@ export class ContainerDiagram extends DiagramBase {
     private containerDiagramSection: HTMLElement;
     
     constructor(private eventAggregator: EventAggregator,
+                private systemContextDiagramService: SystemContextDiagramService,
                 private containerDiagramService: ContainerDiagramService) {
         super();
     };
     
     activate(params): void {
+        this.systemContextDiagramService.getAll().then(diagrams => {
+            let systemContextDiagramModel = diagrams.find(m => m.id === params.systemContextDiagramId);            
+            this.eventAggregator.publish("SystemContextDiagramModelChanged", systemContextDiagramModel);
+        });
+        
         this.containerDiagramService.getAll()
             .then(diagrams => {
                 let containerDiagramModel = diagrams.find(m => m.id === params.id);
                 this.updateFromModel(containerDiagramModel);                                         
-                this.eventAggregator.publish("ContainerDiagramModelChanged", containerDiagramModel.id);
+                this.eventAggregator.publish("ContainerDiagramModelChanged", containerDiagramModel);
             });
     }
     
