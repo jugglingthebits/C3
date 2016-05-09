@@ -7,6 +7,7 @@ export abstract class DiagramBase {
     private isPanning: boolean;
     private selectionBox: SelectionBox;
 
+
     private unselectAll(): void {
         for(var c of this.getNodes()) {
             c.isSelected = false;

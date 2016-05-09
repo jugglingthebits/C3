@@ -1,7 +1,7 @@
 import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {SystemContextDiagramModel, ContainerDiagramModel} from 'common/model';
+import {SystemContextDiagramModel, ContainerDiagramModel, ComponentDiagramModel} from 'common/model';
 import {SystemContextDiagramService, ContainerDiagramService} from 'services/diagram-services'; 
 
 @autoinject
@@ -11,6 +11,9 @@ export class NavBar {
 
     private containerDiagrams: ContainerDiagramModel[] = [];
     private currentContainerDiagram: ContainerDiagramModel = null;
+
+    private componentDiagrams: ComponentDiagramModel[] = [];
+    private currentComponentDiagram: ComponentDiagramModel = null;
     
     constructor(private router: Router, 
                 private eventAggregator: EventAggregator,
@@ -20,9 +23,14 @@ export class NavBar {
         eventAggregator.subscribe("SystemContextDiagramModelChanged", (model: SystemContextDiagramModel) => {
             this.currentSystemContextDiagram = model;
             this.currentContainerDiagram = null;
+            this.currentComponentDiagram = null;
         });
         eventAggregator.subscribe("ContainerDiagramModelChanged", (model: ContainerDiagramModel) => {
             this.currentContainerDiagram = model;
+            this.currentComponentDiagram = null;
+        });
+        eventAggregator.subscribe("ComponentDiagramModelChanged", (model: ComponentDiagramModel) => {
+            this.currentComponentDiagram = model;
         });
     }
 

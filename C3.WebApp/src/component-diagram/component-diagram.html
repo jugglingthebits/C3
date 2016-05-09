@@ -1,0 +1,16 @@
+<template>
+    <require from="./component-diagram.css"></require>
+    
+    <section class="component-diagram col s12"
+             element.ref="componentDiagramSection">
+        <h2>Component Diagram</h2>
+        
+        <svg class="diagram">
+            <svg repeat.for="componentNode of componentNodes" >
+                <compose view-model.bind="componentNode" containerless></compose>
+            </svg>
+            
+            <compose view-model.bind="selectionBox" containerless></compose>
+        </svg>
+    </section>
+</template>

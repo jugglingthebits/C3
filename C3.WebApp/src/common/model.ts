@@ -33,3 +33,10 @@ export interface ContainerDiagramModel extends DiagramModel {
 export interface ContainerNodeModel extends NodeModel {
     description: string;
 }
+
+export interface ComponentDiagramModel extends DiagramModel {
+    componentNodes: ComponentNodeModel[];
+}
+
+export interface ComponentNodeModel extends NodeModel {
+}

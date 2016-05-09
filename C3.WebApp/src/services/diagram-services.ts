@@ -1,7 +1,8 @@
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel, ContainerDiagramModel, 
-        SystemNodeModel, ActorNodeModel, ContainerNodeModel} from '../common/model';
+        SystemNodeModel, ActorNodeModel, ContainerNodeModel, ComponentDiagramModel} 
+    from '../common/model';
 
 export class SystemContextDiagramService {
     private diagrams: SystemContextDiagramModel[];
@@ -107,6 +108,14 @@ export class ContainerDiagramService {
     }
     
     getAll(): Promise<ContainerDiagramModel[]> {
+        return new Promise(resolve => resolve(this.diagrams));
+    }
+}
+
+export class ComponentDiagramService {
+    private diagrams: ComponentDiagramModel[];
+    
+    getAll(): Promise<ComponentDiagramModel[]> {
         return new Promise(resolve => resolve(this.diagrams));
     }
 }
