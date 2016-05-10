@@ -1,4 +1,3 @@
-import {autoinject, View} from 'aurelia-framework';
 import {SystemNodeModel} from '../common/model';
 import {NodeBase} from '../common/node-base';
 import {SystemContextDiagram} from './system-context-diagram';
@@ -9,7 +8,6 @@ export class SystemNode extends NodeBase {
     description: string;
     isExternalSystem = false;
     containerDiagramId: string;
-    parentDiagram: SystemContextDiagram;
     
     constructor() {
         super();

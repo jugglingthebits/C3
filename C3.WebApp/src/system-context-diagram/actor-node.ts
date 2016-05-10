@@ -5,7 +5,6 @@ import {SystemContextDiagram} from './system-context-diagram';
 export class ActorNode extends NodeBase {
     id: string;
     name: string;
-    parentDiagram: SystemContextDiagram;
     
     constructor() {
         super();
