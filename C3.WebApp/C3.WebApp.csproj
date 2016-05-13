@@ -123,6 +123,7 @@
     <Content Include="src\container-diagram\container-node.html" />
     <Content Include="src\nav-bar.html" />
     <Content Include="src\system-context-diagram\actor-node.html" />
+    <Content Include="src\system-context-diagram\connector.html" />
     <Content Include="src\system-context-diagram\system-context-diagram.html" />
     <Content Include="src\system-context-diagram\system-node.html" />
     <Content Include="styles\styles.css" />

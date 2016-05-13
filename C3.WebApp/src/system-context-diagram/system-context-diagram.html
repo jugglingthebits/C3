@@ -12,6 +12,9 @@
             <svg repeat.for="actorNode of actorNodes">
                 <compose view-model.bind="actorNode" containerless></compose>
             </svg>
+            <svg repeat.for="connector of connectors">
+                <compose view-model.bind="connector" containerless></compose>
+            </svg>
             
             <compose view-model.bind="selectionBox" containerless></compose>
         </svg>
