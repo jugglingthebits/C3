@@ -197,7 +197,6 @@
   <ItemGroup>
     <Content Include=".editorconfig" />
     <Content Include=".npmignore" />
-    <Content Include="C3.WebApp.njsproj" />
     <Content Include="doc\CHANGELOG.md" />
     <Content Include="package.json" />
     <Content Include="README.md" />
