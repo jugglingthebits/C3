@@ -7,7 +7,7 @@ import {Connector} from './connector';
 import {SystemContextDiagramModel} from '../common/model';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
-import {SystemContextDiagramService} from '../services/diagram-services'; 
+import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {

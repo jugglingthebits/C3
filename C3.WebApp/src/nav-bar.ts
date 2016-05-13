@@ -2,7 +2,8 @@ import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {SystemContextDiagramModel, ContainerDiagramModel, ComponentDiagramModel} from 'common/model';
-import {SystemContextDiagramService, ContainerDiagramService} from 'services/diagram-services'; 
+import {SystemContextDiagramService} from './services/system-context-diagram-service'; 
+import {ContainerDiagramService} from './services/container-diagram-service'; 
 
 @autoinject
 export class NavBar {

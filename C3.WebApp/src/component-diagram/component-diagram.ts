@@ -6,8 +6,9 @@ import {NodeBase} from '../common/node-base';
 import {ComponentNode} from './component-node';
 import {SelectionBox} from '../common/selection-box';
 import {ComponentDiagramModel} from '../common/model';
-import {SystemContextDiagramService, ContainerDiagramService, ComponentDiagramService} 
-    from '../services/diagram-services';
+import {SystemContextDiagramService} from '../services/system-context-diagram-service';
+import {ContainerDiagramService} from '../services/container-diagram-service';
+import {ComponentDiagramService} from '../services/component-diagram-service';
 import 'hammerjs/hammer.js';
 
 @autoinject

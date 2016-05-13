@@ -5,6 +5,7 @@ export class ContainerNode extends NodeBase {
     id: string;
     name: string;
     description: string;
+    componentDiagramId: string;
 
     constructor() {
         super();
@@ -19,6 +20,7 @@ export class ContainerNode extends NodeBase {
         this.y = model.y;
         this.width = model.width;
         this.height = model.height;
+        this.componentDiagramId = model.componentDiagramId;
     }
     
     copyToModel(): ContainerNodeModel {
@@ -29,6 +31,7 @@ export class ContainerNode extends NodeBase {
         model.y = this.y;
         model.width = this.width;
         model.height = this.height;
+        model.componentDiagramId = this.componentDiagramId;
         return model;
     }
 }

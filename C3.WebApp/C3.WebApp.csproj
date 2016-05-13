@@ -119,6 +119,7 @@
     <Content Include="src\app.html" />
     <Content Include="src\common\selection-box.html" />
     <Content Include="src\component-diagram\component-diagram.html" />
+    <Content Include="src\component-diagram\component-node.html" />
     <Content Include="src\container-diagram\container-diagram.html" />
     <Content Include="src\container-diagram\container-node.html" />
     <Content Include="src\nav-bar.html" />
@@ -171,7 +172,9 @@
     <TypeScriptCompile Include="src\container-diagram\container-node.ts" />
     <TypeScriptCompile Include="src\main.ts" />
     <TypeScriptCompile Include="src\nav-bar.ts" />
-    <TypeScriptCompile Include="src\services\diagram-services.ts" />
+    <TypeScriptCompile Include="src\services\component-diagram-service.ts" />
+    <TypeScriptCompile Include="src\services\container-diagram-service.ts" />
+    <TypeScriptCompile Include="src\services\system-context-diagram-service.ts" />
     <TypeScriptCompile Include="src\system-context-diagram\actor-node.ts" />
     <TypeScriptCompile Include="src\system-context-diagram\connector.ts" />
     <TypeScriptCompile Include="src\system-context-diagram\system-context-diagram.ts" />
@@ -290,6 +293,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="jspm_packages\npm\aurelia-animator-css%401.0.0-beta.1.2.0\.jspm-hash" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\component-diagram\component-node.less" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

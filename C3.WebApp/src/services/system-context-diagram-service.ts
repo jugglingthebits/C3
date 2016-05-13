@@ -3,7 +3,7 @@ import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel, ContainerDiagramModel, 
         SystemNodeModel, ActorNodeModel, ContainerNodeModel, 
         ComponentDiagramModel, ComponentNodeModel, ConnectorModel} 
-    from '../common/model';
+    from "../common/model";
 
 export class SystemContextDiagramService {
     private diagrams: SystemContextDiagramModel[];
@@ -16,7 +16,7 @@ export class SystemContextDiagramService {
             y: 20,
             width: 200,
             height: 200,
-            containerDiagramId: "ContainerDiagram1"
+            containerDiagramId: "containerDiagram1"
         };
         
         let actorNode1 = <ActorNodeModel>{
@@ -75,74 +75,5 @@ export class SystemContextDiagramService {
 
         return httpClient.fetch(`/system/${id}`)
                          .then(response => <Promise<SystemContextDiagramModel>>response.json());
-    }
-}
-
-export class ContainerDiagramService {
-    private diagrams: ContainerDiagramModel[];
-    
-    constructor() {
-        let container1 = <ContainerNodeModel>{
-            id: "containerNode1",
-            name: "Container Node 1",
-            x: 10,
-            y: 10,
-            width: 200,
-            height: 200,
-            description: "Lorem ipsum dolor sit amet"
-        };
-
-        let container2 = <ContainerNodeModel>{
-            id: "containerNode2",
-            name: "Container Node 2",
-            x: 200,
-            y: 200,
-            width: 200,
-            height: 200,
-            description: "Lorem ipsum dolor sit amet"
-        };
-        
-        let diagram1 = <ContainerDiagramModel>{
-            id: "containerDiagram1",
-            name: "Container Diagram 1",
-            containerNodes: [container1, container2]
-        };
-        
-        let diagram2 = <ContainerDiagramModel>{
-            id: "containerDiagram2",
-            name: "Container Diagram 2",
-            containerNodes: []
-        };
-        
-        this.diagrams = [diagram1, diagram2];
-    }
-    
-    getAll(): Promise<ContainerDiagramModel[]> {
-        return new Promise(resolve => resolve(this.diagrams));
-    }
-}
-
-export class ComponentDiagramService {
-    private diagrams: ComponentDiagramModel[];
-    
-    constructor() {
-        let componentNode = <ComponentNodeModel>{
-            id: 'componentNode1',
-            name: 'Component Node 1',
-            x: 100,
-            y: 100
-        };
-        
-        let diagram = <ComponentDiagramModel>{
-            id: "componentDiagram1",
-            name: "Component Diagram 1",
-            componentNodes: [componentNode]
-        };
-        
-        this.diagrams = [diagram]; 
-    }
-    
-    getAll(): Promise<ComponentDiagramModel[]> {
-        return new Promise(resolve => resolve(this.diagrams));
     }
 }

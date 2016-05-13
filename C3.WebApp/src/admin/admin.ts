@@ -4,7 +4,7 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel} from '../common/model';
-import {SystemContextDiagramService} from '../services/diagram-services'; 
+import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 
 @autoinject
 export class Admin {
