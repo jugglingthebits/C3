@@ -4,7 +4,7 @@ export class ContainerDiagramService {
     private diagrams: Model.ContainerDiagramModel[];
     
     constructor() {
-        let container1 = <Model.ContainerNodeModel>{
+        const container1 = <Model.ContainerNodeModel>{
             id: "containerNode1",
             name: "Container Node 1",
             x: 10,
@@ -15,7 +15,7 @@ export class ContainerDiagramService {
             componentDiagramId: "componentDiagram1"
         };
 
-        let container2 = <Model.ContainerNodeModel>{
+        const container2 = <Model.ContainerNodeModel>{
             id: "containerNode2",
             name: "Container Node 2",
             x: 200,
@@ -26,13 +26,13 @@ export class ContainerDiagramService {
             componentDiagramId: 'componentDiagram1'
         };
         
-        let diagram1 = <Model.ContainerDiagramModel>{
+        const diagram1 = <Model.ContainerDiagramModel>{
             id: "containerDiagram1",
             name: "Container Diagram 1",
             containerNodes: [container1, container2]
         };
         
-        let diagram2 = <Model.ContainerDiagramModel>{
+        const diagram2 = <Model.ContainerDiagramModel>{
             id: "containerDiagram2",
             name: "Container Diagram 2",
             containerNodes: []

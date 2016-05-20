@@ -9,7 +9,7 @@ export class SystemContextDiagramService {
     private diagrams: SystemContextDiagramModel[];
     
     constructor() {
-        let systemNode1 = <SystemNodeModel>{
+        const systemNode1 = <SystemNodeModel>{
             id: "systemNode1",
             name: "System Node 1",
             x: 20,
@@ -19,7 +19,7 @@ export class SystemContextDiagramService {
             containerDiagramId: "containerDiagram1"
         };
         
-        let actorNode1 = <ActorNodeModel>{
+        const actorNode1 = <ActorNodeModel>{
             id: "actorNode1",
             name: "Actor Node 1",
             x: 100,
@@ -28,7 +28,7 @@ export class SystemContextDiagramService {
             height: 200
         };
         
-        let externalSystem1 = <SystemNodeModel>{
+        const externalSystem1 = <SystemNodeModel>{
             id: "externalSystemNode1",
             name: "External System Node 1",
             x: 20,
@@ -38,14 +38,14 @@ export class SystemContextDiagramService {
             height: 200
         };
         
-        let connector = <ConnectorModel>{
+        const connector = <ConnectorModel>{
             id: 'connector1',
             name: 'Connector 1',
             sourceNodeId: 'systemNode1',
             targetNodeId: 'externalSystemNode1'
         };
 
-        let diagram1 = <SystemContextDiagramModel>{
+        const diagram1 = <SystemContextDiagramModel>{
             id: "systemContextDiagram1",
             name: "System Context Diagram 1",
             systemNodes: [systemNode1, externalSystem1],
@@ -53,7 +53,7 @@ export class SystemContextDiagramService {
             connectors: [connector]
         };
         
-        let diagram2 = <SystemContextDiagramModel>{
+        const diagram2 = <SystemContextDiagramModel>{
             id: "systemContextDiagram2",
             name: "System Context Diagram 2",
             systemNodes: [],
@@ -69,7 +69,7 @@ export class SystemContextDiagramService {
     }
     
     private loadFromId(id: number): Promise<SystemContextDiagramModel> {
-        let httpClient = new HttpClient();
+        const httpClient = new HttpClient();
         httpClient.configure(config => config.withBaseUrl('api')
                                              .rejectErrorResponses());
 
