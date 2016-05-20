@@ -3,10 +3,11 @@ import {Router} from 'aurelia-router';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
-import {Connector} from './connector';
+import {SystemActorEdge} from './system-actor-edge';
 import {SystemContextDiagramModel} from '../common/model';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
+import {EdgeBase} from '../common/edge-base';
 import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 
 @autoinject
@@ -15,7 +16,7 @@ export class SystemContextDiagram extends DiagramBase {
     name: string;
     actorNodes: ActorNode[];    
     systemNodes: SystemNode[];
-    connectors: Connector[];
+    systemActorEdges: SystemActorEdge[];
     
     private systemContextDiagramSection: HTMLElement;
     
@@ -50,6 +51,11 @@ export class SystemContextDiagram extends DiagramBase {
         return nodes;
     }
     
+    getEdges(): EdgeBase[] {
+        let edges = this.systemActorEdges;
+        return edges;
+    }
+    
     updateFromModel(model: SystemContextDiagramModel): void {
         this.id = model.id;
         this.name = model.name;
@@ -63,8 +69,8 @@ export class SystemContextDiagram extends DiagramBase {
             node.updateFromModel(nodeModel);
             return node;
         });
-        this.connectors = model.connectors.map(connectorModel => {
-           let connector = <Connector>this.container.get(Connector);
+        this.systemActorEdges = model.edges.map(connectorModel => {
+           let connector = <SystemActorEdge>this.container.get(SystemActorEdge);
            connector.parentDiagram = this;
            connector.updateFromModel(connectorModel);
            return connector;
@@ -77,7 +83,7 @@ export class SystemContextDiagram extends DiagramBase {
         model.name = this.name;
         model.actorNodes = this.actorNodes.map(node => node.copyToModel());
         model.systemNodes = this.systemNodes.map(node => node.copyToModel());
-        model.connectors = this.connectors.map(connector => connector.copyToModel());
+        model.edges = this.systemActorEdges.map(connector => connector.copyToModel());
         return model;
     }
 }

@@ -2,7 +2,7 @@ import 'fetch';
 import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel, ContainerDiagramModel, 
         SystemNodeModel, ActorNodeModel, ContainerNodeModel, 
-        ComponentDiagramModel, ComponentNodeModel, ConnectorModel} 
+        ComponentDiagramModel, ComponentNodeModel, SystemActorEdgeModel} 
     from "../common/model";
 
 export class SystemContextDiagramService {
@@ -22,7 +22,7 @@ export class SystemContextDiagramService {
         const actorNode1 = <ActorNodeModel>{
             id: "actorNode1",
             name: "Actor Node 1",
-            x: 100,
+            x: 400,
             y: 100,
             width: 200,
             height: 200
@@ -38,11 +38,11 @@ export class SystemContextDiagramService {
             height: 200
         };
         
-        const connector = <ConnectorModel>{
-            id: 'connector1',
-            name: 'Connector 1',
+        const edge1 = <SystemActorEdgeModel>{
+            id: 'systemActorEdge1',
+            name: 'System Actor Edge 1',
             sourceNodeId: 'systemNode1',
-            targetNodeId: 'externalSystemNode1'
+            targetNodeId: 'actorNode1'
         };
 
         const diagram1 = <SystemContextDiagramModel>{
@@ -50,7 +50,7 @@ export class SystemContextDiagramService {
             name: "System Context Diagram 1",
             systemNodes: [systemNode1, externalSystem1],
             actorNodes: [actorNode1],
-            connectors: [connector]
+            edges: [edge1]
         };
         
         const diagram2 = <SystemContextDiagramModel>{
@@ -58,7 +58,7 @@ export class SystemContextDiagramService {
             name: "System Context Diagram 2",
             systemNodes: [],
             actorNodes: [],
-            connectors: []
+            edges: []
         };
         
         this.diagrams = [diagram1, diagram2];

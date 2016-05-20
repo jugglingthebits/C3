@@ -1,33 +1,38 @@
 ﻿import {autoinject} from 'aurelia-framework';
+import {EdgeBase} from '../common/edge-base';
 import {ActorNode} from './actor-node';
 import {SystemNode} from './system-node';
 import {SystemContextDiagram} from './system-context-diagram';
-import {ConnectorModel} from '../common/model';
+import {EdgeModel} from '../common/model';
 
 @autoinject
-export class Connector {
+export class SystemActorEdge extends EdgeBase {
     id: string;
     name: string;
     description: string;
-    sourceNode: ActorNode | SystemNode;
-    targetNode: SystemNode;
     parentDiagram: SystemContextDiagram;
+    sourceNode: ActorNode | SystemNode;
+    targetNode: ActorNode | SystemNode;
     
     constructor() {
+        super();
     }
     
-    updateFromModel(model: ConnectorModel): void {
+    updateFromModel(model: EdgeModel): void {
         this.id = model.id;
         this.name = model.name;
         this.description = model.description;
         this.sourceNode = this.parentDiagram.actorNodes.find(a => a.id === model.sourceNodeId) 
                        || this.parentDiagram.systemNodes.find(s => s.id === model.sourceNodeId);
                        
-        this.targetNode = this.parentDiagram.systemNodes.find(s => s.id === model.targetNodeId);
+        this.targetNode = this.parentDiagram.systemNodes.find(s => s.id === model.targetNodeId)
+                       || this.parentDiagram.actorNodes.find(s => s.id === model.targetNodeId);
+        
+        this.updatePath();
     }
     
-    copyToModel(): ConnectorModel {
-        let model = <ConnectorModel>{};
+    copyToModel(): EdgeModel {
+        let model = <EdgeModel>{};
         model.id = this.id;
         model.name = this.name;
         model.description = this.description;

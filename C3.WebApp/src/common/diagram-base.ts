@@ -1,9 +1,11 @@
 import {NodeBase} from './node-base';
+import {EdgeBase} from './edge-base';
 import {SelectionBox} from './selection-box';
 import 'hammerjs/hammer.js';
 
 export abstract class DiagramBase {
     abstract getNodes(): NodeBase[];
+    abstract getEdges(): EdgeBase[];
     private isPanning: boolean;
     private selectionBox: SelectionBox;
 
@@ -74,8 +76,11 @@ export abstract class DiagramBase {
         if (this.isPanning) {
             for (var c of this.getNodes()) {
                 if (c.isSelected) {
-                    c.pan(event.deltaX, event.deltaY)
+                    c.pan(event.deltaX, event.deltaY);
                 }
+            }
+            for (var e of this.getEdges()) {
+                e.updatePath();
             }
         }
         else {

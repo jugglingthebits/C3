@@ -3,6 +3,7 @@ import {Container as DIContainer} from 'aurelia-dependency-injection';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
+import {EdgeBase} from '../common/edge-base';
 import {ContainerNode} from './container-node';
 import {SelectionBox} from '../common/selection-box';
 import {ContainerDiagramModel} from '../common/model';
@@ -42,8 +43,12 @@ export class ContainerDiagram extends DiagramBase {
     }
     
     getNodes(): NodeBase[] {
-        let nodes = (<NodeBase[]>this.containerNodes);
+        let nodes = this.containerNodes;
         return nodes;
+    }
+    
+    getEdges(): EdgeBase[] {
+        return [];
     }
     
     updateFromModel(model: ContainerDiagramModel): void {

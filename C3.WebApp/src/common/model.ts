@@ -15,7 +15,7 @@ export interface NodeModel {
 export interface SystemContextDiagramModel extends DiagramModel {
     systemNodes: SystemNodeModel[];
     actorNodes: ActorNodeModel[];
-    connectors: ConnectorModel[];
+    edges: EdgeModel[];
 }
 
 export interface SystemNodeModel extends NodeModel {
@@ -43,10 +43,13 @@ export interface ComponentDiagramModel extends DiagramModel {
 export interface ComponentNodeModel extends NodeModel {
 }
 
-export interface ConnectorModel {
+export interface EdgeModel {
     id: string;
     name: string;
     description: string;
     sourceNodeId: string;
     targetNodeId: string;
+}
+
+export interface SystemActorEdgeModel {
 }
