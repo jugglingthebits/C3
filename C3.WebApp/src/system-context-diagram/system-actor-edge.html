@@ -1,8 +1,18 @@
 ﻿<template>
     <svg>
-        <line x1.bind="path[0].x" y1.bind="path[0].y"
-              x2.bind="path[1].x" y2.bind="path[1].y"
-              stroke="black" stroke-width="2"/>
+        <defs>
+            <marker id="arrowHead"
+                    viewBox="0 0 10 10" 
+                    refX="1" refY="5"
+                    markerWidth="6" 
+                    markerHeight="6"
+                    orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+        </defs>
         
+        <polyline points.bind="points" 
+            fill="none" stroke="black" stroke-width="2"
+            marker-end="url(#arrowHead)"/>
     </svg>
 </template>

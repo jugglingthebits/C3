@@ -1,4 +1,4 @@
-﻿import {autoinject} from 'aurelia-framework';
+﻿import {autoinject, computedFrom} from 'aurelia-framework';
 import {EdgeBase} from '../common/edge-base';
 import {ActorNode} from './actor-node';
 import {SystemNode} from './system-node';
@@ -16,6 +16,11 @@ export class SystemActorEdge extends EdgeBase {
     
     constructor() {
         super();
+    }
+    
+    @computedFrom('path')
+    get points(): string {
+        return `${this.path[0].x},${this.path[0].y} ${this.path[1].x},${this.path[1].y}`;
     }
     
     updateFromModel(model: EdgeModel): void {
