@@ -19,8 +19,9 @@ export class SystemActorEdge extends EdgeBase {
     }
     
     @computedFrom('path')
-    get points(): string {
-        return `${this.path[0].x},${this.path[0].y} ${this.path[1].x},${this.path[1].y}`;
+    get svgPoints(): string {
+        const svgPath = this.path.map(p => `${p.x},${p.y}`).join(" ");
+        return svgPath;
     }
     
     updateFromModel(model: EdgeModel): void {
