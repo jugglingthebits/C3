@@ -1,12 +1,9 @@
 import {NodeBase} from './node-base';
+import {PathFinder} from './path-finder';
 
 export interface Point {
     x: number;
     y: number;
-}
-
-export abstract class PathFinder {
-    abstract findPath(sourcePoint: Point, targetPoint: Point): Point[];
 }
 
 export abstract class EdgeBase {
