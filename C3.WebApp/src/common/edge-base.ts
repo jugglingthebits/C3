@@ -6,6 +6,10 @@ export interface Point {
     y: number;
 }
 
+export enum Direction {
+    North, South, East, West
+}
+
 export abstract class EdgeBase {
     path: Point[];
     sourceNode: NodeBase;
@@ -17,9 +21,10 @@ export abstract class EdgeBase {
         if (this.areNodesOverlapping())
             return;        
  
-        const sourcePoint = this.getNodeConnectionPoint(this.sourceNode, this.targetNode);
-        const targetPoint = this.getNodeConnectionPoint(this.targetNode, this.sourceNode);
-        this.path = this.pathFinder.findPath(sourcePoint, targetPoint);
+        const sourcePoint = this.getNodeConnector(this.sourceNode, this.targetNode);
+        const targetPoint = this.getNodeConnector(this.targetNode, this.sourceNode);
+        this.path = this.pathFinder.findPath(sourcePoint[0], sourcePoint[1], 
+                                             targetPoint[0], targetPoint[1]);
     }
     
     private areNodesOverlapping(): boolean {
@@ -32,7 +37,7 @@ export abstract class EdgeBase {
         return overlapping;
     }
     
-    private getNodeConnectionPoint(connectionNode: NodeBase, otherNode: NodeBase) {
+    private getNodeConnector(connectionNode: NodeBase, otherNode: NodeBase): [Point, Direction] {
         const connectionNodeCenter = this.getNodeCenter(connectionNode);
         const otherNodeCenter = this.getNodeCenter(otherNode);
         
@@ -45,14 +50,14 @@ export abstract class EdgeBase {
                     x: connectionNode.x + connectionNode.width / 2,
                     y: connectionNode.y
                 }
-                return topCenter;
+                return [topCenter, Direction.North];
             }
             else {
                 const bottomCenter: Point = {
                     x: connectionNode.x + connectionNode.width / 2,
                     y: connectionNode.y + connectionNode.height
                 }
-                return bottomCenter;
+                return [bottomCenter, Direction.South];
             }
         } else {
             if (connectionNode.x > otherNode.x) {
@@ -60,14 +65,14 @@ export abstract class EdgeBase {
                     x: connectionNode.x,
                     y: connectionNode.y + connectionNode.height / 2
                 }
-                return leftCenter;
+                return [leftCenter, Direction.West];
             }
             else {
-                const bottomCenter: Point = {
+                const rightCenter: Point = {
                     x: connectionNode.x + connectionNode.width,
                     y: connectionNode.y + connectionNode.height / 2
                 }
-                return bottomCenter;
+                return [rightCenter, Direction.East];
             }
         }
     }

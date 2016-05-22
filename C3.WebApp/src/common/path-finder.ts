@@ -1,11 +1,13 @@
-import {Point} from './edge-base';
+import {Point, Direction} from './edge-base';
 
 export interface PathFinder {
-    findPath(sourcePoint: Point, targetPoint: Point): Point[];
+    findPath(sourcePoint: Point, outgoingDirection: Direction, 
+             targetPoint: Point, incomingDirection: Direction): Point[];
 }
 
 export class StraightPathFinder implements PathFinder {
-    findPath(sourcePoint: Point, targetPoint: Point): Point[] {
+    findPath(sourcePoint: Point, outgoingDirection: Direction, 
+             targetPoint: Point, incomingDirection: Direction): Point[] {
         const path = [];
         path.push(sourcePoint);
         path.push(targetPoint);
@@ -15,7 +17,8 @@ export class StraightPathFinder implements PathFinder {
 }
 
 export class PerpendicularPathFinder implements PathFinder {
-    findPath(sourcePoint: Point, targetPoint: Point): Point[] {
+    findPath(sourcePoint: Point, outgoingDirection: Direction, 
+             targetPoint: Point, incomingDirection: Direction): Point[] {
         const path = [];
         path.push(sourcePoint);
         
@@ -23,7 +26,7 @@ export class PerpendicularPathFinder implements PathFinder {
         const diffY = targetPoint.y - sourcePoint.y;
         
         if (Math.abs(diffX) !== 0 && Math.abs(diffY) !== 0) {
-            if (diffX > diffY) {
+            if (outgoingDirection === Direction.West || outgoingDirection === Direction.East) {
                 const point1X = sourcePoint.x + diffX/2;
                 const point1Y = sourcePoint.y;
                 path.push({x: point1X, y: point1Y});

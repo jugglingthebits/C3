@@ -1,8 +1,6 @@
 import 'bootstrap';
 import {Aurelia} from 'aurelia-framework';
 import {SystemNode} from './system-context-diagram/system-node';
-import {StraightPathFinder} from './common/straight-path-finder';
-import {PathFinder} from './common/edge-base';
 
 export function configure(aurelia: Aurelia) {
     aurelia.use
