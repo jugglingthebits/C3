@@ -1,26 +1,28 @@
 import {NodeBase} from './node-base';
 
-interface Point {
+export interface Point {
     x: number;
     y: number;
+}
+
+export abstract class PathFinder {
+    abstract findPath(sourcePoint: Point, targetPoint: Point): Point[];
 }
 
 export abstract class EdgeBase {
     path: Point[];
     sourceNode: NodeBase;
     targetNode: NodeBase;
+    
+    constructor(private pathFinder: PathFinder) {}
 
     updatePath() {
-        this.path = [];
-
         if (this.areNodesOverlapping())
             return;        
-        
+ 
         const sourcePoint = this.getNodeConnectionPoint(this.sourceNode, this.targetNode);
-        this.path.push(sourcePoint);
-        
         const targetPoint = this.getNodeConnectionPoint(this.targetNode, this.sourceNode);
-        this.path.push(targetPoint);
+        this.path = this.pathFinder.findPath(sourcePoint, targetPoint);
     }
     
     private areNodesOverlapping(): boolean {

@@ -1,5 +1,6 @@
 ﻿import {autoinject, computedFrom} from 'aurelia-framework';
-import {EdgeBase} from '../common/edge-base';
+import {EdgeBase, PathFinder} from '../common/edge-base';
+import {StraightPathFinder} from '../common/straight-path-finder';
 import {ActorNode} from './actor-node';
 import {SystemNode} from './system-node';
 import {SystemContextDiagram} from './system-context-diagram';
@@ -14,8 +15,8 @@ export class SystemActorEdge extends EdgeBase {
     sourceNode: ActorNode | SystemNode;
     targetNode: ActorNode | SystemNode;
     
-    constructor() {
-        super();
+    constructor(pathFinder: StraightPathFinder) {
+        super(pathFinder);
     }
     
     @computedFrom('path')
