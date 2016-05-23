@@ -23,12 +23,16 @@ export class NodeBase {
     }
     
     pan(deltaX: number, deltaY: number): void {
-        this.x = this.startX + deltaX;
-        if (this.x < 0)
-            this.x = 0;
-        this.y = this.startY + deltaY;
-        if (this.y < 0)
-            this.y = 0;
+        let newX = this.startX + deltaX;
+        if (newX < 0)
+            newX = 0;
+        this.x = Math.round(newX/10)*10; // Lock nodes to a 10px grid 
+        
+        let newY = this.startY + deltaY;
+        if (newY < 0)
+            newY = 0;
+        
+        this.y = Math.round(newY/10)*10; // Lock nodes to a 10px grid
     }
     
     endPan() {
