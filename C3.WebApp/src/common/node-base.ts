@@ -1,14 +1,4 @@
-import {Point, Direction} from './edge-base';
-
-export class ConnectionPoint {
-    constructor(point: Point, direction: Direction) {
-        this.point = point;
-        this.direction = direction;
-    }
-    
-    point: Point;
-    direction: Direction;
-}
+import {Point} from './edge-base';
 
 export class NodeBase {
     x: number;
@@ -46,35 +36,31 @@ export class NodeBase {
         this.startY = undefined;
     }
     
-    getConnectionPoints(): ConnectionPoint[] {
+    getConnectionPoints(): Point[] {
         const center = this.getCenter();
         
         const topCenter: Point = {
             x: this.x + this.width / 2,
             y: this.y
         }
-        const topConnectionPoint = new ConnectionPoint(topCenter, Direction.North);
 
         const bottomCenter: Point = {
             x: this.x + this.width / 2,
             y: this.y + this.height
         }
-        const bottomConnectionPoint = new ConnectionPoint(bottomCenter, Direction.South);
 
         const leftCenter: Point = {
             x: this.x,
             y: this.y + this.height / 2
         }
-        const leftConnectionPoint = new ConnectionPoint(leftCenter, Direction.West);
 
         const rightCenter: Point = {
             x: this.x + this.width,
             y: this.y + this.height / 2
         }
-        const rightConnectionPoint = new ConnectionPoint(rightCenter, Direction.East);
         
-        return [topConnectionPoint, bottomConnectionPoint, 
-                leftConnectionPoint, rightConnectionPoint];
+        return [topCenter, bottomCenter, 
+                leftCenter, rightCenter];
     }
     
     private getCenter(): Point {

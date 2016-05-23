@@ -6,10 +6,6 @@ export interface Point {
     y: number;
 }
 
-export enum Direction {
-    North, South, East, West
-}
-
 export abstract class EdgeBase {
     path: Point[];
     sourceNode: NodeBase;

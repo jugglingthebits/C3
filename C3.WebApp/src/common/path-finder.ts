@@ -1,9 +1,8 @@
-import {Point, Direction} from './edge-base';
-import {ConnectionPoint} from './node-base';
+import {Point} from './edge-base';
 
 export interface PathFinder {
-    findPath(sourceConnectionPoints: ConnectionPoint[], 
-             targetConnectionPoints: ConnectionPoint[]): Point[];
+    findPath(sourceConnectionPoints: Point[], 
+             targetConnectionPoints: Point[]): Point[];
 }
 
 function cartesianProduct<T>(array: Array<Array<T>>): Array<Array<T>>
@@ -36,15 +35,15 @@ function lengthOf(path: Point[]): number {
         var b = currentValue.y - array[currentIndex-1].y;
 
         var currentLength = Math.sqrt( a*a + b*b );
-        return currentLength;
+        return previousValue + currentLength;
     }, 0);
     
     return length;
 }
 
 export class StraightPathFinder implements PathFinder {
-    findPath(sourceConnectionPoints: ConnectionPoint[], 
-             targetConnectionPoints: ConnectionPoint[]): Point[] {
+    findPath(sourceConnectionPoints: Point[], 
+             targetConnectionPoints: Point[]): Point[] {
         
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
@@ -63,60 +62,49 @@ export class StraightPathFinder implements PathFinder {
         return path;
     }
     
-    private findAPath(sourcePoint: ConnectionPoint, targetPoint: ConnectionPoint): Point[] {
-        const directPath = [sourcePoint.point, targetPoint.point];
+    private findAPath(sourcePoint: Point, targetPoint: Point): Point[] {
+        const directPath = [sourcePoint, targetPoint];
         return directPath;
     }
 }
 
-// export class PerpendicularPathFinder implements PathFinder {
-//     findPath(sourceConnectionPoints: ConnectionPoint[], 
-//              targetConnectionPoints: ConnectionPoint[]): Point[] {
-//         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
+export class PerpendicularPathFinder implements PathFinder {
+    findPath(sourceConnectionPoints: Point[], 
+             targetConnectionPoints: Point[]): Point[] {
+        const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
-//         const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
-//             const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1]);
-//             const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1]);
+        const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
+            const previousPath = this.findShortestPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1]);
+            const currentPath = this.findShortestPath(currentConnectionPoints[0], currentConnectionPoints[1]);
             
-//             const previousLength = lengthOf(previousPath);
-//             const currentLength = lengthOf(currentPath);
+            const previousLength = lengthOf(previousPath);
+            const currentLength = lengthOf(currentPath);
             
-//             const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
-//             return shorterPath;
-//         });
+            const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
+            return shorterPath;
+        });
         
-//         const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1]);
-//         return path;
-//     }
+        const path = this.findShortestPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1]);
+        return path;
+    }
     
-//     private findAPath(sourcePoint: ConnectionPoint, targetPoint: ConnectionPoint): Point[] {
-//         const diffX = targetPoint.x - sourcePoint.x;
-//         const diffY = targetPoint.y - sourcePoint.y;
-        
-//         if (Math.abs(diffX) === 0 || Math.abs(diffY) === 0) {
-//             const directPath = [sourcePoint.point, targetPoint.point];
-//             return directPath;
-//         }
-        
-//         const path = [];
-//         if (outgoingDirection === Direction.West || outgoingDirection === Direction.East) {
-//             const point1X = sourcePoint.x + diffX/2;
-//             const point1Y = sourcePoint.y;
-//             path.push({x: point1X, y: point1Y});
-            
-//             const point2X = sourcePoint.x + diffX/2;
-//             const point2Y = targetPoint.y;
-//             path.push({x: point2X, y: point2Y});
-//         } else {
-//             const point1X = sourcePoint.x;
-//             const point1Y = sourcePoint.y + diffY/2;
-//             path.push({x: point1X, y: point1Y});
-            
-//             const point2X = targetPoint.x;
-//             const point2Y = targetPoint.y - diffY/2;
-//             path.push({x: point2X, y: point2Y});
-//         }
-        
-//         return path;
-//     }
-// }
+    private findShortestPath(sourcePoint: Point, targetPoint: Point): Point[] {
+        const diffX = Math.abs(targetPoint.x - sourcePoint.x);
+        const diffY = Math.abs(targetPoint.y - sourcePoint.y);
+
+        const path1 = [sourcePoint, 
+                       <Point>{x: sourcePoint.x + diffX/2, y: sourcePoint.y},
+                       <Point>{x: sourcePoint.x + diffX/2, y: targetPoint.y}, 
+                       targetPoint]
+
+        const path2 = [sourcePoint, 
+                       <Point>{x: sourcePoint.x, y: sourcePoint.y + diffY/2},
+                       <Point>{x: targetPoint.x, y: targetPoint.y - diffY/2}, 
+                       targetPoint]
+
+        const path1Length = lengthOf(path1);
+        const path2Length = lengthOf(path2);
+        const shorterPath = path1Length < path2Length ? path1 : path2;                
+        return shorterPath;
+    }
+}
