@@ -1,4 +1,7 @@
+import {LogManager} from 'aurelia-framework';
 import {Point} from './edge-base';
+
+const logger = LogManager.getLogger('pathFinder');
 
 export interface PathFinder {
     findPath(sourceConnectionPoints: Point[], 
@@ -69,42 +72,42 @@ export class StraightPathFinder implements PathFinder {
 }
 
 export class PerpendicularPathFinder implements PathFinder {
+    private veryLongPath = [{x: 0, y: 0}, {x: 10000, y: 10000}];
+    
     findPath(sourceConnectionPoints: Point[], 
              targetConnectionPoints: Point[]): Point[] {
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
-        const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
-            const previousPath = this.findShortestPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1]);
-            const currentPath = this.findShortestPath(currentConnectionPoints[0], currentConnectionPoints[1]);
+        const shortestPath = connectionPointCombinations.reduce((previousShortestPath, currentConnectionPoints) => {
+            const currentShortestPath = this.findShortestPath(currentConnectionPoints[0], currentConnectionPoints[1]);
             
-            const previousLength = lengthOf(previousPath);
-            const currentLength = lengthOf(currentPath);
+            const previousLength = lengthOf(previousShortestPath);
+            const currentLength = lengthOf(currentShortestPath);
             
-            const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
+            const shorterPath = (currentLength < previousLength) ? currentShortestPath : previousShortestPath;
             return shorterPath;
-        });
-        
-        const path = this.findShortestPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1]);
-        return path;
+        }, this.veryLongPath);
+
+        // logger.debug(shortestPath);
+        return shortestPath;
     }
     
     private findShortestPath(sourcePoint: Point, targetPoint: Point): Point[] {
-        const diffX = Math.abs(targetPoint.x - sourcePoint.x);
-        const diffY = Math.abs(targetPoint.y - sourcePoint.y);
+        const diffX = targetPoint.x - sourcePoint.x;
+        const diffY = targetPoint.y - sourcePoint.y;
 
-        const path1 = [sourcePoint, 
-                       <Point>{x: sourcePoint.x + diffX/2, y: sourcePoint.y},
-                       <Point>{x: sourcePoint.x + diffX/2, y: targetPoint.y}, 
-                       targetPoint]
-
-        const path2 = [sourcePoint, 
-                       <Point>{x: sourcePoint.x, y: sourcePoint.y + diffY/2},
-                       <Point>{x: targetPoint.x, y: targetPoint.y - diffY/2}, 
-                       targetPoint]
-
-        const path1Length = lengthOf(path1);
-        const path2Length = lengthOf(path2);
-        const shorterPath = path1Length < path2Length ? path1 : path2;                
-        return shorterPath;
+        if (diffX > diffY) {
+            const path1 = [sourcePoint, 
+                    <Point>{x: sourcePoint.x + diffX/2, y: sourcePoint.y},
+                    <Point>{x: sourcePoint.x + diffX/2, y: targetPoint.y}, 
+                    targetPoint]
+            return path1;
+        } else {
+            const path2 = [sourcePoint, 
+                        <Point>{x: sourcePoint.x, y: sourcePoint.y + diffY/2},
+                        <Point>{x: targetPoint.x, y: sourcePoint.y + diffY/2}, 
+                        targetPoint]
+            return path2;            
+        }
     }
 }
