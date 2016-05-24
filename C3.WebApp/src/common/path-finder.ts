@@ -8,7 +8,7 @@ export interface PathFinder {
              targetConnectionPoints: Point[]): Point[];
 }
 
-function cartesianProduct<T>(array: Array<Array<T>>): Array<Array<T>>
+export function cartesianProduct<T>(array: Array<Array<T>>): Array<Array<T>>
 {
     const reduce = array.reduce((previousValue, currentValue) => {
         const aMap = previousValue.map(value => {
@@ -29,7 +29,7 @@ function cartesianProduct<T>(array: Array<Array<T>>): Array<Array<T>>
     return reduce;
 }
 
-function lengthOf(path: Point[]): number {
+export function lengthOf(path: Point[]): number {
     const length: number = path.reduce((previousValue, currentValue, currentIndex, array) => {
         if (currentIndex === 0)
             return 0;
