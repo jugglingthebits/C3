@@ -3,17 +3,40 @@ import {Point} from './edge-base';
 import {BinaryHeap} from './binary-heap';
 import {DiagramBase} from './diagram-base';
 
-interface Node extends Point {
-    weight: number;
-    g: number;
-    h: number;
-    f: number;
-    visited: boolean;
-    closed: boolean;
+class Node implements Point {
+    x: number;
+    y: number;
+    
+    gScore = 0;
+    fScore(endNode: Node): number {
+        const fScore = this.gScore + this.hScore(endNode);
+        return fScore;
+    };
+    
+    private _hScore;
+    private hScore(endNode: Node): number {
+        if (!this._hScore)
+            this._hScore = manhattanHeuristic(this, endNode);
+        return this._hScore;
+    }
+    
+    private _visited = false;
+    get visited(): boolean {
+        return this._visited;
+    };
+    
+    closed: boolean = false;
     parent: Node;
+    
+    constructor(point: Point) {
+        this.x = point.x;
+        this.y = point.y;
+    }
 }
 
 class GraphForDiagram {
+    private grid: Node[][] = [];
+    
     constructor(private diagram: DiagramBase) {}
     
     getCost(point: Node): number {
@@ -67,14 +90,14 @@ export class AstarPathFinder implements PathFinder {
     
     private findAPath(sourcePoint: Point, targetPoint: Point): Point[] {
         const graph = new GraphForDiagram(this.diagram);
-        const openHeap = new BinaryHeap<Node>(n => graph.getCost(n));
         const heuristic = manhattanHeuristic;
         
-        const startNode = <Node>sourcePoint;
-        const endNode = <Node>targetPoint; 
+        const startNode = new Node(sourcePoint);
+        const endNode = new Node(targetPoint); 
+        const openHeap = new BinaryHeap<Node>(n => n.fScore(endNode));
         let closestNode = startNode;
         
-        startNode.h = heuristic(sourcePoint, targetPoint);
+        // startNode.h = heuristic(sourcePoint, targetPoint);
         
         openHeap.push(startNode);
         
@@ -92,29 +115,28 @@ export class AstarPathFinder implements PathFinder {
                 if (neighbor.closed)
                     continue;
                 
-                const gScore = currentNode.g + neighbor.weight;
-                const beenVisited = neighbor.visited;
+                const tentative_gScore = currentNode.gScore + graph.getCost(neighbor);
+                const neighborVisited = neighbor.visited;
 
-                if (!beenVisited || gScore < neighbor.g) {
+                if (!neighborVisited || tentative_gScore < neighbor.gScore) {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
-                    neighbor.visited = true;
                     neighbor.parent = currentNode;
-                    neighbor.h = neighbor.h || heuristic(neighbor, endNode);
-                    neighbor.g = gScore;
-                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.gScore = tentative_gScore;
                     
-                    if (!beenVisited) {
+                    if (!neighborVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
                     } else {
                         // Already seen the node, but since it has been rescored we need to reorder it in the heap
                         openHeap.rescore(neighbor);
                     }
+                    
+                    neighbor.visited = true;
                 }
             }
         }
         
-        return [];
+        // TODO: error
     }
 
 }
