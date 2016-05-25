@@ -3,11 +3,58 @@ import {EdgeBase} from './edge-base';
 import {SelectionBox} from './selection-box';
 import 'hammerjs/hammer.js';
 
+export class BoundingBox {
+    constructor(public x: number, public y: number, 
+                public width: number, public height: number) {}
+}
+
 export abstract class DiagramBase {
     abstract getNodes(): NodeBase[];
     abstract getEdges(): EdgeBase[];
     private isPanning: boolean;
     private selectionBox: SelectionBox;
+
+    getBoundingBox(): BoundingBox {
+        const nodes = this.getNodes();
+        const edges = this.getEdges();
+        
+        let left: number;
+        let right: number;
+        let top: number;
+        let bottom: number;
+        
+        for (var node of nodes) {
+            if (!left || left > node.x )
+                left = node.x;
+            if (!right || right < node.x + node.width)
+                right = node.x + node.width;
+            if (!top || top > node.y )
+                top = node.y;
+            if (!bottom || bottom < node.y + node.height)
+                bottom = node.y + node.height;
+        }
+        
+        for (var edge of edges) {
+            for (var point of edge.path) {
+                if (!left || left > point.x)
+                    left = point.x;
+                if (!right || right < point.x)
+                    right = point.x;
+                if (!top || top > point.y)
+                    top = point.y;
+                if (!bottom || bottom < point.x)
+                    right = point.y;
+            }
+        }
+
+        if (!left || !right || !top || !bottom)
+            return new BoundingBox(0, 0, 0, 0);
+
+        const width = right - left;
+        const height = bottom - top;
+        
+        return new BoundingBox(left, top, width, height);
+    }
 
     private unselectAll(): void {
         for(var c of this.getNodes()) {
@@ -122,5 +169,4 @@ export abstract class DiagramBase {
         // no container hit
         this.unselectAll();
     }
-    
 }

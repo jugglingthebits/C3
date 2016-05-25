@@ -1,13 +1,16 @@
 import {PathFinder, cartesianProduct, lengthOf} from './path-finder';
 import {Point} from './edge-base';
 import {BinaryHeap} from './binary-heap';
-import {DiagramBase} from './diagram-base';
+import {DiagramBase, BoundingBox} from './diagram-base';
 
 class Node implements Point {
     x: number;
     y: number;
-    
+    visited = false;
+    closed: boolean = false;
+    parent: Node;
     gScore = 0;
+    
     fScore(endNode: Node): number {
         const fScore = this.gScore + this.hScore(endNode);
         return fScore;
@@ -20,14 +23,6 @@ class Node implements Point {
         return this._hScore;
     }
     
-    private _visited = false;
-    get visited(): boolean {
-        return this._visited;
-    };
-    
-    closed: boolean = false;
-    parent: Node;
-    
     constructor(point: Point) {
         this.x = point.x;
         this.y = point.y;
@@ -35,16 +30,55 @@ class Node implements Point {
 }
 
 class GraphForDiagram {
-    private grid: Node[][] = [];
+    // TODO: It would be much more efficient to use a sparse matrix 
+    private grid: Node[][];
+    private diagramBoundingBox: BoundingBox;
     
-    constructor(private diagram: DiagramBase) {}
+    constructor(private diagram: DiagramBase) {
+        this.diagramBoundingBox = this.diagram.getBoundingBox();
+        this.buildGrid();
+    }
     
     getCost(point: Node): number {
         return 0; // TODO
     }
     
-    getNeighbors(node: Node): Node[] {
-        return []; // TODO
+    getNeighbors(x: number, y: number): Node[] {
+        if (this.diagramBoundingBox.width === 0 || this.diagramBoundingBox.height === 0)
+            return [];
+        
+        let neighbors: Node[] = [];
+        const gridX = x - this.diagramBoundingBox.x;
+        const gridY = y - this.diagramBoundingBox.y;
+        
+        if (gridX > 0) {
+            const leftNeighbor = this.grid[gridY][gridX - 1];
+            neighbors.push(leftNeighbor);
+        }
+        if (gridX < this.diagramBoundingBox.width - 1) {
+            const rightNeighbor = this.grid[gridY][gridX + 1];
+            neighbors.push(rightNeighbor);
+        }
+        if (gridY > 0) {
+            const topNeighbor = this.grid[gridY - 1][gridX];
+            neighbors.push(topNeighbor);
+        }
+        if (gridY < this.diagramBoundingBox.height - 1) {
+            const rightNeighbor = this.grid[gridY - 1][gridX];
+            neighbors.push(rightNeighbor);
+        }
+    }
+    
+    private buildGrid() {
+        this.grid = [];
+        for (var i=0; i < this.diagramBoundingBox.height; i++) {
+            let row = [];
+            for (var j=0; j < this.diagramBoundingBox.width; j++) {
+                const node = new Node({x: j, y: i});
+                row.push(node);
+            }
+            this.grid.push(row);
+        }
     }
 }
 
@@ -109,7 +143,7 @@ export class AstarPathFinder implements PathFinder {
             }
             currentNode.closed = true;
             
-            const neighbors = graph.getNeighbors(currentNode);
+            const neighbors = graph.getNeighbors(currentNode.x, currentNode.y);
             
             for (let neighbor of neighbors) {
                 if (neighbor.closed)
