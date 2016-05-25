@@ -30,7 +30,7 @@ class Node implements Point {
 }
 
 class GraphForDiagram {
-    // TODO: It would be much more efficient to use a sparse matrix 
+    // TODO: It would probably be much more efficient to use a sparse matrix 
     private grid: Node[][];
     private diagramBoundingBox: BoundingBox;
     
@@ -39,33 +39,46 @@ class GraphForDiagram {
         this.buildGrid();
     }
     
-    getCost(point: Node): number {
-        return 0; // TODO
+    getNode(point: Point): Node {
+        const gridX = point.x - this.diagramBoundingBox.x;
+        const gridY = point.y - this.diagramBoundingBox.y;
+        
+        return this.grid[gridY][gridX];
     }
     
-    getNeighbors(x: number, y: number): Node[] {
+    getCost(point: Point): number {
+        const nodes = this.diagram.getNodes();
+        for (var node of nodes) {
+            const diagramNodeX = node.x + this.diagramBoundingBox.x;
+            const diagramNodeY = node.y - this.diagramBoundingBox.y;
+            
+            if (node.isHit(diagramNodeX, diagramNodeY))
+                return 1000; // Wall
+        }
+        return 1; // cheapest
+    }
+    
+    getNeighbors(node: Node): Node[] {
         if (this.diagramBoundingBox.width === 0 || this.diagramBoundingBox.height === 0)
             return [];
         
         let neighbors: Node[] = [];
-        const gridX = x - this.diagramBoundingBox.x;
-        const gridY = y - this.diagramBoundingBox.y;
         
-        if (gridX > 0) {
-            const leftNeighbor = this.grid[gridY][gridX - 1];
+        if (node.x > 0) {
+            const leftNeighbor = this.grid[node.y][node.x - 1];
             neighbors.push(leftNeighbor);
         }
-        if (gridX < this.diagramBoundingBox.width - 1) {
-            const rightNeighbor = this.grid[gridY][gridX + 1];
+        if (node.x < this.diagramBoundingBox.width - 1) {
+            const rightNeighbor = this.grid[node.y][node.x + 1];
             neighbors.push(rightNeighbor);
         }
-        if (gridY > 0) {
-            const topNeighbor = this.grid[gridY - 1][gridX];
+        if (node.y > 0) {
+            const topNeighbor = this.grid[node.y - 1][node.x];
             neighbors.push(topNeighbor);
         }
-        if (gridY < this.diagramBoundingBox.height - 1) {
-            const rightNeighbor = this.grid[gridY - 1][gridX];
-            neighbors.push(rightNeighbor);
+        if (node.y < this.diagramBoundingBox.height - 1) {
+            const bottomNeighbor = this.grid[node.y + 1][node.x];
+            neighbors.push(bottomNeighbor);
         }
     }
     
@@ -126,8 +139,8 @@ export class AstarPathFinder implements PathFinder {
         const graph = new GraphForDiagram(this.diagram);
         const heuristic = manhattanHeuristic;
         
-        const startNode = new Node(sourcePoint);
-        const endNode = new Node(targetPoint); 
+        const startNode = graph.getNode(sourcePoint);
+        const endNode = graph.getNode(targetPoint); 
         const openHeap = new BinaryHeap<Node>(n => n.fScore(endNode));
         let closestNode = startNode;
         
@@ -143,7 +156,7 @@ export class AstarPathFinder implements PathFinder {
             }
             currentNode.closed = true;
             
-            const neighbors = graph.getNeighbors(currentNode.x, currentNode.y);
+            const neighbors = graph.getNeighbors(currentNode);
             
             for (let neighbor of neighbors) {
                 if (neighbor.closed)

@@ -1,6 +1,7 @@
 ﻿import {autoinject, computedFrom} from 'aurelia-framework';
 import {EdgeBase} from '../common/edge-base';
 import {StraightPathFinder, PerpendicularPathFinder} from '../common/path-finder';
+import {AstarPathFinder} from '../common/astar-path-finder';
 import {ActorNode} from './actor-node';
 import {SystemNode} from './system-node';
 import {SystemContextDiagram} from './system-context-diagram';
@@ -15,7 +16,7 @@ export class SystemActorEdge extends EdgeBase {
     sourceNode: ActorNode | SystemNode;
     targetNode: ActorNode | SystemNode;
     
-    constructor(pathFinder: PerpendicularPathFinder) {
+    constructor(pathFinder: AstarPathFinder) {
         super(pathFinder);
     }
     
