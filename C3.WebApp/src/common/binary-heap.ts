@@ -4,7 +4,7 @@ export class BinaryHeap<T> {
 
     constructor(private scoreFunction: (node: T) => number) {}
     
-    push(node) {
+    push(node: T): void {
         // Add the new element to the end of the array.
         this.content.push(node);
 
@@ -26,7 +26,7 @@ export class BinaryHeap<T> {
         return result;
     }
 
-    remove(node) {
+    remove(node: T): void {
         var i = this.content.indexOf(node);
 
         // When it is found, the process seen in 'pop' is repeated
