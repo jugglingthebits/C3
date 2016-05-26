@@ -2,11 +2,11 @@
 export class BinaryHeap<T> {
     private content: T[] = [];
 
-    constructor(private scoreFunction: (node: T) => number) {}
+    constructor(private scoreFunction: (element: T) => number) {}
     
-    push(node: T): void {
+    push(element: T): void {
         // Add the new element to the end of the array.
-        this.content.push(node);
+        this.content.push(element);
 
         // Allow it to sink down.
         this.sinkDown(this.content.length - 1);
@@ -26,8 +26,8 @@ export class BinaryHeap<T> {
         return result;
     }
 
-    remove(node: T): void {
-        var i = this.content.indexOf(node);
+    remove(element: T): void {
+        var i = this.content.indexOf(element);
 
         // When it is found, the process seen in 'pop' is repeated
         // to fill up the hole.
@@ -36,7 +36,7 @@ export class BinaryHeap<T> {
         if (i !== this.content.length - 1) {
             this.content[i] = end;
 
-            if (this.scoreFunction(end) < this.scoreFunction(node)) {
+            if (this.scoreFunction(end) < this.scoreFunction(element)) {
                 this.sinkDown(i);
             } else {
                 this.bubbleUp(i);
@@ -44,8 +44,8 @@ export class BinaryHeap<T> {
         }
     }
 
-    rescore(node: T) {
-        this.sinkDown(this.content.indexOf(node));
+    rescore(element: T) {
+        this.sinkDown(this.content.indexOf(element));
     }
     
     get size(): number {
@@ -79,8 +79,8 @@ export class BinaryHeap<T> {
     private bubbleUp(n: number): void {
         // Look up the target element and its score.
         var length = this.content.length;
-        var node = this.content[n];
-        var elemScore = this.scoreFunction(node);
+        var element = this.content[n];
+        var elemScore = this.scoreFunction(element);
 
         while (true) {
             // Compute the indices of the child elements.
@@ -113,7 +113,7 @@ export class BinaryHeap<T> {
             // If the element needs to be moved, swap it, and continue.
             if (swap !== null) {
                 this.content[n] = this.content[swap];
-                this.content[swap] = node;
+                this.content[swap] = element;
                 n = swap;
             }
             // Otherwise, we are done.
