@@ -1,16 +1,21 @@
 import {BinaryHeap} from 'src/common/binary-heap';
 
+class MockElement {
+    score: number;    
+}
+
 describe('the binary heap', () => {
-    let heap: BinaryHeap<string>;
+    let heap: BinaryHeap<MockElement>;
     
     beforeEach(() => {
-         heap = new BinaryHeap<string>(n => 3);
+         heap = new BinaryHeap<MockElement>(e => e.score);
     });
     
     describe('pull', () => {
         it('should return the previously pushed object', () => {
-            heap.push("123");
-            expect(heap.pop()).toBe("123");    
+            const value = {score: 1};
+            heap.push(value);
+            expect(heap.pop()).toBe(value);    
         });
         
         it('should return undefined when empty', () => {
@@ -18,12 +23,14 @@ describe('the binary heap', () => {
         });
         
         it('should return objects in the right order', () => {
+            const values = [];
             for (let i=0; i<100; i++) {
-                heap.push(`${i}`);
+                values.push({score: i});
+                heap.push(values[i]);
             }
             
             for (let i=99; i>=0; i++) {
-                expect(heap.pop()).toBe(`${i}`);
+                expect(heap.pop()).toBe(values[i]);
             }
         });
     });
@@ -35,17 +42,17 @@ describe('the binary heap', () => {
         
         it('should return 100 when there are 100 elements', () => {
             for (let i=0; i<100; i++) {
-                heap.push(`${i}`);
+                heap.push({score: i});
             }
             expect(heap.size).toBe(100);
         });
         
         it('should return 1 less after pop', () => {
             for (let i=0; i<100; i++) {
-                heap.push(`${i}`);
+                heap.push({score: i});
             }
             heap.pop();
-            expect(heap.size).toBe(100);
+            expect(heap.size).toBe(99);
         });
     });
 });
