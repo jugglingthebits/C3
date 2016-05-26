@@ -1,7 +1,11 @@
+import {LogManager} from 'aurelia-framework';
 import {PathFinder, cartesianProduct, lengthOf} from './path-finder';
 import {Point} from './edge-base';
 import {BinaryHeap} from './binary-heap';
 import {DiagramBase, BoundingBox} from './diagram-base';
+
+const logger = LogManager.getLogger('astar');
+const gridSpacing = 10;
 
 class Node implements Point {
     x: number;
@@ -40,22 +44,30 @@ class GraphForDiagram {
     }
     
     getNode(point: Point): Node {
-        const gridX = point.x - this.diagramBoundingBox.x;
-        const gridY = point.y - this.diagramBoundingBox.y;
+        const x = point.x - this.diagramBoundingBox.x;
+        const y = point.y - this.diagramBoundingBox.y;
         
-        return this.grid[gridY][gridX];
+        const node = this.grid[this.toGrid(y)][this.toGrid(x)];
+        return node;
     }
     
     getCost(point: Point): number {
         const nodes = this.diagram.getNodes();
         for (var node of nodes) {
             const diagramNodeX = node.x + this.diagramBoundingBox.x;
-            const diagramNodeY = node.y - this.diagramBoundingBox.y;
+            const diagramNodeY = node.y + this.diagramBoundingBox.y;
             
             if (node.isHit(diagramNodeX, diagramNodeY))
                 return 1000; // Wall
         }
         return 1; // cheapest
+    }
+    
+    private toGrid(value: number) {
+        if (value % gridSpacing !== 0)
+            throw `{value} is not within the grid`;
+
+        return value/gridSpacing;
     }
     
     getNeighbors(node: Node): Node[] {
@@ -65,19 +77,19 @@ class GraphForDiagram {
         let neighbors: Node[] = [];
         
         if (node.x > 0) {
-            const leftNeighbor = this.grid[node.y][node.x - 1];
+            const leftNeighbor = this.grid[this.toGrid(node.y)][this.toGrid(node.x) - 1];
             neighbors.push(leftNeighbor);
         }
         if (node.x < this.diagramBoundingBox.width - 1) {
-            const rightNeighbor = this.grid[node.y][node.x + 1];
+            const rightNeighbor = this.grid[this.toGrid(node.y)][this.toGrid(node.x) + 1];
             neighbors.push(rightNeighbor);
         }
         if (node.y > 0) {
-            const topNeighbor = this.grid[node.y - 1][node.x];
+            const topNeighbor = this.grid[this.toGrid(node.y) - 1][this.toGrid(node.x)];
             neighbors.push(topNeighbor);
         }
         if (node.y < this.diagramBoundingBox.height - 1) {
-            const bottomNeighbor = this.grid[node.y + 1][node.x];
+            const bottomNeighbor = this.grid[this.toGrid(node.y) + 1][this.toGrid(node.x)];
             neighbors.push(bottomNeighbor);
         }
         return neighbors;
@@ -85,9 +97,9 @@ class GraphForDiagram {
     
     private buildGrid() {
         this.grid = [];
-        for (var i=0; i < this.diagramBoundingBox.height; i++) {
+        for (var i=0; i <= this.diagramBoundingBox.height; i=i+gridSpacing) {
             let row = [];
-            for (var j=0; j < this.diagramBoundingBox.width; j++) {
+            for (var j=0; j <= this.diagramBoundingBox.width; j=j+gridSpacing) {
                 const node = new Node({x: j, y: i});
                 row.push(node);
             }
@@ -117,20 +129,26 @@ export class AstarPathFinder implements PathFinder {
     findPath(sourceConnectionPoints: Point[], 
              targetConnectionPoints: Point[], diagram: DiagramBase): Point[] {
                  
-        const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
+        // const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
-        const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
-            const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
-            const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
+        // const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
+        //     const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
+        //     const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
             
-            const previousLength = lengthOf(previousPath);
-            const currentLength = lengthOf(currentPath);
+        //     const previousLength = lengthOf(previousPath);
+        //     const currentLength = lengthOf(currentPath);
             
-            const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
-            return shorterPath;
-        });
+        //     const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
+        //     return shorterPath;
+        // });
         
-        const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
+        //const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
+        
+        const sourceConnectionPoint = sourceConnectionPoints[0];
+        const targetConnectionPoint = targetConnectionPoints[0];
+        
+        const path = this.findAPath(sourceConnectionPoint, targetConnectionPoint, diagram);
+        
         return path;
     }
     
