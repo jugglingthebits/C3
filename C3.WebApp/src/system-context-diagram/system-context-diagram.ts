@@ -69,10 +69,10 @@ export class SystemContextDiagram extends DiagramBase {
             node.updateFromModel(nodeModel);
             return node;
         });
-        this.systemActorEdges = model.edges.map(connectorModel => {
+        this.systemActorEdges = model.edges.map(edgeModel => {
            let connector = <SystemActorEdge>this.container.get(SystemActorEdge);
            connector.parentDiagram = this;
-           connector.updateFromModel(connectorModel);
+           connector.updateFromModel(edgeModel);
            return connector;
         });
     }
