@@ -80,6 +80,7 @@ class GraphForDiagram {
             const bottomNeighbor = this.grid[node.y + 1][node.x];
             neighbors.push(bottomNeighbor);
         }
+        return neighbors;
     }
     
     private buildGrid() {
@@ -113,16 +114,14 @@ function pathTo(node: Node): Node[] {
 
 // Code adapted from https://github.com/bgrins/javascript-astar/blob/master/astar.js
 export class AstarPathFinder implements PathFinder {
-    constructor(private diagram: DiagramBase) {}
-    
     findPath(sourceConnectionPoints: Point[], 
-             targetConnectionPoints: Point[]): Point[] {
+             targetConnectionPoints: Point[], diagram: DiagramBase): Point[] {
                  
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
         const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
-            const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1]);
-            const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1]);
+            const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
+            const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
             
             const previousLength = lengthOf(previousPath);
             const currentLength = lengthOf(currentPath);
@@ -131,12 +130,12 @@ export class AstarPathFinder implements PathFinder {
             return shorterPath;
         });
         
-        const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1]);
+        const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
         return path;
     }
     
-    private findAPath(sourcePoint: Point, targetPoint: Point): Point[] {
-        const graph = new GraphForDiagram(this.diagram);
+    private findAPath(sourcePoint: Point, targetPoint: Point, diagram: DiagramBase): Point[] {
+        const graph = new GraphForDiagram(diagram);
         const heuristic = manhattanHeuristic;
         
         const startNode = graph.getNode(sourcePoint);
