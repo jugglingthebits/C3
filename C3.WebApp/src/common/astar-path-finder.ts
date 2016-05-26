@@ -63,6 +63,19 @@ class GraphForDiagram {
         return 1; // cheapest
     }
     
+    getFullPath(endNode: Node): Point[] {
+        let currentNode = endNode;
+        const path: Point[] = [];
+        while (currentNode.parent) {
+            const point = <Point>{x: currentNode.x + this.diagramBoundingBox.x, 
+                                  y: currentNode.y + this.diagramBoundingBox.y};
+            
+            path.unshift(point);
+            currentNode = currentNode.parent;
+        }
+        return path;
+    }
+    
     private toGrid(value: number) {
         if (value % gridSpacing !== 0)
             throw `{value} is not within the grid`;
@@ -114,15 +127,7 @@ function manhattanHeuristic(pos0: Point, pos1: Point): number {
       return d1 + d2;
 }
 
-function pathTo(node: Node): Node[] {
-    let currentNode = node;
-    let path: Node[] = [];
-    while (currentNode.parent) {
-        path.unshift(currentNode);
-        currentNode = currentNode.parent;
-    }
-    return path;
-}
+
 
 // Code adapted from https://github.com/bgrins/javascript-astar/blob/master/astar.js
 export class AstarPathFinder implements PathFinder {
@@ -169,7 +174,7 @@ export class AstarPathFinder implements PathFinder {
             let currentNode = openHeap.pop();
             
             if (currentNode === endNode) {
-                return pathTo(currentNode);
+                return graph.getFullPath(currentNode);
             }
             currentNode.closed = true;
             
