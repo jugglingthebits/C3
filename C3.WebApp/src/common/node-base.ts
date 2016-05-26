@@ -50,7 +50,7 @@ export class NodeBase {
 
         const bottomCenter: Point = {
             x: this.x + this.width / 2,
-            y: this.y + this.height
+            y: this.y + this.height - 1
         }
 
         const leftCenter: Point = {
@@ -59,7 +59,7 @@ export class NodeBase {
         }
 
         const rightCenter: Point = {
-            x: this.x + this.width,
+            x: this.x + this.width - 1,
             y: this.y + this.height / 2
         }
         

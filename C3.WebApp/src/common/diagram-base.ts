@@ -27,11 +27,11 @@ export abstract class DiagramBase {
             if (!left || left > node.x )
                 left = node.x;
             if (!right || right < node.x + node.width)
-                right = node.x + node.width;
+                right = node.x + node.width - 1;
             if (!top || top > node.y )
                 top = node.y;
             if (!bottom || bottom < node.y + node.height)
-                bottom = node.y + node.height;
+                bottom = node.y + node.height - 1;
         }
         
         for (var edge of edges) {
@@ -42,16 +42,16 @@ export abstract class DiagramBase {
                     right = point.x;
                 if (!top || top > point.y)
                     top = point.y;
-                if (!bottom || bottom < point.x)
-                    right = point.y;
+                if (!bottom || bottom < point.y)
+                    bottom = point.y;
             }
         }
 
         if (!left || !right || !top || !bottom)
             return new BoundingBox(0, 0, 0, 0);
 
-        const width = right - left;
-        const height = bottom - top;
+        const width = right - left + 1;
+        const height = bottom - top + 1;
         
         return new BoundingBox(left, top, width, height);
     }
