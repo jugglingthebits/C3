@@ -26,6 +26,10 @@ export class SystemActorEdge extends EdgeBase {
         return svgPath;
     }
     
+    attached(): void {
+        this.updatePath();
+    }
+    
     updateFromModel(model: EdgeModel): void {
         this.id = model.id;
         this.name = model.name;
@@ -35,8 +39,6 @@ export class SystemActorEdge extends EdgeBase {
                        
         this.targetNode = this.parentDiagram.systemNodes.find(s => s.id === model.targetNodeId)
                        || this.parentDiagram.actorNodes.find(s => s.id === model.targetNodeId);
-        
-        this.updatePath();
     }
     
     copyToModel(): EdgeModel {
