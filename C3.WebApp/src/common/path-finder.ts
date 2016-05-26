@@ -5,7 +5,7 @@ const logger = LogManager.getLogger('pathFinder');
 
 export interface PathFinder {
     findPath(sourceConnectionPoints: Point[], 
-             targetConnectionPoints: Point[]): Point[];
+             targetConnectionPoints: Point[], diagram): Point[];
 }
 
 export function cartesianProduct<T>(array: Array<Array<T>>): Array<Array<T>>
@@ -46,7 +46,7 @@ export function lengthOf(path: Point[]): number {
 
 export class StraightPathFinder implements PathFinder {
     findPath(sourceConnectionPoints: Point[], 
-             targetConnectionPoints: Point[]): Point[] {
+             targetConnectionPoints: Point[], diagram): Point[] {
         
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
@@ -75,7 +75,7 @@ export class PerpendicularPathFinder implements PathFinder {
     private veryLongPath = [{x: 0, y: 0}, {x: 10000, y: 10000}];
     
     findPath(sourceConnectionPoints: Point[], 
-             targetConnectionPoints: Point[]): Point[] {
+             targetConnectionPoints: Point[], diagram): Point[] {
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
         const shortestPath = connectionPointCombinations.reduce((previousShortestPath, currentConnectionPoints) => {

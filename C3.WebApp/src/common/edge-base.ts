@@ -1,5 +1,6 @@
 import {NodeBase} from './node-base';
 import {PathFinder} from './path-finder';
+import {DiagramBase} from './diagram-base';
 
 export interface Point {
     x: number;
@@ -7,9 +8,10 @@ export interface Point {
 }
 
 export abstract class EdgeBase {
-    path: Point[];
+    path: Point[] = [];
     sourceNode: NodeBase;
     targetNode: NodeBase;
+    parentDiagram: DiagramBase;
     
     constructor(private pathFinder: PathFinder) {}
 
@@ -19,7 +21,7 @@ export abstract class EdgeBase {
  
         const sourceConnectionPoints = this.sourceNode.getConnectionPoints();
         const targetConnectionPoints = this.targetNode.getConnectionPoints();
-        this.path = this.pathFinder.findPath(sourceConnectionPoints, targetConnectionPoints);
+        this.path = this.pathFinder.findPath(sourceConnectionPoints, targetConnectionPoints, this.parentDiagram);
     }
     
     private areNodesOverlapping(): boolean {
