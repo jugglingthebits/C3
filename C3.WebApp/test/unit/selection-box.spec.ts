@@ -1,4 +1,4 @@
-import {SelectionBox} from 'src/selection-box';
+import {SelectionBox} from 'src/common/selection-box';
 
 describe('the selection-box module', () => {
     var selectionBox: SelectionBox;
