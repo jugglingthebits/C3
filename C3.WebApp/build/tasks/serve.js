@@ -2,13 +2,15 @@ var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var proxy = require('http-proxy-middleware');
 
-var apiProxy = proxy('/api', {
-  target: 'http://localhost:5000',
-  logLevel: 'debug',
-    // Workaround for a problem in kestrel with reverse proxies. 
-    // See https://github.com/aspnet/KestrelHttpServer/issues/468.
-  headers: {'Connection': 'keep-alive'} 
-});
+function apiProxy() {
+    return proxy('/api', {
+        target: 'http://localhost:5000',
+        logLevel: 'debug',
+          // Workaround for a problem in kestrel with reverse proxies. 
+          // See https://github.com/aspnet/KestrelHttpServer/issues/468.
+        headers: {'Connection': 'keep-alive'}
+    });
+}
 
 // this task utilizes the browsersync plugin
 // to create a dev server instance
@@ -25,7 +27,7 @@ gulp.task('serve', ['build'], function(done) {
           res.setHeader('Access-Control-Allow-Origin', '*');
           next();
         },
-        apiProxy
+        apiProxy()
       ]
     }
   }, done);
@@ -46,7 +48,7 @@ gulp.task('serve-bundle', ['bundle'], function(done) {
           res.setHeader('Access-Control-Allow-Origin', '*');
           next();
         },
-        apiProxy
+        apiProxy()
       ]
     }
   }, done);
