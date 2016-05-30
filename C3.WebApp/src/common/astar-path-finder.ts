@@ -51,13 +51,13 @@ class GraphForDiagram {
         return node;
     }
     
-    getCost(point: Point): number {
-        const nodes = this.diagram.getNodes();
-        for (var node of nodes) {
-            const diagramNodeX = node.x + this.diagramBoundingBox.x;
-            const diagramNodeY = node.y + this.diagramBoundingBox.y;
+    getCost(node: Node): number {
+        const diagramNodes = this.diagram.getNodes();
+        for (var diagramNode of diagramNodes) {
+            const diagramX = diagramNode.x + this.diagramBoundingBox.x;
+            const diagramY = diagramNode.y + this.diagramBoundingBox.y;
             
-            if (node.isHit(diagramNodeX, diagramNodeY))
+            if (diagramNode.isHit(diagramX, diagramY))
                 return 1000; // Wall
         }
         return 1; // cheapest
