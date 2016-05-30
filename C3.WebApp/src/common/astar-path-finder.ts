@@ -51,16 +51,23 @@ class GraphForDiagram {
         return node;
     }
     
-    getCost(node: Node): number {
+    getCost(currentNode: Node, neighborNode: Node): number {
+        if (this.isDiagramNodeHit(neighborNode)) {
+            return 1000;
+        }
+        
+        return 1; // cheapest
+    }
+    
+    private isDiagramNodeHit(node: Node) {
+        const diagramX = node.x + this.diagramBoundingBox.x;
+        const diagramY = node.y + this.diagramBoundingBox.y;
+
         const diagramNodes = this.diagram.getNodes();
         for (var diagramNode of diagramNodes) {
-            const diagramX = diagramNode.x + this.diagramBoundingBox.x;
-            const diagramY = diagramNode.y + this.diagramBoundingBox.y;
-            
             if (diagramNode.isHit(diagramX, diagramY))
-                return 1000; // Wall
+                return true;
         }
-        return 1; // cheapest
     }
     
     getFullPath(endNode: Node): Point[] {
@@ -178,29 +185,29 @@ export class AstarPathFinder implements PathFinder {
             }
             currentNode.closed = true;
             
-            const neighbors = graph.getNeighbors(currentNode);
+            const neighborNodes = graph.getNeighbors(currentNode);
             
-            for (let neighbor of neighbors) {
-                if (neighbor.closed)
+            for (let neighborNode of neighborNodes) {
+                if (neighborNode.closed)
                     continue;
                 
-                const tentative_gScore = currentNode.gScore + graph.getCost(neighbor);
-                const neighborVisited = neighbor.visited;
+                const tentative_gScore = currentNode.gScore + graph.getCost(currentNode, neighborNode);
+                const neighborVisited = neighborNode.visited;
 
-                if (!neighborVisited || tentative_gScore < neighbor.gScore) {
+                if (!neighborVisited || tentative_gScore < neighborNode.gScore) {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
-                    neighbor.parent = currentNode;
-                    neighbor.gScore = tentative_gScore;
+                    neighborNode.parent = currentNode;
+                    neighborNode.gScore = tentative_gScore;
                     
                     if (!neighborVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
-                        openHeap.push(neighbor);
+                        openHeap.push(neighborNode);
                     } else {
                         // Already seen the node, but since it has been rescored we need to reorder it in the heap
-                        openHeap.rescore(neighbor);
+                        openHeap.rescore(neighborNode);
                     }
                     
-                    neighbor.visited = true;
+                    neighborNode.visited = true;
                 }
             }
         }
