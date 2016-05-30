@@ -29,7 +29,7 @@ describe('the binary heap', () => {
                 heap.push(values[i]);
             }
             
-            for (let i=99; i>=0; i++) {
+            for (let i=0; i<=99; i++) {
                 expect(heap.pop()).toBe(values[i]);
             }
         });
