@@ -46,7 +46,7 @@ export abstract class DiagramBase {
     }
     
     private onPanStart(event: HammerInput) {
-        let containerHit = this.getContainerHit(event.pointers[0].offsetX, event.pointers[0].offsetY);
+        let containerHit = this.getContainerHit(event.pointers[0].x, event.pointers[0].y);
         if (containerHit !== null) {
             if (!containerHit.isSelected) {
                 if (!event.srcEvent.ctrlKey) {
@@ -66,8 +66,8 @@ export abstract class DiagramBase {
         else {
             this.unselectAll();
             this.selectionBox = new SelectionBox();
-            this.selectionBox.x = event.pointers[0].offsetX;
-            this.selectionBox.y = event.pointers[0].offsetY;
+            this.selectionBox.x = event.pointers[0].x;
+            this.selectionBox.y = event.pointers[0].y;
             this.selectionBox.startPan();
         }
     }
@@ -107,7 +107,7 @@ export abstract class DiagramBase {
     
     private onTap(event: HammerInput) {
         for(var c of this.getNodes()) {
-            if (c.isHit(event.pointers[0].offsetX, event.pointers[0].offsetY)) {
+            if (c.isHit(event.pointers[0].x, event.pointers[0].y)) {
                 if (event.srcEvent.ctrlKey) {
                     c.isSelected = !c.isSelected;
                 }
