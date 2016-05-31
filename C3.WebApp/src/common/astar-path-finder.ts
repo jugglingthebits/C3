@@ -51,12 +51,17 @@ class GraphForDiagram {
         return node;
     }
     
-    getCost(currentNode: Node, neighborNode: Node): number {
-        if (this.isDiagramNodeHit(neighborNode)) {
+    getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
+        if (this.isDiagramNodeHit(node)) {
             return 1000;
         }
         
-        return 1; // cheapest
+        if (!previousNode || !penultimateNode
+         || node.x === previousNode.x && previousNode.x === penultimateNode.x 
+         || node.y === previousNode.y && previousNode.y === penultimateNode.y )
+            return 1;
+        
+        return 10; // cheapest
     }
     
     private isDiagramNodeHit(node: Node) {
@@ -191,7 +196,7 @@ export class AstarPathFinder implements PathFinder {
                 if (neighborNode.closed)
                     continue;
                 
-                const tentative_gScore = currentNode.gScore + graph.getCost(currentNode, neighborNode);
+                const tentative_gScore = currentNode.gScore + graph.getCost(neighborNode, currentNode, currentNode.parent);
                 const neighborVisited = neighborNode.visited;
 
                 if (!neighborVisited || tentative_gScore < neighborNode.gScore) {
