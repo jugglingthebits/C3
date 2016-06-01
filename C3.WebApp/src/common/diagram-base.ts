@@ -11,6 +11,7 @@ export class BoundingBox {
 export abstract class DiagramBase {
     abstract getNodes(): NodeBase[];
     abstract getEdges(): EdgeBase[];
+    
     private isPanning: boolean;
     private selectionBox: SelectionBox;
 
@@ -71,12 +72,12 @@ export abstract class DiagramBase {
         return null;
     }
 
-    protected attachHammerEventHandler(element: HTMLElement) {
+    protected attachHammerEventHandler(element: SVGElement) {
         var self: DiagramBase = this;
         var hammertime = new Hammer(element);
         
         hammertime.on('panstart', (event: HammerInput) => {
-            self.onPanStart(event);
+            self.onPanStart(event, element);
         });
         
         hammertime.on('pan', function(event: HammerInput) {
@@ -88,12 +89,16 @@ export abstract class DiagramBase {
         });
         
         hammertime.on('tap', function(event: HammerInput) {
-            self.onTap(event);
+            self.onTap(event, element);
         });
     }
     
-    private onPanStart(event: HammerInput) {
-        let containerHit = this.getContainerHit(event.pointers[0].x, event.pointers[0].y);
+    private onPanStart(event: HammerInput, element: SVGElement) {
+        const clientRect = element.getBoundingClientRect();
+        const eventX = event.pointers[0].x - clientRect.left;
+        const eventY = event.pointers[0].y - clientRect.top;
+        
+        let containerHit = this.getContainerHit(eventX, eventY);
         if (containerHit !== null) {
             if (!containerHit.isSelected) {
                 if (!event.srcEvent.ctrlKey) {
@@ -113,8 +118,8 @@ export abstract class DiagramBase {
         else {
             this.unselectAll();
             this.selectionBox = new SelectionBox();
-            this.selectionBox.x = event.pointers[0].x;
-            this.selectionBox.y = event.pointers[0].y;
+            this.selectionBox.x = eventX;
+            this.selectionBox.y = eventY;
             this.selectionBox.startPan();
         }
     }
@@ -125,9 +130,6 @@ export abstract class DiagramBase {
                 if (c.isSelected) {
                     c.pan(event.deltaX, event.deltaY);
                 }
-            }
-            for (var e of this.getEdges()) {
-                e.updatePath();
             }
         }
         else {
@@ -146,15 +148,23 @@ export abstract class DiagramBase {
                 }
             }
             this.isPanning = false;
+            
+            for (var e of this.getEdges()) {
+                e.updatePath();
+            }
         }
         else {
             this.selectionBox = null;
         }
     }
     
-    private onTap(event: HammerInput) {
+    private onTap(event: HammerInput, element: SVGElement) {
+        const clientRect = element.getBoundingClientRect();
+        const eventX = event.pointers[0].x - clientRect.left;
+        const eventY = event.pointers[0].y - clientRect.top;
+        
         for(var c of this.getNodes()) {
-            if (c.isHit(event.pointers[0].x, event.pointers[0].y)) {
+            if (c.isHit(eventX, eventY)) {
                 if (event.srcEvent.ctrlKey) {
                     c.isSelected = !c.isSelected;
                 }

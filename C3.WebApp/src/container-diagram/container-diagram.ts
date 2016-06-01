@@ -16,7 +16,7 @@ export class ContainerDiagram extends DiagramBase {
     id: string;
     name: string;
     private containerNodes: ContainerNode[];
-    private containerDiagramSection: HTMLElement;
+    private diagramElement: SVGElement;
     
     constructor(private eventAggregator: EventAggregator,
                 private systemContextDiagramService: SystemContextDiagramService,
@@ -39,7 +39,7 @@ export class ContainerDiagram extends DiagramBase {
     }
     
     attached(): void {
-        this.attachHammerEventHandler(this.containerDiagramSection);
+        this.attachHammerEventHandler(this.diagramElement);
     }
     
     getNodes(): NodeBase[] {

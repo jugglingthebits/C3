@@ -17,7 +17,7 @@ export class ComponentDiagram extends DiagramBase {
     id: string;
     name: string;
     private componentNodes: ComponentNode[];
-    private componentDiagramSection: HTMLElement;
+    private diagramElement: SVGElement;
     
     constructor(private eventAggregator: EventAggregator,
                 private systemContextDiagramService: SystemContextDiagramService,
@@ -47,7 +47,7 @@ export class ComponentDiagram extends DiagramBase {
     }
     
     attached(): void {
-        this.attachHammerEventHandler(this.componentDiagramSection);
+        this.attachHammerEventHandler(this.diagramElement);
     }
     
     getNodes(): NodeBase[] {

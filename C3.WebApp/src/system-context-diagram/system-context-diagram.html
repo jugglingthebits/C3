@@ -2,10 +2,9 @@
     <require from="./system-context-diagram.css"></require>
     <require from="./system-node"></require>
     
-    <section class="system-context-diagram col s12"
-             element.ref="systemContextDiagramSection">
+    <section class="system-context-diagram col s12">
     
-        <svg class="diagram">
+        <svg class="diagram" element.ref="diagramElement">
             <svg repeat.for="systemNode of systemNodes">
                 <compose view-model.bind="systemNode" containerless></compose>
             </svg>
