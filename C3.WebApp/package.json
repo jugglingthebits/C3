@@ -42,6 +42,7 @@
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-tslint": "^5.0.0",
     "gulp-typescript": "^2.13.6",
+    "http-proxy-middleware": "^0.16.0",
     "isparta": "^4.0.0",
     "jasmine-core": "^2.4.1",
     "jspm": "^0.16.15",
