@@ -47,7 +47,9 @@ class GraphForDiagram {
         const x = point.x - this.diagramBoundingBox.x;
         const y = point.y - this.diagramBoundingBox.y;
         
-        const node = this.grid[this.toGrid(y)][this.toGrid(x)];
+        const gridY = this.toGrid(y);
+        const gridX = this.toGrid(x);
+        const node = this.grid[gridY][gridX];
         return node;
     }
     
@@ -88,9 +90,10 @@ class GraphForDiagram {
         return path;
     }
     
-    private toGrid(value: number) {
+    private toGrid(value: number): number {
         if (value % gridSpacing !== 0)
-            throw `{value} is not within the grid`;
+            //throw `{value} is not within the grid`;
+            value = value - value % gridSpacing; // TODO: Use round of something more clever.
 
         return value/gridSpacing;
     }
@@ -146,25 +149,20 @@ export class AstarPathFinder implements PathFinder {
     findPath(sourceConnectionPoints: Point[], 
              targetConnectionPoints: Point[], diagram: DiagramBase): Point[] {
                  
-        // const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
+        const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
-        // const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
-        //     const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
-        //     const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
+        const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
+            const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
+            const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
             
-        //     const previousLength = lengthOf(previousPath);
-        //     const currentLength = lengthOf(currentPath);
+            const previousLength = lengthOf(previousPath);
+            const currentLength = lengthOf(currentPath);
             
-        //     const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
-        //     return shorterPath;
-        // });
+            const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
+            return shorterPath;
+        });
         
-        //const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
-        
-        const sourceConnectionPoint = sourceConnectionPoints[0];
-        const targetConnectionPoint = targetConnectionPoints[0];
-        
-        const path = this.findAPath(sourceConnectionPoint, targetConnectionPoint, diagram);
+        const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
         
         return path;
     }
