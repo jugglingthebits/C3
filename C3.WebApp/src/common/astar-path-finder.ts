@@ -54,16 +54,19 @@ class GraphForDiagram {
     }
     
     getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
+        // Does the node intersect with a different node?
         if (this.isDiagramNodeHit(node)) {
             return 1000;
         }
         
+        // Is the node in line with the last ones?
         if (!previousNode || !penultimateNode
          || node.x === previousNode.x && previousNode.x === penultimateNode.x 
          || node.y === previousNode.y && previousNode.y === penultimateNode.y )
             return 1;
         
-        return 10; // cheapest
+        // Take a turn.
+        return 10;
     }
     
     private isDiagramNodeHit(node: Node) {
@@ -75,6 +78,7 @@ class GraphForDiagram {
             if (diagramNode.isHit(diagramX, diagramY))
                 return true;
         }
+        return false;
     }
     
     getFullPath(endNode: Node): Point[] {
