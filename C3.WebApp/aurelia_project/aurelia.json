@@ -131,7 +131,8 @@
             "path": "../node_modules/aurelia-testing/dist/amd",
             "main": "aurelia-testing",
             "env": "dev"
-          }
+          },
+          "hammerjs"
         ]
       }
     ]
