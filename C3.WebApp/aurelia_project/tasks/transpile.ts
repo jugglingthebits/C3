@@ -33,7 +33,9 @@ function buildTypeScript() {
     .pipe(changedInPlace({firstPass: true}));
 
   return eventStream.merge(dts, src)
-    .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
+    //gulp-notify is really annoying on windows, so take it out for now.
+    //.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
+    .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(ts(typescriptCompiler))
     .pipe(build.bundle());
