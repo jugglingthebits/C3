@@ -1,7 +1,7 @@
 import {NodeBase} from './node-base';
 import {EdgeBase} from './edge-base';
 import {SelectionBox} from './selection-box';
-import 'hammerjs/hammer.js';
+import 'hammerjs';
 
 export abstract class DiagramBase {
     abstract getNodes(): NodeBase[];
