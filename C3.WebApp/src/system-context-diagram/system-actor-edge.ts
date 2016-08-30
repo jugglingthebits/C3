@@ -1,4 +1,4 @@
-﻿import {autoinject, computedFrom} from 'aurelia-framework';
+﻿import {autoinject, computedFrom, transient} from 'aurelia-framework';
 import {EdgeBase} from '../common/edge-base';
 import {StraightPathFinder, PerpendicularPathFinder} from '../common/path-finder';
 import {ActorNode} from './actor-node';
@@ -7,6 +7,7 @@ import {SystemContextDiagram} from './system-context-diagram';
 import {EdgeModel} from '../common/model';
 
 @autoinject
+@transient()
 export class SystemActorEdge extends EdgeBase {
     id: string;
     name: string;

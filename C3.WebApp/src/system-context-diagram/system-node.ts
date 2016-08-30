@@ -1,7 +1,9 @@
+import {transient} from 'aurelia-framework';
 import {SystemNodeModel} from '../common/model';
 import {NodeBase} from '../common/node-base';
 import {SystemContextDiagram} from './system-context-diagram';
 
+@transient()
 export class SystemNode extends NodeBase {
     id: string;
     name: string;
