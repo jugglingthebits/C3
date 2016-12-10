@@ -14,6 +14,12 @@ class Node implements Point {
     closed: boolean = false;
     parent: Node;
     gScore = 0;
+    isOccupied = false
+    
+    constructor(point: Point) {
+        this.x = point.x;
+        this.y = point.y;
+    }
     
     fScore(endNode: Node): number {
         const fScore = this.gScore + this.hScore(endNode);
@@ -25,11 +31,6 @@ class Node implements Point {
         if (!this._hScore)
             this._hScore = manhattanHeuristic(this, endNode);
         return this._hScore;
-    }
-    
-    constructor(point: Point) {
-        this.x = point.x;
-        this.y = point.y;
     }
 }
 
@@ -55,7 +56,7 @@ class GraphForDiagram {
     
     getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
         // Does the node intersect with a different node?
-        if (this.isDiagramNodeHit(node)) {
+        if (node.isOccupied) {
             return 1000;
         }
         
@@ -67,18 +68,6 @@ class GraphForDiagram {
         
         // Take a turn.
         return 10;
-    }
-    
-    private isDiagramNodeHit(node: Node) {
-        const diagramX = node.x + this.diagramBoundingBox.x;
-        const diagramY = node.y + this.diagramBoundingBox.y;
-
-        const diagramNodes = this.diagram.getNodes();
-        for (var diagramNode of diagramNodes) {
-            if (diagramNode.isHit(diagramX, diagramY))
-                return true;
-        }
-        return false;
     }
     
     getFullPath(endNode: Node): Point[] {
@@ -133,10 +122,25 @@ class GraphForDiagram {
             let row = [];
             for (var j=0; j <= this.diagramBoundingBox.width; j=j+gridSpacing) {
                 const node = new Node({x: j, y: i});
+
+                node.isOccupied = this.isDiagramNodeHit(node);
+
                 row.push(node);
             }
             this.grid.push(row);
         }
+    }
+
+    private isDiagramNodeHit(node: Node) {
+        const diagramX = node.x + this.diagramBoundingBox.x;
+        const diagramY = node.y + this.diagramBoundingBox.y;
+
+        const diagramNodes = this.diagram.getNodes();
+        for (var diagramNode of diagramNodes) {
+            if (diagramNode.isHit(diagramX, diagramY))
+                return true;
+        }
+        return false;
     }
 }
 
@@ -145,8 +149,6 @@ function manhattanHeuristic(pos0: Point, pos1: Point): number {
       var d2 = Math.abs(pos1.y - pos0.y);
       return d1 + d2;
 }
-
-
 
 // Code adapted from https://github.com/bgrins/javascript-astar/blob/master/astar.js
 export class AstarPathFinder implements PathFinder {
@@ -184,10 +186,14 @@ export class AstarPathFinder implements PathFinder {
         
         openHeap.push(startNode);
         
+        let numTries = 0;
+
         while (openHeap.size > 0) {
+            numTries++;
             let currentNode = openHeap.pop();
             
             if (currentNode === endNode) {
+                console.debug("It took " +  numTries + " tries");
                 return graph.getFullPath(currentNode);
             }
             currentNode.closed = true;

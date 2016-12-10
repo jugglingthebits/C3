@@ -131,6 +131,10 @@ export abstract class DiagramBase {
                     c.pan(event.deltaX, event.deltaY);
                 }
             }
+
+            for (var e of this.getEdges()) {
+                e.updatePath();
+            }
         }
         else {
             this.selectionBox.pan(event.deltaX, event.deltaY);

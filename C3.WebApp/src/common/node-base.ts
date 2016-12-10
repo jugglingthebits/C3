@@ -12,8 +12,10 @@ export class NodeBase {
     private startY: number;
 
     isHit(x: number, y: number): boolean {
-        var hit = x >= this.x && x < this.x + this.width &&
-                  y >= this.y && y < this.y + this.height;
+        var hit = !(x < this.x || x >= this.x + this.width ||
+                  y < this.y || y >= this.y + this.height);
+        // var hit = x >= this.x && x < this.x + this.width &&
+        //           y >= this.y && y < this.y + this.height;
         return hit;
     }
     
@@ -63,8 +65,8 @@ export class NodeBase {
             y: this.y + this.height / 2
         }
         
-        return [topCenter, bottomCenter, 
-                leftCenter, rightCenter];
+        // Only use center for now.
+        return [center];
     }
     
     private getCenter(): Point {
