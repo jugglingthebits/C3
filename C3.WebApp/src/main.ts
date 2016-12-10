@@ -1,18 +1,26 @@
 import {Aurelia} from 'aurelia-framework';
-import {SystemNode} from './system-context-diagram/system-node';
+import environment from './environment';
+
+//Configure Bluebird Promises.
+(<any>Promise).config({
+  longStackTraces: environment.debug,
+  warnings: {
+    wForgottenReturn: false
+  }
+});
 
 export function configure(aurelia: Aurelia) {
-    aurelia.use
-        .standardConfiguration()
-        .developmentLogging();
+  aurelia.use
+    .standardConfiguration()
+    .feature('resources');
 
-    aurelia.container.registerTransient(SystemNode);
-    
-    //Uncomment the line below to enable animation.
-    //aurelia.use.plugin('aurelia-animator-css');
+  if (environment.debug) {
+    aurelia.use.developmentLogging();
+  }
 
-    //Anyone wanting to use HTMLImports to load views, will need to install the following plugin.
-    //aurelia.use.plugin('aurelia-html-import-template-loader')
+  if (environment.testing) {
+    aurelia.use.plugin('aurelia-testing');
+  }
 
-    aurelia.start().then(() => aurelia.setRoot());
+  aurelia.start().then(() => aurelia.setRoot());
 }
