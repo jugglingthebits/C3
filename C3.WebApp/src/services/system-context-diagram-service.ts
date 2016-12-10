@@ -1,5 +1,5 @@
-import 'fetch';
-import {HttpClient} from 'aurelia-fetch-client';
+// import 'fetch';
+// import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel, ContainerDiagramModel, 
         SystemNodeModel, ActorNodeModel, ContainerNodeModel, 
         ComponentDiagramModel, ComponentNodeModel, SystemActorEdgeModel} 
@@ -68,12 +68,12 @@ export class SystemContextDiagramService {
         return new Promise(resolve => resolve(this.diagrams));
     }
     
-    private loadFromId(id: number): Promise<SystemContextDiagramModel> {
-        const httpClient = new HttpClient();
-        httpClient.configure(config => config.withBaseUrl('api')
-                                             .rejectErrorResponses());
+    // private loadFromId(id: number): Promise<SystemContextDiagramModel> {
+    //     const httpClient = new HttpClient();
+    //     httpClient.configure(config => config.withBaseUrl('api')
+    //                                          .rejectErrorResponses());
 
-        return httpClient.fetch(`/system/${id}`)
-                         .then(response => <Promise<SystemContextDiagramModel>>response.json());
-    }
+    //     return httpClient.fetch(`/system/${id}`)
+    //                      .then(response => <Promise<SystemContextDiagramModel>>response.json());
+    // }
 }

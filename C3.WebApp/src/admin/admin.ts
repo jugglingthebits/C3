@@ -1,8 +1,8 @@
 import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import 'fetch';
-import {HttpClient} from 'aurelia-fetch-client';
+// import 'fetch';
+// import {HttpClient} from 'aurelia-fetch-client';
 import {SystemContextDiagramModel} from '../common/model';
 import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 

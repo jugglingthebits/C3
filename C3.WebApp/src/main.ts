@@ -1,4 +1,3 @@
-import 'bootstrap';
 import {Aurelia} from 'aurelia-framework';
 import {SystemNode} from './system-context-diagram/system-node';
 

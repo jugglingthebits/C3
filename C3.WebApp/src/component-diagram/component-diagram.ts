@@ -10,7 +10,7 @@ import {ComponentDiagramModel} from '../common/model';
 import {SystemContextDiagramService} from '../services/system-context-diagram-service';
 import {ContainerDiagramService} from '../services/container-diagram-service';
 import {ComponentDiagramService} from '../services/component-diagram-service';
-import 'hammerjs/hammer.js';
+import 'hammerjs';
 
 @autoinject
 export class ComponentDiagram extends DiagramBase {
