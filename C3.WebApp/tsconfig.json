@@ -1,8 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
     "sourceMap": true,
     "target": "es5",
     "module": "amd",
@@ -18,12 +16,7 @@
     "./src/**/*.ts",
     "./test/**/*.ts",
     "./typings/index.d.ts",
-    "./custom_typings/**/*.d.ts",
-    "./jspm_packages/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "jspm_packages"
+    "./custom_typings/**/*.d.ts"
   ],
   "atom": {
     "rewriteTsconfig": false
