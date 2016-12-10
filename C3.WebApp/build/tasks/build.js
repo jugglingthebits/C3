@@ -22,7 +22,8 @@ gulp.task('build-system', function() {
     });
   }
   return gulp.src(paths.dtsSrc.concat(paths.source))
-    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    // .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(plumber())
     .pipe(changed(paths.output, {extension: '.ts'}))
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(typescript(typescriptCompiler))
