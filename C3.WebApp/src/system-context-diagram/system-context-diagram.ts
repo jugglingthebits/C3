@@ -27,10 +27,6 @@ export class SystemContextDiagram extends DiagramBase {
         super();
     }
     
-    attached(): void {
-        this.attachHammerEventHandler(this.diagramElement);
-    }
-    
     activate(params): void {
         this.systemContextDiagramService.getAll().then(diagrams => {
             let systemContextDiagramModel = diagrams.find(m => m.id === params.id);
@@ -39,8 +35,10 @@ export class SystemContextDiagram extends DiagramBase {
                 this.router.navigateToRoute('system-context-diagram', {'id': diagrams[0].id});
                 return;
             }
-                        
-            this.updateFromModel(systemContextDiagramModel);                                             
+
+            this.updateFromModel(systemContextDiagramModel);
+            this.updateEdgePaths();
+
             this.eventAggregator.publish("SystemContextDiagramModelChanged", systemContextDiagramModel);
         });
     }

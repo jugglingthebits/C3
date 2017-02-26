@@ -71,116 +71,30 @@ export abstract class DiagramBase {
         }
         return null;
     }
-
-    protected attachHammerEventHandler(element: SVGElement) {
-        var self: DiagramBase = this;
-        var hammertime = new Hammer(element);
-        
-        hammertime.on('panstart', (event: HammerInput) => {
-            self.onPanStart(event, element);
-        });
-        
-        hammertime.on('pan', function(event: HammerInput) {
-            self.onPan(event);
-        });
-        
-        hammertime.on('panend', function(event: HammerInput) {
-            self.onPanEnd(event);
-        });
-        
-        hammertime.on('tap', function(event: HammerInput) {
-            self.onTap(event, element);
-        });
-    }
     
-    private onPanStart(event: HammerInput, element: SVGElement) {
-        const clientRect = element.getBoundingClientRect();
-        const eventX = event.pointers[0].x - clientRect.left;
-        const eventY = event.pointers[0].y - clientRect.top;
+    // private onTap(event: HammerInput, element: SVGElement) {
+    //     const clientRect = element.getBoundingClientRect();
+    //     const eventX = event.pointers[0].x - clientRect.left;
+    //     const eventY = event.pointers[0].y - clientRect.top;
         
-        let containerHit = this.getContainerHit(eventX, eventY);
-        if (containerHit !== null) {
-            if (!containerHit.isSelected) {
-                if (!event.srcEvent.ctrlKey) {
-                    this.unselectAll();
-                }
-                containerHit.isSelected = true;
-            }
-            
-            for(var c of this.getNodes()) {
-                if (c.isSelected) {
-                    c.startPan();
-                }
-            }
-            this.isPanning = true;
-            return;
-        }
-        else {
-            this.unselectAll();
-            this.selectionBox = new SelectionBox();
-            this.selectionBox.x = eventX;
-            this.selectionBox.y = eventY;
-            this.selectionBox.startPan();
-        }
-    }
-    
-    private onPan(event: HammerInput) {
-        if (this.isPanning) {
-            for (var c of this.getNodes()) {
-                if (c.isSelected) {
-                    c.pan(event.deltaX, event.deltaY);
-                }
-            }
-
-            for (var e of this.getEdges()) {
-                e.updatePath();
-            }
-        }
-        else {
-            this.selectionBox.pan(event.deltaX, event.deltaY);
-            for(var c of this.getNodes()) {
-                c.isSelected = this.selectionBox.containsRect(c.x, c.y, c.width, c.height);
-            }
-        }
-    }
-    
-    private onPanEnd(event: HammerInput) {
-        if (this.isPanning) {
-            for(var c of this.getNodes()) {
-                if (c.isSelected) {
-                    c.endPan();
-                }
-            }
-            this.isPanning = false;
-            
-            for (var e of this.getEdges()) {
-                e.updatePath();
-            }
-        }
-        else {
-            this.selectionBox = null;
-        }
-    }
-    
-    private onTap(event: HammerInput, element: SVGElement) {
-        const clientRect = element.getBoundingClientRect();
-        const eventX = event.pointers[0].x - clientRect.left;
-        const eventY = event.pointers[0].y - clientRect.top;
+    //     for(var c of this.getNodes()) {
+    //         if (c.isHit(eventX, eventY)) {
+    //             if (event.srcEvent.ctrlKey) {
+    //                 c.isSelected = !c.isSelected;
+    //             }
+    //             else {
+    //                 this.unselectAll();
+    //                 c.isSelected = true;
+    //             }
+    //             return;
+    //         }
+    //     }
         
-        for(var c of this.getNodes()) {
-            if (c.isHit(eventX, eventY)) {
-                if (event.srcEvent.ctrlKey) {
-                    c.isSelected = !c.isSelected;
-                }
-                else {
-                    this.unselectAll();
-                    c.isSelected = true;
-                }
-                return;
-            }
-        }
-        
-        // no container hit
-        this.unselectAll();
+    //     // no container hit
+    //     this.unselectAll();
+    // }
+    
+    protected updateEdgePaths() {
+        this.getEdges().forEach(e => e.updatePath());
     }
 }

@@ -41,13 +41,10 @@ export class ComponentDiagram extends DiagramBase {
         this.componentDiagramService.getAll()
             .then(diagrams => {
                 let componentDiagramModel = diagrams.find(m => m.id === params.id);
-                this.updateFromModel(componentDiagramModel);                                         
+                this.updateFromModel(componentDiagramModel);
+                this.updateEdgePaths();                                       
                 this.eventAggregator.publish('ComponentDiagramModelChanged', componentDiagramModel);
             });
-    }
-    
-    attached(): void {
-        this.attachHammerEventHandler(this.diagramElement);
     }
     
     getNodes(): NodeBase[] {

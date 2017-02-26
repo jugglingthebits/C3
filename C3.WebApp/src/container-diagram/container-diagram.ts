@@ -33,13 +33,10 @@ export class ContainerDiagram extends DiagramBase {
         this.containerDiagramService.getAll()
             .then(diagrams => {
                 let containerDiagramModel = diagrams.find(m => m.id === params.id);
-                this.updateFromModel(containerDiagramModel);                                         
+                this.updateFromModel(containerDiagramModel);
+                this.updateEdgePaths();
                 this.eventAggregator.publish("ContainerDiagramModelChanged", containerDiagramModel);
             });
-    }
-    
-    attached(): void {
-        this.attachHammerEventHandler(this.diagramElement);
     }
     
     getNodes(): NodeBase[] {
