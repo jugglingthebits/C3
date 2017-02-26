@@ -1,6 +1,8 @@
+import { transient } from 'aurelia-framework';
 import {NodeBase} from '../common/node-base';
 import {ComponentNodeModel} from '../common/model';
 
+@transient()
 export class ComponentNode extends NodeBase {
     id: string;
     name: string;
