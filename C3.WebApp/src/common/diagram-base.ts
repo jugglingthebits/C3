@@ -1,7 +1,6 @@
 import {NodeBase} from './node-base';
 import {EdgeBase} from './edge-base';
 import {SelectionBox} from './selection-box';
-import 'hammerjs';
 
 export class BoundingBox {
     constructor(public x: number, public y: number, 
