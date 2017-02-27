@@ -8,6 +8,14 @@ body {
 }
 
 .page-host {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50px;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+
     height: ~"calc(100% - 68px)"; //TODO: Should be 64px according to materialize css.
     
     router-view {
@@ -16,4 +24,17 @@ body {
         display: flex;
         flex-direction: column;
     }
+
+}
+
+@media print {
+  .page-host {
+    position: absolute;
+    left: 10px;
+    right: 0;
+    top: 50px;
+    bottom: 0;
+    overflow-y: inherit;
+    overflow-x: inherit;
+  }
 }
