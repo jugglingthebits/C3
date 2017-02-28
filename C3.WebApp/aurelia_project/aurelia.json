@@ -130,11 +130,6 @@
             "path": "../node_modules/aurelia-testing/dist/amd",
             "main": "aurelia-testing",
             "env": "dev"
-          },
-          {
-            "name": "hammerjs",
-            "path": "../node_modules/hammerjs",
-            "main": "hammer"
           }
         ]
       }

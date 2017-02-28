@@ -9,7 +9,6 @@ import {SelectionBox} from '../common/selection-box';
 import {ContainerDiagramModel} from '../common/model';
 import {SystemContextDiagramService} from "../services/system-context-diagram-service";
 import {ContainerDiagramService} from "../services/container-diagram-service";
-import 'hammerjs';
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
