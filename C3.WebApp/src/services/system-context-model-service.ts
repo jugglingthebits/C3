@@ -17,7 +17,8 @@ export class SystemContextModelService {
         };
 
         const container2 = <ContainerModel>{
-            id: "container2"
+            id: "container2",
+            components: []
         };
 
         const system1 = <SystemModel>{
