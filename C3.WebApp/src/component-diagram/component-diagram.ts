@@ -1,15 +1,13 @@
-import {autoinject} from 'aurelia-framework';
-import {Container as DIContainer} from 'aurelia-dependency-injection';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {DiagramBase} from '../common/diagram-base';
-import {NodeBase} from '../common/node-base';
-import {EdgeBase} from '../common/edge-base';
-import {ComponentNode} from './component-node';
-import {SelectionBox} from '../common/selection-box';
-import {ComponentModel} from '../common/model';
-import {SystemContextModelService} from '../services/system-context-diagram-service';
-import {ContainerDiagramService} from '../services/container-diagram-service';
-import {ComponentDiagramService} from '../services/component-diagram-service';
+import { autoinject, Container } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { DiagramBase } from '../common/diagram-base';
+import { NodeBase } from '../common/node-base';
+import { EdgeBase } from '../common/edge-base';
+import { ComponentNode } from './component-node';
+import { SelectionBox } from '../common/selection-box';
+import { ComponentModel, ContainerModel } from '../common/model';
+import { SystemContextModelService } from '../services/system-context-model-service';
+import { ModelSelectionChangedEventArgs } from "../nav-bar";
 
 @autoinject
 export class ComponentDiagram extends DiagramBase {
@@ -17,35 +15,27 @@ export class ComponentDiagram extends DiagramBase {
     name: string;
     private componentNodes: ComponentNode[];
     private diagramElement: SVGElement;
-    
+
     constructor(private eventAggregator: EventAggregator,
-                private systemContextDiagramService: SystemContextModelService,
-                private containerDiagramService: ContainerDiagramService,
-                private componentDiagramService: ComponentDiagramService) {
+        private container: Container,
+        private systemContextModelService: SystemContextModelService) {
         super();
     }
-    
-    activate(params): void {
-        this.systemContextDiagramService.getAll().then(diagrams => {
-            let systemContextDiagramModel = diagrams.find(m => m.id === params.systemContextDiagramId);            
-            this.eventAggregator.publish('SystemContextDiagramModelChanged', systemContextDiagramModel);
-        });
-        
-        this.containerDiagramService.getAll()
-            .then(diagrams => {
-                let containerDiagramModel = diagrams.find(m => m.id === params.containerDiagramId);
-                this.eventAggregator.publish('ContainerDiagramModelChanged', containerDiagramModel);
-            });
 
-        this.componentDiagramService.getAll()
-            .then(diagrams => {
-                let componentDiagramModel = diagrams.find(m => m.id === params.id);
-                this.updateFromModel(componentDiagramModel);
-                this.updateEdgePaths();                                       
-                this.eventAggregator.publish('ComponentDiagramModelChanged', componentDiagramModel);
-            });
+    activate(params): void {
+        let systemId = params.systemId;
+        let containerId = params.containerId;
+        this.systemContextModelService.get().then(systemContext => {
+            let system = systemContext.systems.find(m => m.id === params.systemId);
+            let container = system.containers.find(m => m.id === params.id);
+            this.updateFromModel(container);
+            this.updateEdgePaths();
+
+            let eventArgs = new ModelSelectionChangedEventArgs(systemContext, system, container);
+            this.eventAggregator.publish('ModelSelectionChanged', eventArgs);
+        });
     }
-    
+
     getNodes(): NodeBase[] {
         let nodes = this.componentNodes;
         return nodes;
@@ -55,20 +45,19 @@ export class ComponentDiagram extends DiagramBase {
         return [];
     }
 
-    updateFromModel(model: ComponentModel): void {
+    updateFromModel(model: ContainerModel): void {
         this.id = model.id;
-        this.componentNodes = model.componentNodes.map(nodeModel => {
-            let node = new ComponentNode();
-            node.updateFromModel(nodeModel);
+        this.componentNodes = model.components.map(component => {
+            let node = <ComponentNode>this.container.get(ComponentNode);
+            node.updateFromModel(component);
             return node;
         });
     }
-    
-    copyToModel(): ComponentModel {
-        let model = <ComponentModel>{};
+
+    copyToModel(): ContainerModel {
+        let model = <ContainerModel>{};
         model.id = this.id;
-        model.name = this.name;
-        model.componentNodes = this.componentNodes.map(node => node.copyToModel());
+        model.components = this.componentNodes.map(node => node.copyToModel());
         return model;
     }
 }

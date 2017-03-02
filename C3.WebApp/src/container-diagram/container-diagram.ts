@@ -1,5 +1,4 @@
-import { autoinject } from 'aurelia-framework';
-import { Container as DIContainer } from 'aurelia-dependency-injection';
+import { autoinject, Container } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { DiagramBase } from '../common/diagram-base';
 import { NodeBase } from '../common/node-base';
@@ -7,7 +6,7 @@ import { EdgeBase } from '../common/edge-base';
 import { ContainerNode } from './container-node';
 import { SelectionBox } from '../common/selection-box';
 import { ContainerModel, SystemModel } from '../common/model';
-import { SystemContextModelService } from "../services/system-context-diagram-service";
+import { SystemContextModelService } from "../services/system-context-model-service";
 import { ModelSelectionChangedEventArgs } from '../nav-bar';
 
 @autoinject
@@ -18,6 +17,7 @@ export class ContainerDiagram extends DiagramBase {
     private diagramElement: SVGElement;
 
     constructor(private eventAggregator: EventAggregator,
+        private container: Container,
         private systemContextModelService: SystemContextModelService) {
         super();
     };
@@ -46,7 +46,7 @@ export class ContainerDiagram extends DiagramBase {
     updateFromModel(model: SystemModel): void {
         this.id = model.id;
         this.containerNodes = model.containers.map(container => {
-            let node = new ContainerNode();
+            let node = <ContainerNode>this.container.get(ContainerNode);
             node.updateFromModel(container);
             return node;
         });
