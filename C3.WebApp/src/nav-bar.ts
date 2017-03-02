@@ -2,7 +2,7 @@ import {autoinject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import { SystemContextDiagram, ContainerDiagram, ComponentDiagramModel } from './common/model';
-import {SystemContextDiagramService} from './services/system-context-diagram-service'; 
+import {SystemContextModelService} from './services/system-context-diagram-service'; 
 import {ContainerDiagramService} from './services/container-diagram-service'; 
 
 @autoinject
@@ -18,7 +18,7 @@ export class NavBar {
     
     constructor(private router: Router, 
                 private eventAggregator: EventAggregator,
-                private systemContextDiagramService: SystemContextDiagramService,
+                private systemContextDiagramService: SystemContextModelService,
                 private containerDiagramService: ContainerDiagramService) {
                     
         eventAggregator.subscribe("DiagramModelChanged", (eventArgs: DiagramModelChangedEventArgs) => {

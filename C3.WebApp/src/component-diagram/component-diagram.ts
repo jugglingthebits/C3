@@ -6,8 +6,8 @@ import {NodeBase} from '../common/node-base';
 import {EdgeBase} from '../common/edge-base';
 import {ComponentNode} from './component-node';
 import {SelectionBox} from '../common/selection-box';
-import {ComponentDiagramModel} from '../common/model';
-import {SystemContextDiagramService} from '../services/system-context-diagram-service';
+import {ComponentModel} from '../common/model';
+import {SystemContextModelService} from '../services/system-context-diagram-service';
 import {ContainerDiagramService} from '../services/container-diagram-service';
 import {ComponentDiagramService} from '../services/component-diagram-service';
 
@@ -19,7 +19,7 @@ export class ComponentDiagram extends DiagramBase {
     private diagramElement: SVGElement;
     
     constructor(private eventAggregator: EventAggregator,
-                private systemContextDiagramService: SystemContextDiagramService,
+                private systemContextDiagramService: SystemContextModelService,
                 private containerDiagramService: ContainerDiagramService,
                 private componentDiagramService: ComponentDiagramService) {
         super();
@@ -55,9 +55,8 @@ export class ComponentDiagram extends DiagramBase {
         return [];
     }
 
-    updateFromModel(model: ComponentDiagramModel): void {
+    updateFromModel(model: ComponentModel): void {
         this.id = model.id;
-        this.name = model.name;
         this.componentNodes = model.componentNodes.map(nodeModel => {
             let node = new ComponentNode();
             node.updateFromModel(nodeModel);
@@ -65,8 +64,8 @@ export class ComponentDiagram extends DiagramBase {
         });
     }
     
-    copyToModel(): ComponentDiagramModel {
-        let model = <ComponentDiagramModel>{};
+    copyToModel(): ComponentModel {
+        let model = <ComponentModel>{};
         model.id = this.id;
         model.name = this.name;
         model.componentNodes = this.componentNodes.map(node => node.copyToModel());

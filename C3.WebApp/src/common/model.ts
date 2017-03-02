@@ -14,12 +14,12 @@ export interface EdgeModel extends EntityModel {
 export interface SystemContextModel extends DiagramModel, EntityModel {
     systems: SystemModel[];
     actors: ActorModel[];
-    actorSystemUsings: ActorSystemUsing[];
-    systemSystemUsings: SystemSystemUsing[];
+    actorSystemUsings: ActorSystemUsingModel[];
+    systemSystemUsings: SystemSystemUsingModel[];
 }
 
 export interface SystemModel extends EntityModel {
-    description: string;
+    description: string | null;
     isExternal: boolean;
     containers: ContainerModel[];
 }
@@ -27,11 +27,14 @@ export interface SystemModel extends EntityModel {
 export interface ActorModel extends EntityModel {
 }
 
-export interface ActorSystemUsing extends EdgeModel {
+export interface ActorSystemUsingModel extends EdgeModel {
+}
+
+export interface SystemSystemUsingModel extends EdgeModel {
 }
 
 export interface ContainerModel extends EntityModel {
-    description: string;
+    description: string | null;
     components: ComponentModel[];
 }
 

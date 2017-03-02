@@ -1,71 +1,43 @@
 // import 'fetch';
 // import {HttpClient} from 'aurelia-fetch-client';
-import {SystemContextDiagram, ContainerDiagram, 
-        System, ActorModel, Container, 
-        ComponentDiagramModel, ComponentNodeModel, ActorSystemUsing} 
+import { SystemContextModel, ActorSystemUsingModel, SystemModel, ActorModel } 
     from "../common/model";
 
-export class SystemContextDiagramService {
-    private diagrams: SystemContextDiagram[];
+export class SystemContextModelService {
+    private systemContexts: SystemContextModel[];
     
     constructor() {
-        const systemNode1 = <System>{
-            id: "systemNode1",
-            name: "System Node 1",
-            x: 20,
-            y: 20,
-            width: 200,
-            height: 200,
-            containerDiagramId: "containerDiagram1"
+        const systemModel1 = <SystemModel>{
+            id: "systemNode1"
         };
         
-        const actorNode1 = <ActorModel>{
-            id: "actorNode1",
-            name: "Actor Node 1",
-            x: 400,
-            y: 100,
-            width: 200,
-            height: 200
+        const actor1 = <ActorModel>{
+            id: "actorNode1"
         };
         
-        const externalSystem1 = <System>{
-            id: "externalSystemNode1",
-            name: "External System Node 1",
-            x: 20,
-            y: 250,
-            isExternal: true,
-            width: 200,
-            height: 200
+        const externalSystem1 = <SystemModel>{
+            id: "externalSystem1",
+            isExternal: true
         };
         
-        const edge1 = <ActorSystemUsing>{
+        const actorSystemUsing1 = <ActorSystemUsingModel>{
             id: 'systemActorEdge1',
-            name: 'System Actor Edge 1',
-            sourceNodeId: 'systemNode1',
-            targetNodeId: 'actorNode1'
+            sourceId: 'systemNode1',
+            targetId: 'actor1'
         };
 
-        const diagram1 = <SystemContextDiagram>{
-            id: "systemContextDiagram1",
-            name: "System Context Diagram 1",
-            systems: [systemNode1, externalSystem1],
-            actors: [actorNode1],
-            edges: [edge1]
+        const systemContext1 = <SystemContextModel>{
+            id: "systemContext1",
+            systems: [systemModel1, externalSystem1],
+            actors: [actor1],
+            actorSystemUsings: [actorSystemUsing1]
         };
         
-        const diagram2 = <SystemContextDiagram>{
-            id: "systemContextDiagram2",
-            name: "System Context Diagram 2",
-            systems: [],
-            actors: [],
-            edges: []
-        };
-        
-        this.diagrams = [diagram1, diagram2];
+        this.systemContexts = [systemContext1];
     }
     
-    getAll(): Promise<SystemContextDiagram[]> {
-        return new Promise(resolve => resolve(this.diagrams));
+    getAll(): Promise<SystemContextModel[]> {
+        return new Promise(resolve => resolve(this.systemContexts));
     }
     
     // private loadFromId(id: number): Promise<SystemContextDiagramModel> {

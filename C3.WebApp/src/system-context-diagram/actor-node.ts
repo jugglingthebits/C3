@@ -16,21 +16,11 @@ export class ActorNode extends NodeBase {
     
     updateFromModel(model: ActorModel): void {
         this.id = model.id;
-        this.name = model.name;
-        this.x = model.x;
-        this.y = model.y;
-        this.width = model.width;
-        this.height = model.height;
     }
     
     copyToModel(): ActorModel {
         let model = <ActorModel>{};
         model.id = this.id;
-        model.name = this.name;
-        model.x = this.x;
-        model.y = this.y;
-        model.width = this.width;
-        model.height = this.height;
         return model;
     }
 }

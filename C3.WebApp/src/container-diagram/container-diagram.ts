@@ -7,7 +7,7 @@ import {EdgeBase} from '../common/edge-base';
 import {ContainerNode} from './container-node';
 import {SelectionBox} from '../common/selection-box';
 import {ContainerDiagram} from '../common/model';
-import {SystemContextDiagramService} from "../services/system-context-diagram-service";
+import {SystemContextModelService} from "../services/system-context-diagram-service";
 import {ContainerDiagramService} from "../services/container-diagram-service";
 import { DiagramModelChangedEventArgs } from '../nav-bar';
 
@@ -19,7 +19,7 @@ export class ContainerDiagram extends DiagramBase {
     private diagramElement: SVGElement;
     
     constructor(private eventAggregator: EventAggregator,
-                private systemContextDiagramService: SystemContextDiagramService,
+                private systemContextDiagramService: SystemContextModelService,
                 private containerDiagramService: ContainerDiagramService) {
         super();
     };
