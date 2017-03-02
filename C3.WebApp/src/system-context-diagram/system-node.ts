@@ -9,7 +9,6 @@ export class SystemNode extends NodeBase {
     name: string;
     description: string;
     isExternalSystem = false;
-    containerDiagramId: string;
 
     constructor() {
         super();

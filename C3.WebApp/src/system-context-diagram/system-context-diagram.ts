@@ -9,7 +9,7 @@ import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
 import {EdgeBase} from '../common/edge-base';
 import {SystemContextModelService} from '../services/system-context-diagram-service'; 
-import { DiagramModelChangedEventArgs } from '../nav-bar';
+import { ModelSelectionChangedEventArgs } from '../nav-bar';
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
@@ -39,7 +39,7 @@ export class SystemContextDiagram extends DiagramBase {
             this.updateFromModel(systemContextModel);
             this.updateEdgePaths();
 
-            let eventArgs = new DiagramModelChangedEventArgs(systemContextModel);
+            let eventArgs = new ModelSelectionChangedEventArgs(systemContextModel);
             this.eventAggregator.publish("DiagramModelChanged", eventArgs);
         });
     }

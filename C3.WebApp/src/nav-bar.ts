@@ -1,47 +1,29 @@
-import {autoinject} from 'aurelia-framework';
-import {Router} from 'aurelia-router';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import { SystemContextDiagram, ContainerDiagram, ComponentDiagramModel } from './common/model';
-import {SystemContextModelService} from './services/system-context-diagram-service'; 
-import {ContainerDiagramService} from './services/container-diagram-service'; 
+import { autoinject } from 'aurelia-framework';
+import { Router } from 'aurelia-router';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { SystemContextModel, SystemModel, ContainerModel } from './common/model';
+import { SystemContextModelService } from './services/system-context-diagram-service';
 
 @autoinject
 export class NavBar {
-    private systemContextDiagrams: SystemContextDiagram[] = [];
-    private currentSystemContextDiagram: SystemContextDiagram = null;
+    private currentSystemContext: SystemContextModel = null;
+    private currentContainer: SystemModel = null;
+    private currentComponent: ContainerModel = null;
 
-    private containerDiagrams: ContainerDiagram[] = [];
-    private currentContainerDiagram: ContainerDiagram = null;
+    constructor(private router: Router,
+        private eventAggregator: EventAggregator,
+        private systemContextModelService: SystemContextModelService) {
 
-    private componentDiagrams: ComponentDiagramModel[] = [];
-    private currentComponentDiagram: ComponentDiagramModel = null;
-    
-    constructor(private router: Router, 
-                private eventAggregator: EventAggregator,
-                private systemContextDiagramService: SystemContextModelService,
-                private containerDiagramService: ContainerDiagramService) {
-                    
-        eventAggregator.subscribe("DiagramModelChanged", (eventArgs: DiagramModelChangedEventArgs) => {
-            this.currentSystemContextDiagram = eventArgs.systemContextDiagramModel;
-            this.currentContainerDiagram = eventArgs.containerDiagramModel; ==
-            this.currentComponentDiagram = eventArgs.componentDiagramModel;
+        eventAggregator.subscribe("ModelSelectionChanged", (eventArgs: ModelSelectionChangedEventArgs) => {
+            this.currentSystemContext = eventArgs.systemContext;
+            this.currentContainer = eventArgs.system;
+            this.currentComponent = eventArgs.container;
         });
-    }
-
-    attached(): void {
-        this.systemContextDiagramService.getAll()
-            .then(diagrams => {
-                this.systemContextDiagrams = diagrams;
-            });
-        this.containerDiagramService.getAll()
-            .then(diagrams => {
-                this.containerDiagrams = diagrams;
-            });
     }
 }
 
-export class DiagramModelChangedEventArgs {
-    constructor(public systemContextDiagramModel: SystemContextDiagram,
-                public containerDiagramModel: ContainerDiagram = null,
-                public componentDiagramModel: ComponentDiagramModel = null) {}
+export class ModelSelectionChangedEventArgs {
+    constructor(public systemContext: SystemContextModel,
+        public system: SystemModel = null,
+        public container: ContainerModel = null) { }
 }

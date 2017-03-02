@@ -3,7 +3,6 @@ export interface DiagramModel {
 
 export interface EntityModel {
     id: string;
-    description: string | null;
 }
 
 export interface EdgeModel extends EntityModel {

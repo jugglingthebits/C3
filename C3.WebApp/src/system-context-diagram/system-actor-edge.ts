@@ -32,7 +32,6 @@ export class SystemActorEdge extends EdgeBase {
 
     updateFromModel(model: ActorSystemUsingModel): void {
         this.id = model.id;
-        this.description = model.description;
         this.sourceNode = this.parentDiagram.actorNodes.find(a => a.id === model.sourceId)
             || this.parentDiagram.systemNodes.find(s => s.id === model.sourceId);
 
@@ -43,7 +42,6 @@ export class SystemActorEdge extends EdgeBase {
     copyToModel(): ActorSystemUsingModel {
         let model = <ActorSystemUsingModel>{};
         model.id = this.id;
-        model.description = this.description;
         model.sourceId = this.sourceNode.id;
         model.targetId = this.targetNode.id;
         return model;

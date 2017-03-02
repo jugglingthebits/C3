@@ -1,45 +1,57 @@
 // import 'fetch';
 // import {HttpClient} from 'aurelia-fetch-client';
-import { SystemContextModel, ActorSystemUsingModel, SystemModel, ActorModel } 
+import { SystemContextModel, ActorSystemUsingModel, SystemModel, ActorModel, ContainerModel, ComponentModel }
     from "../common/model";
 
 export class SystemContextModelService {
-    private systemContexts: SystemContextModel[];
-    
+    private systemContext: SystemContextModel;
+
     constructor() {
-        const systemModel1 = <SystemModel>{
-            id: "systemNode1"
+        const component1 = <ComponentModel>{
+            id: "component1"
         };
-        
+
+        const container1 = <ContainerModel>{
+            id: "container1",
+            components: [component1]
+        };
+
+        const container2 = <ContainerModel>{
+            id: "container2"
+        };
+
+        const system1 = <SystemModel>{
+            id: "system1",
+            containers: [container1, container2]
+        };
+
         const actor1 = <ActorModel>{
-            id: "actorNode1"
+            id: "actor1"
         };
-        
+
         const externalSystem1 = <SystemModel>{
             id: "externalSystem1",
             isExternal: true
         };
-        
+
         const actorSystemUsing1 = <ActorSystemUsingModel>{
-            id: 'systemActorEdge1',
-            sourceId: 'systemNode1',
+            id: 'systemActorUsing1',
+            sourceId: 'system1',
             targetId: 'actor1'
         };
 
-        const systemContext1 = <SystemContextModel>{
+        this.systemContext = <SystemContextModel>{
             id: "systemContext1",
-            systems: [systemModel1, externalSystem1],
+            systems: [system1, externalSystem1],
             actors: [actor1],
             actorSystemUsings: [actorSystemUsing1]
         };
-        
-        this.systemContexts = [systemContext1];
     }
-    
-    getAll(): Promise<SystemContextModel[]> {
-        return new Promise(resolve => resolve(this.systemContexts));
+
+    get(): Promise<SystemContextModel> {
+        return new Promise(resolve => resolve(this.systemContext));
     }
-    
+
     // private loadFromId(id: number): Promise<SystemContextDiagramModel> {
     //     const httpClient = new HttpClient();
     //     httpClient.configure(config => config.withBaseUrl('api')

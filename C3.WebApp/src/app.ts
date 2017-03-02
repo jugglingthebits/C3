@@ -11,9 +11,7 @@ export class App {
             { route: 'container-diagram/:id', name: 'container-diagram', 
               moduleId: 'container-diagram/container-diagram', title: 'Container Diagram' },
             { route: 'component-diagram/:id', name: 'component-diagram', 
-              moduleId: 'component-diagram/component-diagram', title: 'Component Diagram' },
-            { route: 'admin', name: 'admin', moduleId: 'admin/admin',
-              nav: true, title: 'Admin' }
+              moduleId: 'component-diagram/component-diagram', title: 'Component Diagram' }
         ]);
 
         this.router = router;

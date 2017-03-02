@@ -1,6 +1,6 @@
 import { transient } from 'aurelia-framework';
-import {NodeBase} from '../common/node-base';
-import {Container} from '../common/model';
+import { NodeBase } from '../common/node-base';
+import { ContainerModel } from '../common/model';
 
 @transient()
 export class ContainerNode extends NodeBase {
@@ -14,26 +14,16 @@ export class ContainerNode extends NodeBase {
         this.width = 200;
         this.height = 200;
     }
-    
-    updateFromModel(model: Container): void {
+
+    updateFromModel(model: ContainerModel): void {
         this.id = model.id;
-        this.name = model.name;
-        this.x = model.x;
-        this.y = model.y;
-        this.width = model.width;
-        this.height = model.height;
-        this.componentDiagramId = model.componentDiagramId;
+        this.description = model.description;
     }
-    
-    copyToModel(): Container {
-        let model = <Container>{};
+
+    copyToModel(): ContainerModel {
+        let model = <ContainerModel>{};
         model.id = this.id;
-        model.name = this.name;
-        model.x = this.x;
-        model.y = this.y;
-        model.width = this.width;
-        model.height = this.height;
-        model.componentDiagramId = this.componentDiagramId;
+        model.description = this.description;
         return model;
     }
 }

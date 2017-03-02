@@ -1,15 +1,14 @@
-import {autoinject} from 'aurelia-framework';
-import {Container as DIContainer} from 'aurelia-dependency-injection';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {DiagramBase} from '../common/diagram-base';
-import {NodeBase} from '../common/node-base';
-import {EdgeBase} from '../common/edge-base';
-import {ContainerNode} from './container-node';
-import {SelectionBox} from '../common/selection-box';
-import {ContainerDiagram} from '../common/model';
-import {SystemContextModelService} from "../services/system-context-diagram-service";
-import {ContainerDiagramService} from "../services/container-diagram-service";
-import { DiagramModelChangedEventArgs } from '../nav-bar';
+import { autoinject } from 'aurelia-framework';
+import { Container as DIContainer } from 'aurelia-dependency-injection';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { DiagramBase } from '../common/diagram-base';
+import { NodeBase } from '../common/node-base';
+import { EdgeBase } from '../common/edge-base';
+import { ContainerNode } from './container-node';
+import { SelectionBox } from '../common/selection-box';
+import { ContainerModel, SystemModel } from '../common/model';
+import { SystemContextModelService } from "../services/system-context-diagram-service";
+import { ModelSelectionChangedEventArgs } from '../nav-bar';
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
@@ -17,51 +16,45 @@ export class ContainerDiagram extends DiagramBase {
     name: string;
     private containerNodes: ContainerNode[];
     private diagramElement: SVGElement;
-    
+
     constructor(private eventAggregator: EventAggregator,
-                private systemContextDiagramService: SystemContextModelService,
-                private containerDiagramService: ContainerDiagramService) {
+        private systemContextModelService: SystemContextModelService) {
         super();
     };
-    
-    activate(params): void {
-        this.systemContextDiagramService.getAll().then(diagrams => {
-            let systemContextDiagramModel = diagrams.find(d => d.systems.i === params.systemContextDiagramId);            
-            this.containerDiagramService.getAll()
-                .then(diagrams => {
-                    let containerDiagramModel = diagrams.find(m => m.id === params.id);
-                    this.updateFromModel(containerDiagramModel);
-                    this.updateEdgePaths();
 
-                    let eventArgs = new DiagramModelChangedEventArgs(systemContextDiagramModel, containerDiagramModel);
-                    this.eventAggregator.publish("DiagramModelChanged", eventArgs);
-                });
+    activate(params): void {
+        let systemId = params.id;
+        this.systemContextModelService.get().then(systemContext => {
+            let system = systemContext.systems.find(system => system.id === systemId);
+            this.updateFromModel(system);
+            this.updateEdgePaths();
+
+            let eventArgs = new ModelSelectionChangedEventArgs(systemContext, system);
+            this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
         });
     }
-    
+
     getNodes(): NodeBase[] {
         let nodes = this.containerNodes;
         return nodes;
     }
-    
+
     getEdges(): EdgeBase[] {
         return [];
     }
-    
-    updateFromModel(model: ContainerDiagram): void {
+
+    updateFromModel(model: SystemModel): void {
         this.id = model.id;
-        this.name = model.name;
-        this.containerNodes = model.containers.map(nodeModel => {
+        this.containerNodes = model.containers.map(container => {
             let node = new ContainerNode();
-            node.updateFromModel(nodeModel);
+            node.updateFromModel(container);
             return node;
         });
     }
-    
-    copyToModel(): ContainerDiagram {
-        let model = <ContainerDiagram>{};
+
+    copyToModel(): SystemModel {
+        let model = <SystemModel>{};
         model.id = this.id;
-        model.name = this.name;
         model.containers = this.containerNodes.map(node => node.copyToModel());
         return model;
     }
