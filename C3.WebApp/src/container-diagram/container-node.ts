@@ -5,9 +5,7 @@ import { ContainerModel } from '../common/model';
 @transient()
 export class ContainerNode extends NodeBase {
     id: string;
-    name: string;
-    description: string;
-    componentDiagramId: string;
+    description: string | null;
 
     constructor() {
         super();

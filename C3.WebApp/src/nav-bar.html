@@ -7,16 +7,16 @@
     </div>
 
     <div class="navbar">
-        <a if.bind="currentSystemContextDiagram" route-href="route: system-context-diagram; params.bind: {id: currentSystemContextDiagram.id}">
-            ${currentSystemContextDiagram.name}
+        <a if.bind="currentSystemContext" route-href="route: system-context-diagram">
+            ${currentSystemContext.id}
         </a>
 
-        <a if.bind="currentContainerDiagram" route-href="route: container-diagram; params.bind: {id: currentContainerDiagram.id}">
-            ${currentContainerDiagram.name}
+        <a if.bind="currentContainer" route-href="route: container-diagram; params.bind: {id: currentContainer.id}">
+            ${currentContainer.id}
         </a>
 
-        <a if.bind="currentComponentDiagram" route-href="route: component-diagram; params.bind: {id: currentComponentDiagram.id}">
-            ${currentComponentDiagram.name}
+        <a if.bind="currentComponent" route-href="route: component-diagram; params.bind: {id: currentComponent.id}">
+            ${currentComponent.id}
         </a>
 
         <!--<li class="loader" if.bind="router.isNavigating">

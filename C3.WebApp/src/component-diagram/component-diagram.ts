@@ -9,10 +9,13 @@ import { ComponentModel, ContainerModel } from '../common/model';
 import { SystemContextModelService } from '../services/system-context-model-service';
 import { ModelSelectionChangedEventArgs } from "../nav-bar";
 
+function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
+    return [].concat(...array.map(callbackfn));
+}
+
 @autoinject
 export class ComponentDiagram extends DiagramBase {
     id: string;
-    name: string;
     private componentNodes: ComponentNode[];
     private diagramElement: SVGElement;
 
@@ -23,18 +26,25 @@ export class ComponentDiagram extends DiagramBase {
     }
 
     activate(params): void {
-        let systemId = params.systemId;
-        let containerId = params.containerId;
+        let containerId = params.id;
         this.systemContextModelService.get().then(systemContext => {
-            let system = systemContext.systems.find(m => m.id === params.systemId);
-            let container = system.containers.find(m => m.id === params.id);
+            let system = systemContext.systems.find(s => s.containers.some(c => c.id === containerId));
+            let container = system.containers.find(m => m.id === containerId);
             this.updateFromModel(container);
             this.updateEdgePaths();
+            this.positionNodes();
 
             let eventArgs = new ModelSelectionChangedEventArgs(systemContext, system, container);
             this.eventAggregator.publish('ModelSelectionChanged', eventArgs);
         });
     }
+
+    private positionNodes() {
+        var x, y = 0;
+        this.componentNodes.forEach(n => {
+            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
+    }
+
 
     getNodes(): NodeBase[] {
         let nodes = this.componentNodes;

@@ -30,11 +30,20 @@ export class SystemContextDiagram extends DiagramBase {
     activate(): void {
         this.systemContextModelService.get().then(systemContext => {
             this.updateFromModel(systemContext);
+            this.positionNodes();
             this.updateEdgePaths();
 
             let eventArgs = new ModelSelectionChangedEventArgs(systemContext);
             this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
         });
+    }
+
+    private positionNodes() {
+        var x, y = 0;
+        this.systemNodes.forEach(n => {
+            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
+        this.actorNodes.forEach(n => {
+            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
     }
 
     getNodes(): NodeBase[] {

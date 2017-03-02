@@ -10,13 +10,12 @@
             x="5" y="5" width="90" height="90"
             rx="1" ry="1" />
         <text x="8" y="15" font-size="8">
-            ${name}
+            ${id}
         </text>
         <foreignObject requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
                         x="8" y="20" width="80" height="80">
             <div style="height: 70px; font-size: 8px; overflow: hidden">
-                ${description}
-                <a route-href="route: component-diagram; params.bind: {id: componentDiagramId}">open component diagram</a>
+                <a route-href="route: component-diagram; params.bind: {id: id}">open component diagram</a>
             </div>
         </foreignObject>
     </svg>

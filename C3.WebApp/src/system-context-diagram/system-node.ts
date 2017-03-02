@@ -8,7 +8,7 @@ export class SystemNode extends NodeBase {
     id: string;
     name: string;
     description: string;
-    isExternalSystem = false;
+    isExternal = false;
 
     constructor() {
         super();
@@ -18,13 +18,13 @@ export class SystemNode extends NodeBase {
 
     updateFromModel(model: SystemModel): void {
         this.id = model.id;
-        this.isExternalSystem = model.isExternal;
+        this.isExternal = model.isExternal;
     }
 
     copyToModel(): SystemModel {
         let model = <SystemModel>{};
         model.id = this.id;
-        model.isExternal = this.isExternalSystem;
+        model.isExternal = this.isExternal;
         return model;
     }
 }

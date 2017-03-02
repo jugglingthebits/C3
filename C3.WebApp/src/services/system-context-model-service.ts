@@ -22,6 +22,7 @@ export class SystemContextModelService {
 
         const system1 = <SystemModel>{
             id: "system1",
+            isExternal: false,
             containers: [container1, container2]
         };
 
@@ -44,7 +45,7 @@ export class SystemContextModelService {
             id: "systemContext1",
             systems: [system1, externalSystem1],
             actors: [actor1],
-            actorSystemUsings: [actorSystemUsing1]
+            actorSystemUsings: []
         };
     }
 

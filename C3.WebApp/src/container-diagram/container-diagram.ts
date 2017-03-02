@@ -12,7 +12,6 @@ import { ModelSelectionChangedEventArgs } from '../nav-bar';
 @autoinject
 export class ContainerDiagram extends DiagramBase {
     id: string;
-    name: string;
     private containerNodes: ContainerNode[];
     private diagramElement: SVGElement;
 
@@ -28,10 +27,17 @@ export class ContainerDiagram extends DiagramBase {
             let system = systemContext.systems.find(system => system.id === systemId);
             this.updateFromModel(system);
             this.updateEdgePaths();
+            this.positionNodes();
 
             let eventArgs = new ModelSelectionChangedEventArgs(systemContext, system);
             this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
         });
+    }
+
+    private positionNodes() {
+        var x, y = 0;
+        this.containerNodes.forEach(n => {
+            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
     }
 
     getNodes(): NodeBase[] {
