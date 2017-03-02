@@ -1,55 +1,39 @@
 export interface DiagramModel {
+}
+
+export interface EntityModel {
     id: string;
-    name: string;
+    description: string | null;
 }
 
-export interface NodeModel {
-    id: string;
-    name: string;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+export interface EdgeModel extends EntityModel {
+    sourceId: string;
+    targetId: string;
 }
 
-export interface SystemContextDiagramModel extends DiagramModel {
-    systemNodes: SystemNodeModel[];
-    actorNodes: ActorNodeModel[];
-    edges: EdgeModel[];
+export interface SystemContextModel extends DiagramModel, EntityModel {
+    systems: SystemModel[];
+    actors: ActorModel[];
+    actorSystemUsings: ActorSystemUsing[];
+    systemSystemUsings: SystemSystemUsing[];
 }
 
-export interface SystemNodeModel extends NodeModel {
+export interface SystemModel extends EntityModel {
     description: string;
-    isExternalSystem: boolean;
-    containerDiagramId: string;
+    isExternal: boolean;
+    containers: ContainerModel[];
 }
 
-export interface ActorNodeModel extends NodeModel {
+export interface ActorModel extends EntityModel {
 }
 
-export interface ContainerDiagramModel extends DiagramModel {
-    containerNodes: ContainerNodeModel[];
+export interface ActorSystemUsing extends EdgeModel {
 }
 
-export interface ContainerNodeModel extends NodeModel {
+export interface ContainerModel extends EntityModel {
     description: string;
-    componentDiagramId: string;
+    components: ComponentModel[];
 }
 
-export interface ComponentDiagramModel extends DiagramModel {
-    componentNodes: ComponentNodeModel[];
-}
-
-export interface ComponentNodeModel extends NodeModel {
-}
-
-export interface EdgeModel {
-    id: string;
-    name: string;
-    description: string;
-    sourceNodeId: string;
-    targetNodeId: string;
-}
-
-export interface SystemActorEdgeModel {
+export interface ComponentModel extends EntityModel {
 }

@@ -1,65 +1,31 @@
 <template>
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle Navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+  <nav class="navbar" role="navigation">
       <a class="navbar-brand" href="#">
         <i class="fa fa-home"></i>
         <span>${router.title}</span>
       </a>
     </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li if.bind="currentSystemContextDiagram" class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              ${currentSystemContextDiagram.name} <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li repeat.for="diagram of systemContextDiagrams">
-                <a route-href="route: system-context-diagram; params.bind: {id: diagram.id}">${diagram.name}</a>
-            </li>
-          </ul>
-        </li>
-        
-        <li if.bind="currentContainerDiagram" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                ${currentContainerDiagram.name} <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li repeat.for="diagram of containerDiagrams">
-                    <a route-href="route: container-diagram; params.bind: {id: diagram.id}">${diagram.name}</a>
-                </li>
-            </ul>
-        </li>
-        
-        <li if.bind="currentComponentDiagram" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                ${currentComponentDiagram.name} <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li repeat.for="diagram of componentDiagrams">
-                    <a route-href="route: component-diagram; params.bind: {id: diagram.id}">${diagram.name}</a>
-                </li>
-            </ul>
-        </li>
-      </ul>
+    <div class="navbar">
+        <a if.bind="currentSystemContextDiagram" route-href="route: system-context-diagram; params.bind: {id: currentSystemContextDiagram.id}">
+            ${currentSystemContextDiagram.name}
+        </a>
 
-      <ul class="nav navbar-nav navbar-right">
-        <li class="loader" if.bind="router.isNavigating">
+        <a if.bind="currentContainerDiagram" route-href="route: container-diagram; params.bind: {id: currentContainerDiagram.id}">
+            ${currentContainerDiagram.name}
+        </a>
+
+        <a if.bind="currentComponentDiagram" route-href="route: component-diagram; params.bind: {id: currentComponentDiagram.id}">
+            ${currentComponentDiagram.name}
+        </a>
+
+        <!--<li class="loader" if.bind="router.isNavigating">
           <i class="fa fa-spinner fa-spin fa-2x"></i>
         </li>
         
-        <li>
-            <a route-href="route: admin" title="Admin">
-                <i class="fa fa-wrench" aria-hidden="true"></i>
-            </a>
-        </li>
-      </ul>
+        <a route-href="route: admin" title="Admin">
+            <i class="fa fa-wrench" aria-hidden="true"></i>
+        </a>
     </div>
   </nav>
 </template>

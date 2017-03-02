@@ -3,12 +3,12 @@ import {Router} from 'aurelia-router';
 import {EventAggregator} from 'aurelia-event-aggregator';
 // import 'fetch';
 // import {HttpClient} from 'aurelia-fetch-client';
-import {SystemContextDiagramModel} from '../common/model';
+import {SystemContextDiagram} from '../common/model';
 import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
 
 @autoinject
 export class Admin {
-    private systemContextDiagrams: SystemContextDiagramModel[]; 
+    private systemContextDiagrams: SystemContextDiagram[]; 
     
     constructor(private router: Router,
                 private eventAggregator: EventAggregator, 

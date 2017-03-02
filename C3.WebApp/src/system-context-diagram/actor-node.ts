@@ -1,5 +1,5 @@
 import {transient} from 'aurelia-framework';
-import {ActorNodeModel} from '../common/model';
+import {ActorModel} from '../common/model';
 import {NodeBase} from '../common/node-base';
 import {SystemContextDiagram} from './system-context-diagram';
 
@@ -14,7 +14,7 @@ export class ActorNode extends NodeBase {
         this.height = 200;
     }
     
-    updateFromModel(model: ActorNodeModel): void {
+    updateFromModel(model: ActorModel): void {
         this.id = model.id;
         this.name = model.name;
         this.x = model.x;
@@ -23,8 +23,8 @@ export class ActorNode extends NodeBase {
         this.height = model.height;
     }
     
-    copyToModel(): ActorNodeModel {
-        let model = <ActorNodeModel>{};
+    copyToModel(): ActorModel {
+        let model = <ActorModel>{};
         model.id = this.id;
         model.name = this.name;
         model.x = this.x;

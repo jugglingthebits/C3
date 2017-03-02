@@ -4,11 +4,12 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {SystemNode} from './system-node';
 import {ActorNode} from './actor-node';
 import {SystemActorEdge} from './system-actor-edge';
-import {SystemContextDiagramModel} from '../common/model';
+import {SystemContextDiagram} from '../common/model';
 import {DiagramBase} from '../common/diagram-base';
 import {NodeBase} from '../common/node-base';
 import {EdgeBase} from '../common/edge-base';
 import {SystemContextDiagramService} from '../services/system-context-diagram-service'; 
+import { DiagramModelChangedEventArgs } from '../nav-bar';
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
@@ -39,7 +40,8 @@ export class SystemContextDiagram extends DiagramBase {
             this.updateFromModel(systemContextDiagramModel);
             this.updateEdgePaths();
 
-            this.eventAggregator.publish("SystemContextDiagramModelChanged", systemContextDiagramModel);
+            let eventArgs = new DiagramModelChangedEventArgs(systemContextDiagramModel);
+            this.eventAggregator.publish("DiagramModelChanged", eventArgs);
         });
     }
     
@@ -54,15 +56,15 @@ export class SystemContextDiagram extends DiagramBase {
         return edges;
     }
     
-    updateFromModel(model: SystemContextDiagramModel): void {
+    updateFromModel(model: SystemContextDiagram): void {
         this.id = model.id;
         this.name = model.name;
-        this.actorNodes = model.actorNodes.map(nodeModel => {
+        this.actorNodes = model.actors.map(nodeModel => {
             let node = <ActorNode>this.container.get(ActorNode);
             node.updateFromModel(nodeModel);
             return node;
         });
-        this.systemNodes = model.systemNodes.map(nodeModel => {
+        this.systemNodes = model.systems.map(nodeModel => {
             let node = <SystemNode>this.container.get(SystemNode);
             node.updateFromModel(nodeModel);
             return node;
@@ -75,12 +77,12 @@ export class SystemContextDiagram extends DiagramBase {
         });
     }
     
-    copyToModel(): SystemContextDiagramModel {
-        let model = <SystemContextDiagramModel>{};
+    copyToModel(): SystemContextDiagram {
+        let model = <SystemContextDiagram>{};
         model.id = this.id;
         model.name = this.name;
-        model.actorNodes = this.actorNodes.map(node => node.copyToModel());
-        model.systemNodes = this.systemNodes.map(node => node.copyToModel());
+        model.actors = this.actorNodes.map(node => node.copyToModel());
+        model.systems = this.systemNodes.map(node => node.copyToModel());
         model.edges = this.systemActorEdges.map(connector => connector.copyToModel());
         return model;
     }

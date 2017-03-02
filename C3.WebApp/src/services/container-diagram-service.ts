@@ -1,10 +1,10 @@
 import * as Model from "../common/model";
 
 export class ContainerDiagramService {
-    private diagrams: Model.ContainerDiagramModel[];
+    private diagrams: Model.ContainerDiagram[];
     
     constructor() {
-        const container1 = <Model.ContainerNodeModel>{
+        const container1 = <Model.Container>{
             id: "containerNode1",
             name: "Container Node 1",
             x: 10,
@@ -15,7 +15,7 @@ export class ContainerDiagramService {
             componentDiagramId: "componentDiagram1"
         };
 
-        const container2 = <Model.ContainerNodeModel>{
+        const container2 = <Model.Container>{
             id: "containerNode2",
             name: "Container Node 2",
             x: 200,
@@ -26,22 +26,22 @@ export class ContainerDiagramService {
             componentDiagramId: 'componentDiagram1'
         };
         
-        const diagram1 = <Model.ContainerDiagramModel>{
+        const diagram1 = <Model.ContainerDiagram>{
             id: "containerDiagram1",
             name: "Container Diagram 1",
-            containerNodes: [container1, container2]
+            containers: [container1, container2]
         };
         
-        const diagram2 = <Model.ContainerDiagramModel>{
+        const diagram2 = <Model.ContainerDiagram>{
             id: "containerDiagram2",
             name: "Container Diagram 2",
-            containerNodes: []
+            containers: []
         };
         
         this.diagrams = [diagram1, diagram2];
     }
     
-    getAll(): Promise<Model.ContainerDiagramModel[]> {
+    getAll(): Promise<Model.ContainerDiagram[]> {
         return new Promise(resolve => resolve(this.diagrams));
     }
 }
