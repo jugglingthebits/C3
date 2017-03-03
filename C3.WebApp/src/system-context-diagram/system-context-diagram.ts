@@ -27,7 +27,7 @@ export class SystemContextDiagram extends DiagramBase {
         super();
     }
 
-    activate(): void {
+    created(): void {
         this.systemContextModelService.get().then(systemContext => {
             this.updateFromModel(systemContext);
             this.positionNodes();
@@ -39,11 +39,19 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     private positionNodes() {
-        var x, y = 0;
+        var x = 0, y = 0;
         this.systemNodes.forEach(n => {
-            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
+            n.x = x;
+            n.y = y;
+            x += 300;
+            y += 300;
+        }); //TODO: Auto positioning
         this.actorNodes.forEach(n => {
-            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
+            n.x = x;
+            n.y = y;
+            x += 300;
+            y += 300;
+        }); //TODO: Auto positioning
     }
 
     getNodes(): NodeBase[] {
