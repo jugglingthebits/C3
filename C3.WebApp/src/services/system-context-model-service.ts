@@ -46,7 +46,7 @@ export class SystemContextModelService {
             id: "systemContext1",
             systems: [system1, externalSystem1],
             actors: [actor1],
-            actorSystemUsings: []
+            actorSystemUsings: [actorSystemUsing1]
         };
     }
 
