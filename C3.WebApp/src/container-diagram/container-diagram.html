@@ -1,8 +1,8 @@
 <template>
     <require from="./container-diagram.css"></require>
     
-    <section class="container-diagram col s12 au-animate">
-        <h2>Container Diagram</h2>
+    <section class="container-diagram au-animate">
+        <h2>${id} Containers</h2>
         
         <svg class="diagram" element.ref="diagramElement">
             <svg repeat.for="containerNode of containerNodes" >

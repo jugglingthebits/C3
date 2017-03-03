@@ -2,21 +2,30 @@
     <require from="./navbar.css"></require>
 
     <nav class="navbar" role="navigation">
-        <a class="navbar-brand" route-href="route: system-context-diagram">
+        <a class="home" route-href="route: system-context-diagram">
             <i class="fa fa-home"></i>
         </a>
 
-        <a if.bind="currentSystemContext" route-href="route: system-context-diagram">
-            ${currentSystemContext.id}
-        </a>
+        <ol class="breadcrumb">
+            <li if.bind="currentSystemContext">
+                <a route-href="route: system-context-diagram">
+                    ${currentSystemContext.id}
+                </a>
+            </li>
 
-        <a if.bind="currentContainer" route-href="route: container-diagram; params.bind: {id: currentContainer.id}">
-            ${currentContainer.id}
-        </a>
+            <li if.bind="currentContainer">
+                <a route-href="route: container-diagram; params.bind: {id: currentContainer.id}">
+                ${currentContainer.id}
+                </a>
+            </li>
 
-        <a if.bind="currentComponent" route-href="route: component-diagram; params.bind: {id: currentComponent.id}">
-            ${currentComponent.id}
-        </a>
+            <li if.bind="currentComponent">
+                <a route-href="route: component-diagram; params.bind: {id: currentComponent.id}">
+                ${currentComponent.id}
+                </a>
+            </li>
+
+        </ol>
 
         <!--<li class="loader" if.bind="router.isNavigating">
           <i class="fa fa-spinner fa-spin fa-2x"></i>

@@ -1,3 +1,23 @@
-.navbar-nav li.loader {
-  margin: 12px 24px 0 6px;
+nav.navbar {
+    background-color: #edeff0;
+    padding: 0.5em 1em;
+    a.home {
+        font-size: 1.5em;
+    }
+    ol.breadcrumb {
+        display: inline-block;
+        list-style-type: none;
+        padding: 0em 1em;
+        li {
+            display: inline-block;
+            padding-right: 0.5em;
+        }
+        li::after {
+            padding-left: 0.5em;
+            content: '\00bb';
+        }
+        li:last-of-type::after {
+            display: none;
+        }
+    }
 }
