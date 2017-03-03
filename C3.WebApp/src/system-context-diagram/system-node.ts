@@ -7,7 +7,6 @@ import { SystemContextDiagram } from './system-context-diagram';
 export class SystemNode extends NodeBase {
     id: string;
     name: string;
-    description: string;
     isExternal = false;
 
     constructor() {

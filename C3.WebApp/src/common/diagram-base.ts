@@ -1,6 +1,5 @@
 import {NodeBase} from './node-base';
 import {EdgeBase} from './edge-base';
-import {SelectionBox} from './selection-box';
 
 export class BoundingBox {
     constructor(public x: number, public y: number, 
@@ -11,9 +10,6 @@ export abstract class DiagramBase {
     abstract getNodes(): NodeBase[];
     abstract getEdges(): EdgeBase[];
     
-    private isPanning: boolean;
-    private selectionBox: SelectionBox;
-
     getBoundingBox(): BoundingBox {
         const nodes = this.getNodes();
         const edges = this.getEdges();
@@ -55,43 +51,6 @@ export abstract class DiagramBase {
         
         return new BoundingBox(left, top, width, height);
     }
-
-    private unselectAll(): void {
-        for(var c of this.getNodes()) {
-            c.isSelected = false;
-        };
-    }
-    
-    private getContainerHit(x: number, y: number): NodeBase {
-        for(var c of this.getNodes()) {
-            if (c.isHit(x, y)) {
-                return c;
-            }
-        }
-        return null;
-    }
-    
-    // private onTap(event: HammerInput, element: SVGElement) {
-    //     const clientRect = element.getBoundingClientRect();
-    //     const eventX = event.pointers[0].x - clientRect.left;
-    //     const eventY = event.pointers[0].y - clientRect.top;
-        
-    //     for(var c of this.getNodes()) {
-    //         if (c.isHit(eventX, eventY)) {
-    //             if (event.srcEvent.ctrlKey) {
-    //                 c.isSelected = !c.isSelected;
-    //             }
-    //             else {
-    //                 this.unselectAll();
-    //                 c.isSelected = true;
-    //             }
-    //             return;
-    //         }
-    //     }
-        
-    //     // no container hit
-    //     this.unselectAll();
-    // }
     
     protected updateEdgePaths() {
         this.getEdges().forEach(e => e.updatePath());

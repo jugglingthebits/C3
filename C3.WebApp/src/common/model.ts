@@ -18,7 +18,6 @@ export interface SystemContextModel extends DiagramModel, EntityModel {
 }
 
 export interface SystemModel extends EntityModel {
-    description: string | null;
     isExternal: boolean;
     containers: ContainerModel[];
 }
@@ -33,7 +32,6 @@ export interface SystemSystemUsingModel extends EdgeModel {
 }
 
 export interface ContainerModel extends EntityModel {
-    description: string | null;
     components: ComponentModel[];
 }
 
