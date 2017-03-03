@@ -27,7 +27,7 @@ export class SystemContextDiagram extends DiagramBase {
         super();
     }
 
-    created(): void {
+    activate(): void {
         this.systemContextModelService.get().then(systemContext => {
             this.updateFromModel(systemContext);
             this.positionNodes();

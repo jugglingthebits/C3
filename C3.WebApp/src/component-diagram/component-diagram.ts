@@ -40,9 +40,12 @@ export class ComponentDiagram extends DiagramBase {
     }
 
     private positionNodes() {
-        var x, y = 0;
+        var x = 0, y = 0;
         this.componentNodes.forEach(n => {
-            n.x = x; n.y = y; x != 300; y += 300; }); //TODO: Auto positioning
+            n.x = x; 
+            n.y = y; 
+            x += 300; 
+            y += 300; }); //TODO: Auto positioning
     }
 
 
