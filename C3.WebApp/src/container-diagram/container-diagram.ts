@@ -4,7 +4,6 @@ import { DiagramBase } from '../common/diagram-base';
 import { NodeBase } from '../common/node-base';
 import { EdgeBase } from '../common/edge-base';
 import { ContainerNode } from './container-node';
-import { SelectionBox } from '../common/selection-box';
 import { ContainerModel, SystemModel } from '../common/model';
 import { SystemContextModelService } from "../services/system-context-model-service";
 import { ModelSelectionChangedEventArgs } from '../nav-bar';

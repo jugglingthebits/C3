@@ -1,6 +1,6 @@
 // import 'fetch';
 // import {HttpClient} from 'aurelia-fetch-client';
-import { SystemContextModel, ActorSystemUsingModel, SystemModel, ActorModel, ContainerModel, ComponentModel }
+import { SystemContextModel, SystemModel, ActorModel, ContainerModel, ComponentModel, EdgeModel }
     from "../common/model";
 
 export class SystemContextModelService {
@@ -36,17 +36,21 @@ export class SystemContextModelService {
             isExternal: true
         };
 
-        const actorSystemUsing1 = <ActorSystemUsingModel>{
-            id: 'systemActorUsing1',
+        const actorSystemUsing1 = <EdgeModel>{
+            sourceId: 'actor1',
+            targetId: 'system1'
+        };
+
+        const systemSystemUsing1 = <EdgeModel>{
             sourceId: 'system1',
-            targetId: 'actor1'
+            targetId: 'externalSystem1'
         };
 
         this.systemContext = <SystemContextModel>{
             id: "systemContext1",
             systems: [system1, externalSystem1],
             actors: [actor1],
-            actorSystemUsings: [actorSystemUsing1]
+            usings: [actorSystemUsing1, systemSystemUsing1],
         };
     }
 

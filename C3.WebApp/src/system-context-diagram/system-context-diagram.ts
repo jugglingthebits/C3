@@ -3,7 +3,7 @@ import { Router } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { SystemNode } from './system-node';
 import { ActorNode } from './actor-node';
-import { SystemActorEdge } from './system-actor-edge';
+import { UsingEdge } from './using-edge';
 import { SystemContextModel } from '../common/model';
 import { DiagramBase } from '../common/diagram-base';
 import { NodeBase } from '../common/node-base';
@@ -16,7 +16,7 @@ export class SystemContextDiagram extends DiagramBase {
     id: string;
     actorNodes: ActorNode[];
     systemNodes: SystemNode[];
-    actorSystemUsingEdges: SystemActorEdge[];
+    usingEdges: UsingEdge[];
 
     private diagramElement: SVGElement;
 
@@ -76,7 +76,7 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     getEdges(): EdgeBase[] {
-        let edges = this.actorSystemUsingEdges;
+        let edges = this.usingEdges;
         return edges;
     }
 
@@ -92,10 +92,10 @@ export class SystemContextDiagram extends DiagramBase {
             node.updateFromModel(system);
             return node;
         });
-        this.actorSystemUsingEdges = model.actorSystemUsings.map(actorSystemUsing => {
-            let connector = <SystemActorEdge>this.container.get(SystemActorEdge);
+        this.usingEdges = model.usings.map(using => {
+            let connector = <UsingEdge>this.container.get(UsingEdge);
             connector.parentDiagram = this;
-            connector.updateFromModel(actorSystemUsing);
+            connector.updateFromModel(using);
             return connector;
         });
     }
@@ -105,7 +105,7 @@ export class SystemContextDiagram extends DiagramBase {
         model.id = this.id;
         model.actors = this.actorNodes.map(node => node.copyToModel());
         model.systems = this.systemNodes.map(node => node.copyToModel());
-        model.actorSystemUsings = this.actorSystemUsingEdges.map(connector => connector.copyToModel());
+        model.usings = this.usingEdges.map(connector => connector.copyToModel());
         return model;
     }
 }

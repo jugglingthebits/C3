@@ -5,8 +5,6 @@ import { SystemContextDiagram } from './system-context-diagram';
 
 @transient()
 export class SystemNode extends NodeBase {
-    id: string;
-    name: string;
     isExternal = false;
 
     constructor() {

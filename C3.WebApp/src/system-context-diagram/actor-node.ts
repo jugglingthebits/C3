@@ -5,8 +5,6 @@ import {SystemContextDiagram} from './system-context-diagram';
 
 @transient()
 export class ActorNode extends NodeBase {
-    id: string;
-    
     constructor() {
         super();
         this.width = 200;

@@ -5,16 +5,14 @@ import { AstarPathFinder } from '../common/astar-path-finder';
 import { ActorNode } from './actor-node';
 import { SystemNode } from './system-node';
 import { SystemContextDiagram } from './system-context-diagram';
-import { ActorSystemUsingModel } from '../common/model';
+import { EdgeModel } from '../common/model';
+import { NodeBase } from "../common/node-base";
 
 @autoinject @transient()
-export class SystemActorEdge extends EdgeBase {
-    id: string;
-    name: string;
-    description: string;
+export class UsingEdge extends EdgeBase {
     parentDiagram: SystemContextDiagram;
-    sourceNode: ActorNode | SystemNode;
-    targetNode: ActorNode | SystemNode;
+    sourceNode: NodeBase;
+    targetNode: NodeBase;
 
     constructor(pathFinder: AstarPathFinder) {
         super(pathFinder);
@@ -30,18 +28,16 @@ export class SystemActorEdge extends EdgeBase {
         // this.updatePath();
     }
 
-    updateFromModel(model: ActorSystemUsingModel): void {
-        this.id = model.id;
-        this.sourceNode = this.parentDiagram.actorNodes.find(a => a.id === model.sourceId)
+    updateFromModel(model: EdgeModel): void {
+        this.sourceNode = this.parentDiagram.getNodes().find(a => a.id === model.sourceId)
             || this.parentDiagram.systemNodes.find(s => s.id === model.sourceId);
 
         this.targetNode = this.parentDiagram.systemNodes.find(s => s.id === model.targetId)
             || this.parentDiagram.actorNodes.find(s => s.id === model.targetId);
     }
 
-    copyToModel(): ActorSystemUsingModel {
-        let model = <ActorSystemUsingModel>{};
-        model.id = this.id;
+    copyToModel(): EdgeModel {
+        let model = <EdgeModel>{};
         model.sourceId = this.sourceNode.id;
         model.targetId = this.targetNode.id;
         return model;

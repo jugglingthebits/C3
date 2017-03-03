@@ -4,8 +4,6 @@ import { ComponentModel } from '../common/model';
 
 @transient()
 export class ComponentNode extends NodeBase {
-    id: string;
-
     constructor() {
         super();
         this.width = 200;

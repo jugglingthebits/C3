@@ -1,6 +1,7 @@
 import {Point} from './edge-base';
 
 export class NodeBase {
+    id: string;
     x: number;
     y: number;
     width: number;

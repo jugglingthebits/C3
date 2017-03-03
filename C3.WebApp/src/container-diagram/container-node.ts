@@ -4,9 +4,6 @@ import { ContainerModel } from '../common/model';
 
 @transient()
 export class ContainerNode extends NodeBase {
-    id: string;
-    description: string | null;
-
     constructor() {
         super();
         this.width = 200;
@@ -15,13 +12,11 @@ export class ContainerNode extends NodeBase {
 
     updateFromModel(model: ContainerModel): void {
         this.id = model.id;
-        this.description = model.description;
     }
 
     copyToModel(): ContainerModel {
         let model = <ContainerModel>{};
         model.id = this.id;
-        model.description = this.description;
         return model;
     }
 }
