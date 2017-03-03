@@ -11,8 +11,8 @@
             <svg repeat.for="actorNode of actorNodes">
                 <compose view-model.bind="actorNode" containerless></compose>
             </svg>
-            <svg repeat.for="systemActorEdge of systemActorEdges">
-                <compose view-model.bind="systemActorEdge" containerless></compose>
+            <svg repeat.for="actorSystemUsingEdge of actorSystemUsingEdges">
+                <compose view-model.bind="actorSystemUsingEdge" containerless></compose>
             </svg>
             
             <compose view-model.bind="selectionBox" containerless></compose>
