@@ -39,19 +39,34 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     private positionNodes() {
+        let space = 50;
+
         var x = 0, y = 0;
-        this.systemNodes.forEach(n => {
-            n.x = x;
-            n.y = y;
-            x += 300;
-            y += 300;
-        }); //TODO: Auto positioning
         this.actorNodes.forEach(n => {
             n.x = x;
             n.y = y;
-            x += 300;
-            y += 300;
-        }); //TODO: Auto positioning
+            x += n.width + space;
+        });
+
+        x = 0;
+        if (this.actorNodes.length > 0) {
+            y += this.actorNodes[0].height + space;
+        }
+        this.systemNodes.filter(n => !n.isExternal).forEach(n => {
+            n.x = x;
+            n.y = y;
+            x += n.width + space;
+        });
+
+        x = 0;
+        if (this.systemNodes.filter(n => !n.isExternal).length > 0) {
+            y += this.systemNodes.filter(n => !n.isExternal)[0].height + space;
+        }
+        this.systemNodes.filter(n => n.isExternal).forEach(n => {
+            n.x = x;
+            n.y = y;
+            x += n.width + space;
+        });
     }
 
     getNodes(): NodeBase[] {
