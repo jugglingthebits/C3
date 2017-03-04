@@ -1,4 +1,3 @@
-// import 'fetch';
 // import {HttpClient} from 'aurelia-fetch-client';
 import { SystemContextModel, SystemModel, ActorModel, ContainerModel, ComponentModel, EdgeModel }
     from "../common/model";

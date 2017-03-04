@@ -5,12 +5,14 @@ import { SystemContextDiagram } from './system-context-diagram';
 
 @transient()
 export class SystemNode extends NodeBase {
+    static width = 200;
+    static height = 200;
     isExternal = false;
 
     constructor() {
         super();
-        this.width = 200;
-        this.height = 200;
+        this.width = SystemNode.width;
+        this.height = SystemNode.height;
     }
 
     updateFromModel(model: SystemModel): void {

@@ -27,7 +27,7 @@ export class SystemContextDiagram extends DiagramBase {
         super();
     }
 
-    activate(): void {
+    attached(): void {
         this.systemContextModelService.get().then(systemContext => {
             this.updateFromModel(systemContext);
             this.positionNodes();
@@ -39,33 +39,42 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     private positionNodes() {
-        let space = 50;
+        const space = 50;
 
-        var x = 0, y = 0;
+        let middleX = Math.abs(this.diagramElement.clientWidth / 2);
+
+        let actorNodesRowWith = this.actorNodes.length * ActorNode.width + (this.actorNodes.length - 1) * space;
+        let internalSystemNodesRowWidth = this.systemNodes.filter(n => !n.isExternal).length * SystemNode.width + (this.systemNodes.filter(n => !n.isExternal).length - 1) * space;
+        let externalSystemNodesRowWidth = this.systemNodes.filter(n => n.isExternal).length * SystemNode.width + (this.systemNodes.filter(n => n.isExternal).length - 1) * space;
+
+        let maxRowWidth = Math.max(actorNodesRowWith, internalSystemNodesRowWidth, externalSystemNodesRowWidth);
+
+        var actorNodeX = Math.abs(middleX - actorNodesRowWith / 2);
+        var y = 0;
         this.actorNodes.forEach(n => {
-            n.x = x;
+            n.x = actorNodeX;
             n.y = y;
-            x += n.width + space;
+            actorNodeX += ActorNode.width + space;
         });
 
-        x = 0;
+        var internalSystemNodeX = Math.abs(middleX - internalSystemNodesRowWidth / 2);
         if (this.actorNodes.length > 0) {
-            y += this.actorNodes[0].height + space;
+            y += ActorNode.height + space;
         }
         this.systemNodes.filter(n => !n.isExternal).forEach(n => {
-            n.x = x;
+            n.x = internalSystemNodeX;
             n.y = y;
-            x += n.width + space;
+            internalSystemNodeX += SystemNode.width + space;
         });
 
-        x = 0;
+        var externalSystemNodeX = Math.abs(middleX - externalSystemNodesRowWidth / 2);
         if (this.systemNodes.filter(n => !n.isExternal).length > 0) {
             y += this.systemNodes.filter(n => !n.isExternal)[0].height + space;
         }
         this.systemNodes.filter(n => n.isExternal).forEach(n => {
-            n.x = x;
+            n.x = externalSystemNodeX;
             n.y = y;
-            x += n.width + space;
+            externalSystemNodeX += SystemNode.width + space;
         });
     }
 
