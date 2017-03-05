@@ -41,7 +41,7 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     private positionNodes() {
-        const space = 50;
+        const space = 150;
 
         let middleX = Math.abs(this.diagramElement.clientWidth / 2);
 

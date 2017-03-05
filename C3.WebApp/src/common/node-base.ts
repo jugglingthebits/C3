@@ -39,7 +39,7 @@ export class NodeBase {
         }
         
         // Only use center for now.
-        return [center];
+        return [topCenter, bottomCenter];
     }
     
     private getCenter(): Point {
