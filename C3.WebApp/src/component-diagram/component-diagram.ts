@@ -27,7 +27,7 @@ export class ComponentDiagram extends DiagramBase {
     activate(params): void {
         let containerId = params.id;
         this.systemContextModelService.get().then(systemContext => {
-            let system = systemContext.systems.find(s => s.containers.some(c => c.id === containerId));
+            let system = systemContext.system;
             let container = system.containers.find(m => m.id === containerId);
             this.updateFromModel(container);
             this.updateEdgePaths();

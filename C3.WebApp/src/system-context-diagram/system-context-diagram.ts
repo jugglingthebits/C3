@@ -10,12 +10,14 @@ import { NodeBase } from '../common/node-base';
 import { EdgeBase } from '../common/edge-base';
 import { SystemContextModelService } from '../services/system-context-model-service';
 import { ModelSelectionChangedEventArgs } from '../nav-bar';
+import { ExternalSystemNode } from "./external-system-node";
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
     id: string;
     actorNodes: ActorNode[];
-    systemNodes: SystemNode[];
+    systemNode: SystemNode;
+    externalSystemNodes: ExternalSystemNode[];
     usingEdges: UsingEdge[];
 
     private diagramElement: SVGElement;
@@ -44,10 +46,10 @@ export class SystemContextDiagram extends DiagramBase {
         let middleX = Math.abs(this.diagramElement.clientWidth / 2);
 
         let actorNodesRowWith = this.actorNodes.length * ActorNode.width + (this.actorNodes.length - 1) * space;
-        let internalSystemNodesRowWidth = this.systemNodes.filter(n => !n.isExternal).length * SystemNode.width + (this.systemNodes.filter(n => !n.isExternal).length - 1) * space;
-        let externalSystemNodesRowWidth = this.systemNodes.filter(n => n.isExternal).length * SystemNode.width + (this.systemNodes.filter(n => n.isExternal).length - 1) * space;
+        let systemNodeRowWidth = SystemNode.width;
+        let externalSystemNodesRowWidth = this.externalSystemNodes.length * SystemNode.width + (this.externalSystemNodes.length - 1) * space;
 
-        let maxRowWidth = Math.max(actorNodesRowWith, internalSystemNodesRowWidth, externalSystemNodesRowWidth);
+        let maxRowWidth = Math.max(actorNodesRowWith, systemNodeRowWidth, externalSystemNodesRowWidth);
 
         var actorNodeX = Math.abs(middleX - actorNodesRowWith / 2);
         var y = 0;
@@ -57,30 +59,28 @@ export class SystemContextDiagram extends DiagramBase {
             actorNodeX += ActorNode.width + space;
         });
 
-        var internalSystemNodeX = Math.abs(middleX - internalSystemNodesRowWidth / 2);
+        var systemNodeX = Math.abs(middleX - systemNodeRowWidth / 2);
         if (this.actorNodes.length > 0) {
             y += ActorNode.height + space;
         }
-        this.systemNodes.filter(n => !n.isExternal).forEach(n => {
-            n.x = internalSystemNodeX;
-            n.y = y;
-            internalSystemNodeX += SystemNode.width + space;
-        });
+        this.systemNode.x = systemNodeX;
+        this.systemNode.y = y;
 
         var externalSystemNodeX = Math.abs(middleX - externalSystemNodesRowWidth / 2);
-        if (this.systemNodes.filter(n => !n.isExternal).length > 0) {
-            y += this.systemNodes.filter(n => !n.isExternal)[0].height + space;
+        if (this.systemNode) {
+            y += ExternalSystemNode.height + space;
         }
-        this.systemNodes.filter(n => n.isExternal).forEach(n => {
+        this.externalSystemNodes.forEach(n => {
             n.x = externalSystemNodeX;
             n.y = y;
-            externalSystemNodeX += SystemNode.width + space;
+            externalSystemNodeX += ExternalSystemNode.width + space;
         });
     }
 
     getNodes(): NodeBase[] {
-        let nodes = (<NodeBase[]>this.systemNodes)
-            .concat(<NodeBase[]>this.actorNodes);
+        let nodes = (<NodeBase[]>this.actorNodes)
+            .concat(<NodeBase>this.systemNode)
+            .concat(<NodeBase[]>this.externalSystemNodes);
         return nodes;
     }
 
@@ -90,15 +90,18 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     updateFromModel(model: SystemContextModel): void {
-        this.id = model.id;
+        this.id = model.system.id;
         this.actorNodes = model.actors.map(actor => {
             let node = <ActorNode>this.container.get(ActorNode);
             node.updateFromModel(actor);
             return node;
         });
-        this.systemNodes = model.systems.map(system => {
-            let node = <SystemNode>this.container.get(SystemNode);
-            node.updateFromModel(system);
+        let node = <SystemNode>this.container.get(SystemNode);
+        node.updateFromModel(model.system);
+        this.systemNode = node;
+        this.externalSystemNodes = model.externalSystems.map(externalSystem => {
+            let node = <ExternalSystemNode>this.container.get(ExternalSystemNode);
+            node.updateFromModel(externalSystem);
             return node;
         });
         this.usingEdges = model.usings.map(using => {
@@ -111,9 +114,10 @@ export class SystemContextDiagram extends DiagramBase {
 
     copyToModel(): SystemContextModel {
         let model = <SystemContextModel>{};
-        model.id = this.id;
+        model.system.id = this.id;
         model.actors = this.actorNodes.map(node => node.copyToModel());
-        model.systems = this.systemNodes.map(node => node.copyToModel());
+        model.system = this.systemNode.copyToModel();
+        model.externalSystems = this.externalSystemNodes.map(node => node.copyToModel());
         model.usings = this.usingEdges.map(connector => connector.copyToModel());
         return model;
     }

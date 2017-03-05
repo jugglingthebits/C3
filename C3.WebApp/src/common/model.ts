@@ -1,6 +1,3 @@
-export interface DiagramModel {
-}
-
 export interface EntityModel {
     id: string;
 }
@@ -10,14 +7,14 @@ export interface EdgeModel {
     targetId: string;
 }
 
-export interface SystemContextModel extends DiagramModel, EntityModel {
-    systems: SystemModel[];
+export interface SystemContextModel {
     actors: ActorModel[];
+    system: SystemModel;
+    externalSystems: SystemModel[];
     usings: EdgeModel[];
 }
 
 export interface SystemModel extends EntityModel {
-    isExternal: boolean;
     containers: ContainerModel[];
 }
 

@@ -6,11 +6,14 @@
         <h2>${id} System Context</h2>
 
         <svg class="diagram" element.ref="diagramElement">
-            <svg repeat.for="systemNode of systemNodes">
-                <compose view-model.bind="systemNode" containerless></compose>
-            </svg>
             <svg repeat.for="actorNode of actorNodes">
                 <compose view-model.bind="actorNode" containerless></compose>
+            </svg>
+            <svg>
+                <compose view-model.bind="systemNode" containerless></compose>
+            </svg>
+            <svg repeat.for="externalSystemNode of externalSystemNodes">
+                <compose view-model.bind="externalSystemNode" containerless></compose>
             </svg>
             <svg repeat.for="usingEdge of usingEdges">
                 <compose view-model.bind="usingEdge" containerless></compose>

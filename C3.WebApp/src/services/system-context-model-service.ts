@@ -32,7 +32,6 @@ export class SystemContextModelService {
 
         const externalSystem1 = <SystemModel>{
             id: "externalSystem1",
-            isExternal: true
         };
 
         const actorSystemUsing1 = <EdgeModel>{
@@ -46,9 +45,9 @@ export class SystemContextModelService {
         };
 
         this.systemContext = <SystemContextModel>{
-            id: "systemContext1",
-            systems: [system1, externalSystem1],
             actors: [actor1],
+            system: system1,
+            externalSystems: [externalSystem1],
             usings: [actorSystemUsing1, systemSystemUsing1],
         };
     }

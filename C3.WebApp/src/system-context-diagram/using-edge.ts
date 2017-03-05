@@ -29,11 +29,8 @@ export class UsingEdge extends EdgeBase {
     }
 
     updateFromModel(model: EdgeModel): void {
-        this.sourceNode = this.parentDiagram.getNodes().find(a => a.id === model.sourceId)
-            || this.parentDiagram.systemNodes.find(s => s.id === model.sourceId);
-
-        this.targetNode = this.parentDiagram.systemNodes.find(s => s.id === model.targetId)
-            || this.parentDiagram.actorNodes.find(s => s.id === model.targetId);
+        this.sourceNode = this.parentDiagram.getNodes().find(a => a.id === model.sourceId);
+        this.targetNode = this.parentDiagram.getNodes().find(s => s.id === model.targetId);
     }
 
     copyToModel(): EdgeModel {

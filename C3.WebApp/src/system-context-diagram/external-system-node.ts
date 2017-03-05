@@ -4,14 +4,14 @@ import { NodeBase } from '../common/node-base';
 import { SystemContextDiagram } from './system-context-diagram';
 
 @transient()
-export class SystemNode extends NodeBase {
+export class ExternalSystemNode extends NodeBase {
     static width = 200;
     static height = 200;
 
     constructor() {
         super();
-        this.width = SystemNode.width;
-        this.height = SystemNode.height;
+        this.width = ExternalSystemNode.width;
+        this.height = ExternalSystemNode.height;
     }
 
     updateFromModel(model: SystemModel): void {

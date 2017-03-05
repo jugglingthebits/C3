@@ -23,8 +23,8 @@ export class ContainerDiagram extends DiagramBase {
     activate(params): void {
         let systemId = params.id;
         this.systemContextModelService.get().then(systemContext => {
-            let system = systemContext.systems.find(system => system.id === systemId);
-            this.updateFromModel(system);
+            let system = systemContext.system;
+            this.updateFromModel(systemContext.system);
             this.updateEdgePaths();
             this.positionNodes();
 
