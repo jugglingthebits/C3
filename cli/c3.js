@@ -2,8 +2,9 @@
 "use strict";
 exports.__esModule = true;
 var program = require("commander");
+var Path = require("path");
+var Inert = require("inert");
 var packageJson = require('../package.json');
-var Path = require('path');
 program
     .version(packageJson.version)
     .parse(process.argv);
@@ -23,7 +24,7 @@ var server = new Hapi.Server({
     }
 });
 server.connection({ port: 3000, host: 'localhost' });
-server.register(require('inert'), function (err) {
+server.register(Inert, function (err) {
     if (err) {
         throw err;
     }

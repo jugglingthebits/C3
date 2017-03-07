@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import * as program from 'commander';
+import * as Path  from 'path';
+import * as Inert from 'inert';
 let packageJson = require('../package.json');
-const Path = require('path');
 
 program
     .version(packageJson.version)
@@ -30,7 +31,7 @@ const server = new Hapi.Server({
 });
 
 server.connection({ port: 3000, host: 'localhost' });
-server.register(require('inert'), (err) => {
+server.register(Inert, (err) => {
     if (err) {
         throw err;
     }

@@ -25,6 +25,7 @@
   "devDependencies": {
     "@types/commander": "^2.3.31",
     "@types/hapi": "^16.0.0",
+    "@types/inert": "^4.0.0",
     "@types/node": "^7.0.5",
     "aurelia-animator-css": "^1.0.1",
     "aurelia-cli": "^0.24.0",
