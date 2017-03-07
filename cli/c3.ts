@@ -21,6 +21,8 @@ program
 // if (program.bbqSauce) console.log('  - bbq');
 // console.log('  - %s cheese', program.cheese);
 
+
+
 const server = new Hapi.Server({
     connections: {
         routes: {
@@ -58,6 +60,13 @@ server.register(Inert, (err) => {
             directory: {
                 path: 'styles'
             }
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/api/system-context/current',
+        handler: function (request, reply) {
+            reply.file('c3.json');
         }
     });
     server.start((err) => {

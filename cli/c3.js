@@ -54,6 +54,13 @@ server.register(Inert, function (err) {
             }
         }
     });
+    server.route({
+        method: 'GET',
+        path: '/api/system-context/current',
+        handler: function (request, reply) {
+            reply.file('c3.json');
+        }
+    });
     server.start(function (err) {
         if (err) {
             throw err;

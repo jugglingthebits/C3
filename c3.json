@@ -1,0 +1,25 @@
+{
+    "actors": [
+        {
+            "id": "actor1"
+        }
+    ],
+    "system": {
+        "id": "system1"
+    },
+    "externalSystems": [
+        {
+            "id": "externalSystem1"
+        }
+    ],
+    "usings": [
+        {
+            "sourceId": "actor1",
+            "targetId": "system1"
+        },
+        {
+            "sourceId": "system1",
+            "targetId": "externalSystem1"
+        }
+    ]
+}
