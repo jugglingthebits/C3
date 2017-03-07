@@ -30,7 +30,7 @@ const server = new Hapi.Server({
         }
     }
 });
-server.connection({ port: 3000, host: 'localhost' });
+server.connection({ port: 3000, host: 'localhost', uri: 'http://localhost:3000/index.html' });
 server.register(Inert, (err) => {
     if (err) {
         throw err;
