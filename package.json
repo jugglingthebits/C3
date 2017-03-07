@@ -9,14 +9,17 @@
     "url": "TODO"
   },
   "dependencies": {
-    "aurelia-bootstrapper": "^2.0.1",
     "aurelia-animator-css": "^1.0.1",
+    "aurelia-bootstrapper": "^2.0.1",
     "bluebird": "^3.4.7",
+    "commander": "^2.9.0",
     "requirejs": "^2.3.3",
     "text": "github:requirejs/text#latest"
   },
   "peerDependencies": {},
   "devDependencies": {
+    "@types/commander": "^2.3.31",
+    "@types/node": "^7.0.5",
     "aurelia-animator-css": "^1.0.1",
     "aurelia-cli": "^0.24.0",
     "aurelia-fetch-client": "^1.1.1",
