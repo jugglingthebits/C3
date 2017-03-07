@@ -18,6 +18,7 @@
     "commander": "^2.9.0",
     "hapi": "^16.1.0",
     "inert": "^4.1.0",
+    "opn": "^4.0.2",
     "requirejs": "^2.3.3",
     "text": "github:requirejs/text#latest"
   },

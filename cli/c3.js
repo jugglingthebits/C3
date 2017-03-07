@@ -3,7 +3,9 @@
 exports.__esModule = true;
 var program = require("commander");
 var Path = require("path");
+var Hapi = require("hapi");
 var Inert = require("inert");
+var opn = require("opn");
 var packageJson = require('../package.json');
 program
     .version(packageJson.version)
@@ -13,7 +15,6 @@ program
 // if (program.pineapple) console.log('  - pineapple');
 // if (program.bbqSauce) console.log('  - bbq');
 // console.log('  - %s cheese', program.cheese);
-var Hapi = require("hapi");
 var server = new Hapi.Server({
     connections: {
         routes: {
@@ -30,7 +31,7 @@ server.register(Inert, function (err) {
     }
     server.route({
         method: 'GET',
-        path: '/hello',
+        path: '/index.html',
         handler: function (request, reply) {
             reply.file('index.html');
         }
@@ -60,3 +61,4 @@ server.register(Inert, function (err) {
         console.log("Server running at: " + server.info.uri);
     });
 });
+opn('http://localhost:3000/index.html');

@@ -2,7 +2,9 @@
 
 import * as program from 'commander';
 import * as Path  from 'path';
+import * as Hapi from 'hapi';
 import * as Inert from 'inert';
+import * as opn from 'opn';
 let packageJson = require('../package.json');
 
 program
@@ -19,7 +21,6 @@ program
 // if (program.bbqSauce) console.log('  - bbq');
 // console.log('  - %s cheese', program.cheese);
 
-import * as Hapi from 'hapi';
 const server = new Hapi.Server({
     connections: {
         routes: {
@@ -29,7 +30,6 @@ const server = new Hapi.Server({
         }
     }
 });
-
 server.connection({ port: 3000, host: 'localhost' });
 server.register(Inert, (err) => {
     if (err) {
@@ -37,7 +37,7 @@ server.register(Inert, (err) => {
     }
     server.route({
         method: 'GET',
-        path: '/hello',
+        path: '/index.html',
         handler: function (request, reply) {
             reply.file('index.html');
         }
@@ -67,3 +67,4 @@ server.register(Inert, (err) => {
         console.log(`Server running at: ${server.info.uri}`);
     });
 });
+opn('http://localhost:3000/index.html');
