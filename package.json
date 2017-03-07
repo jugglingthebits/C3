@@ -8,6 +8,9 @@
     "type": "git",
     "url": "TODO"
   },
+  "bin": {
+    "c3": "cli/c3.js"
+  },
   "dependencies": {
     "aurelia-animator-css": "^1.0.1",
     "aurelia-bootstrapper": "^2.0.1",
