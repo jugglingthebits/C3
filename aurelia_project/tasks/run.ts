@@ -4,31 +4,36 @@ import * as historyApiFallback from 'connect-history-api-fallback/lib';
 import * as project from '../aurelia.json';
 import build from './build';
 import {CLIOptions} from 'aurelia-cli';
+import startServer from '../../cli/server';
 
 function onChange(path) {
   console.log(`File Changed: ${path}`);
 }
 
+let browserSyncServer;
+
 function reload(done) {
-  browserSync.reload();
+  browserSyncServer.reload();
   done();
 }
 
 let serve = gulp.series(
   build,
+  startServer,
   done => {
-    browserSync({
+    browserSyncServer = browserSync.create();
+    browserSyncServer.init({
       online: false,
       open: false,
       port: 9000,
       logLevel: 'silent',
-      server: {
-        baseDir: ['.'],
-        middleware: [historyApiFallback(), function(req, res, next) {
+      proxy: {
+        target: 'localhost:3000',
+        middleware: [function(req, res, next) { //TODO: historyApiFallback(), 
           res.setHeader('Access-Control-Allow-Origin', '*');
           next();
         }]
-      }
+      } 
     }, function (err, bs) {
       let urls = bs.options.get('urls').toJS();
       console.log(`Application Available At: ${urls.local}`);
