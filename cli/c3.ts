@@ -23,5 +23,5 @@ program
 // console.log('  - %s cheese', program.cheese);
 
 startServer(() => {
-    opn('http://localhost:3000/index.html');
+    opn('http://localhost:3000');
 });

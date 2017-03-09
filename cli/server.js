@@ -13,14 +13,14 @@ function startServer(done) {
             }
         }
     });
-    server.connection({ port: 3000, host: 'localhost', uri: 'http://localhost:3000/index.html' });
+    server.connection({ port: 3000, host: 'localhost' });
     server.register(Inert, function (err) {
         if (err) {
             throw err;
         }
         server.route({
             method: 'GET',
-            path: '/index.html',
+            path: '/',
             handler: function (request, reply) {
                 reply.file('index.html');
             }

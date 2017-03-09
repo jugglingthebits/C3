@@ -14,5 +14,5 @@ program
 // if (program.bbqSauce) console.log('  - bbq');
 // console.log('  - %s cheese', program.cheese);
 server_1["default"](function () {
-    opn('http://localhost:3000/index.html');
+    opn('http://localhost:3000');
 });
