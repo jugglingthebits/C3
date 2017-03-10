@@ -4,7 +4,7 @@ exports.__esModule = true;
 var program = require("commander");
 var opn = require("opn");
 var packageJson = require('../package.json');
-var server_1 = require("./server");
+var server_1 = require("../server/server");
 program
     .version(packageJson.version)
     .parse(process.argv);

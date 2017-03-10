@@ -4,7 +4,7 @@ import * as historyApiFallback from 'connect-history-api-fallback/lib';
 import * as project from '../aurelia.json';
 import build from './build';
 import {CLIOptions} from 'aurelia-cli';
-import startServer from '../../cli/server';
+import startServer from '../../server/server';
 
 function onChange(path) {
   console.log(`File Changed: ${path}`);
