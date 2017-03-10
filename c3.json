@@ -5,7 +5,24 @@
         }
     ],
     "system": {
-        "id": "system1"
+        "id": "system1",
+        "containers": [
+            {
+                "id": "container1",
+                "components": [
+                    {
+                        "id": "component1"
+                    },
+                    {
+                        "id": "component2"
+                    }
+                ]
+            },
+            {
+                "id": "container2",
+                "components": []
+            }
+        ]
     },
     "externalSystems": [
         {
