@@ -1,10 +1,10 @@
 import * as gulp from 'gulp';
 import * as browserSync from 'browser-sync';
 import * as historyApiFallback from 'connect-history-api-fallback/lib';
-import * as project from '../aurelia.json';
 import build from './build';
 import {CLIOptions} from 'aurelia-cli';
 import startServer from '../../server/server';
+let project = require('../aurelia.json');
 
 function onChange(path) {
   console.log(`File Changed: ${path}`);
