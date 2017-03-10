@@ -5,7 +5,7 @@
     <section class="system-context-diagram au-animate">
         <h2>${id}: context</h2>
 
-        <svg class="diagram" element.ref="diagramElement">
+        <svg class="diagram" element.ref="diagramElement" style.bind="style & signal:'diagramLoaded' & oneTime" >
             <svg repeat.for="actorNode of actorNodes">
                 <compose view-model.bind="actorNode" containerless></compose>
             </svg>
