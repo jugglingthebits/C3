@@ -1,12 +1,16 @@
 {
   "name": "c3",
   "version": "0.1.0",
-  "description": "",
+  "description": "A tool to view system context, container and component diagrams.",
   "license": "MIT",
-  "author": "TODO",
+  "author": {
+    "name": "Stephan Oehlert",
+    "email": "stephan.oehlert@gmail.com",
+    "url": "https://github.com/jugglingthebits"
+  },
   "repository": {
     "type": "git",
-    "url": "TODO"
+    "url": "https://github.com/jugglingthebits/C3"
   },
   "bin": {
     "c3": "cli/c3.js"
