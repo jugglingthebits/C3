@@ -5,6 +5,7 @@ import processCSS from './process-css';
 import {build} from 'aurelia-cli';
 import prepareFontAwesome from './prepare-font-awesome';
 import * as project from '../aurelia.json';
+import copyFiles from "./copy-files";
 
 export default gulp.series(
   readProjectConfiguration,
@@ -12,6 +13,7 @@ export default gulp.series(
     transpile,
     processMarkup,
     processCSS,
+    copyFiles,
     prepareFontAwesome
   ),
   writeBundles
