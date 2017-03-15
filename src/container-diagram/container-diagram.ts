@@ -26,13 +26,12 @@ export class ContainerDiagram extends DiagramBase {
 
     activate(params): void {
         let systemId = params.id;
-        this.systemContextModelService.get().then(systemContext => {
-            let system = systemContext.system;
-            this.updateFromModel(systemContext.system);
+        this.systemContextModelService.get().then(system => {
+            this.updateFromModel(system);
             this.updateEdgePaths();
             this.positionNodes();
 
-            let eventArgs = new ModelSelectionChangedEventArgs(systemContext, system);
+            let eventArgs = new ModelSelectionChangedEventArgs(system);
             this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
         });
     }
@@ -58,15 +57,32 @@ export class ContainerDiagram extends DiagramBase {
         return [];
     }
 
-    updateFromModel(model: SystemModel): void {
-        this.id = model.id;
-        this.containerNodes = model.containers.map(container => {
+    updateFromModel(systemModel: SystemModel): void {
+        this.id = systemModel.id;
+        this.actorNodes = systemModel.actors
+            .filter(a => systemModel.usings.some(u => u.sourceId === a.id && 
+                    systemModel.containers.some(c => u.targetId === c.id)))
+            .map(a => {
+                let node = <ActorNode>this.container.get(ActorNode);
+                node.updateFromModel(a);
+                return node;
+            });
+        this.containerNodes = systemModel.containers.map(container => {
             let node = <ContainerNode>this.container.get(ContainerNode);
             node.updateFromModel(container);
             return node;
         });
+        this.externalSystemNodes = systemModel.externalSystems
+            .filter(e => systemModel.usings.some(u => u.targetId === e.id &&
+                systemModel.containers.some(c => u.sourceId === c.id)))
+            .map(e => {
+                let node = <ExternalSystemNode>this.container.get(ExternalSystemNode);
+                node.updateFromModel(e);
+                return node;
+            });
     }
 
+    //TODO
     copyToModel(): SystemModel {
         let model = <SystemModel>{};
         model.id = this.id;

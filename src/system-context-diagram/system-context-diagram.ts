@@ -4,13 +4,13 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 import { SystemNode } from './system-node';
 import { ActorNode } from './actor-node';
 import { UsingEdge } from './using-edge';
-import { SystemContextModel } from '../common/model';
 import { DiagramBase } from '../common/diagram-base';
 import { NodeBase } from '../common/node-base';
 import { EdgeBase } from '../common/edge-base';
 import { SystemContextModelService } from '../services/system-context-model-service';
 import { ModelSelectionChangedEventArgs } from '../nav-bar';
 import { ExternalSystemNode } from "./external-system-node";
+import { SystemModel, EdgeModel } from "../common/model";
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
@@ -29,12 +29,12 @@ export class SystemContextDiagram extends DiagramBase {
     }
 
     attached(): void {
-        this.systemContextModelService.get().then(systemContext => {
-            this.updateFromModel(systemContext);
+        this.systemContextModelService.get().then(system => {
+            this.updateFromModel(system);
             this.positionNodes();
             this.updateEdgePaths();
 
-            let eventArgs = new ModelSelectionChangedEventArgs(systemContext);
+            let eventArgs = new ModelSelectionChangedEventArgs(system);
             this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
         });
     }
@@ -88,36 +88,49 @@ export class SystemContextDiagram extends DiagramBase {
         return edges;
     }
 
-    updateFromModel(model: SystemContextModel): void {
-        this.id = model.system.id;
-        this.actorNodes = model.actors.map(actor => {
+    updateFromModel(systemModel: SystemModel): void {
+        this.id = systemModel.id;
+        this.actorNodes = systemModel.actors.map(actor => {
             let node = <ActorNode>this.container.get(ActorNode);
             node.updateFromModel(actor);
             return node;
         });
         let node = <SystemNode>this.container.get(SystemNode);
-        node.updateFromModel(model.system);
+        node.updateFromModel(systemModel);
         this.systemNode = node;
-        this.externalSystemNodes = model.externalSystems.map(externalSystem => {
+        this.externalSystemNodes = systemModel.externalSystems.map(externalSystem => {
             let node = <ExternalSystemNode>this.container.get(ExternalSystemNode);
             node.updateFromModel(externalSystem);
             return node;
         });
-        this.usingEdges = model.usings.map(using => {
-            let connector = <UsingEdge>this.container.get(UsingEdge);
-            connector.parentDiagram = this;
-            connector.updateFromModel(using);
-            return connector;
-        });
+        this.usingEdges = systemModel.usings
+            .map((value, index, array) => {
+                let sourceId = systemModel.actors.some(a => a.id === value.sourceId) ? value.sourceId : systemModel.id;
+                let targetId = systemModel.externalSystems.some(e => e.id === value.targetId) ? value.targetId : systemModel.id;
+                return <EdgeModel>{
+                    sourceId: sourceId,
+                    targetId: targetId
+                };
+            })
+            .filter((value, index, array) => {
+                let copies = array.filter(u => u.sourceId === value.sourceId && u.targetId === value.targetId);
+                if (copies.length === 1)
+                    return true;
+                return array.indexOf(copies[0]) === index;
+            }).map(using => {
+                let connector = <UsingEdge>this.container.get(UsingEdge);
+                    connector.parentDiagram = this;
+                    connector.updateFromModel(using);
+                return connector;
+            });
     }
 
-    copyToModel(): SystemContextModel {
-        let model = <SystemContextModel>{};
-        model.system.id = this.id;
-        model.actors = this.actorNodes.map(node => node.copyToModel());
-        model.system = this.systemNode.copyToModel();
-        model.externalSystems = this.externalSystemNodes.map(node => node.copyToModel());
-        model.usings = this.usingEdges.map(connector => connector.copyToModel());
-        return model;
+    //TODO
+    copyToModel(): SystemModel {
+        let systemModel = this.systemNode.copyToModel();
+        systemModel.actors = this.actorNodes.map(node => node.copyToModel());
+        systemModel.externalSystems = this.externalSystemNodes.map(node => node.copyToModel());
+        systemModel.usings = this.usingEdges.map(connector => connector.copyToModel());
+        return systemModel;
     }
 }

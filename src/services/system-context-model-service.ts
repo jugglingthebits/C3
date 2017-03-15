@@ -1,11 +1,15 @@
 // import {HttpClient} from 'aurelia-fetch-client';
-import { SystemContextModel, SystemModel, ActorModel, ContainerModel, ComponentModel, EdgeModel }
+import { SystemModel, ActorModel, ContainerModel, ComponentModel, EdgeModel }
     from "../common/model";
 
 export class SystemContextModelService {
-    private systemContext: SystemContextModel;
+    private system: SystemModel;
 
     constructor() {
+        const actor1 = <ActorModel>{
+            id: "actor1"
+        };
+
         const component1 = <ComponentModel>{
             id: "component1"
         };
@@ -20,40 +24,45 @@ export class SystemContextModelService {
             components: []
         };
 
-        const system1 = <SystemModel>{
-            id: "system1",
-            isExternal: false,
-            containers: [container1, container2]
-        };
-
-        const actor1 = <ActorModel>{
-            id: "actor1"
-        };
-
         const externalSystem1 = <SystemModel>{
             id: "externalSystem1",
         };
 
-        const actorSystemUsing1 = <EdgeModel>{
-            sourceId: 'actor1',
-            targetId: 'system1'
+        const actor1Container1Using = <EdgeModel>{
+            sourceId: "actor1",
+            targetId: "container1"
+        }
+
+        const container1Container2Using = <EdgeModel>{
+            sourceId: 'container1',
+            targetId: 'container2'
         };
 
-        const systemSystemUsing1 = <EdgeModel>{
-            sourceId: 'system1',
+        const container2ExternalSystem1Using = <EdgeModel>{
+            sourceId: 'container2',
             targetId: 'externalSystem1'
         };
 
-        this.systemContext = <SystemContextModel>{
+        const system1 = <SystemModel>{
+            id: "system1",
             actors: [actor1],
-            system: system1,
+            containers: [container1, container2],
             externalSystems: [externalSystem1],
-            usings: [actorSystemUsing1, systemSystemUsing1],
+            usings: [actor1Container1Using, container1Container2Using, container2ExternalSystem1Using]
         };
+
+        this.system = system1;
+
+        // this.systemContext = <SystemContextModel>{
+            // actors: [actor1],
+            // system: system1,
+            // externalSystems: [externalSystem1],
+            // usings: [actorSystemUsing1, systemSystemUsing1],
+        // };
     }
 
-    get(): Promise<SystemContextModel> {
-        return new Promise(resolve => resolve(this.systemContext));
+    get(): Promise<SystemModel> {
+        return new Promise(resolve => resolve(this.system));
     }
 
     // private loadFromId(id: number): Promise<SystemContextDiagramModel> {
