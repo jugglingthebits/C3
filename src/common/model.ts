@@ -7,13 +7,6 @@ export interface EdgeModel {
     targetId: string;
 }
 
-// export interface SystemContextModel {
-//     actors: ActorModel[];
-//     system: SystemModel;
-//     externalSystems: SystemModel[];
-//     usings: EdgeModel[];
-// }
-
 export interface SystemModel extends EntityModel {
     actors: ActorModel[];
     containers: ContainerModel[];

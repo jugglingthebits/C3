@@ -48,8 +48,6 @@ export class SystemContextDiagram extends DiagramBase {
         let systemNodeRowWidth = SystemNode.width;
         let externalSystemNodesRowWidth = this.externalSystemNodes.length * SystemNode.width + (this.externalSystemNodes.length - 1) * space;
 
-        let maxRowWidth = Math.max(actorNodesRowWith, systemNodeRowWidth, externalSystemNodesRowWidth);
-
         var actorNodeX = Math.abs(middleX - actorNodesRowWith / 2);
         var y = 0;
         this.actorNodes.forEach(n => {

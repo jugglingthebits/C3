@@ -9,6 +9,7 @@ import { SystemContextModelService } from "../services/system-context-model-serv
 import { ModelSelectionChangedEventArgs } from '../nav-bar';
 import { ActorNode } from "../system-context-diagram/actor-node";
 import { ExternalSystemNode } from "../system-context-diagram/external-system-node";
+import { SystemNode } from "../system-context-diagram/system-node";
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
@@ -17,6 +18,7 @@ export class ContainerDiagram extends DiagramBase {
     containerNodes: ContainerNode[];
     externalSystemNodes: ExternalSystemNode[];
     private diagramElement: SVGElement;
+    private loaded: Promise<void>;
 
     constructor(private eventAggregator: EventAggregator,
         private container: Container,
@@ -24,26 +26,61 @@ export class ContainerDiagram extends DiagramBase {
         super();
     };
 
-    activate(params): void {
-        let systemId = params.id;
-        this.systemContextModelService.get().then(system => {
+    private load() {
+        return this.systemContextModelService.get().then(system => {
             this.updateFromModel(system);
-            this.updateEdgePaths();
-            this.positionNodes();
-
             let eventArgs = new ModelSelectionChangedEventArgs(system);
             this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
+        })
+    }
+
+    activate(){
+        this.loaded = this.load();
+    }
+
+    attached(){
+        this.loaded.then(() => {
+            this.positionNodes();
+            this.updateEdgePaths();
         });
     }
 
     private positionNodes() {
-        var x = 0, y = 0;
-        this.containerNodes.forEach(n => {
-            n.x = x; 
-            n.y = y; 
-            x += 300; 
-            y += 300; 
-        }); //TODO: Auto positioning
+        const space = 150;
+
+        let middleX = Math.abs(this.diagramElement.clientWidth / 2);
+
+        let actorNodesRowWith = this.actorNodes.length * ActorNode.width + (this.actorNodes.length - 1) * space;
+        let containerNodesRowWidth = this.containerNodes.length * ContainerNode.width + (this.containerNodes.length - 1) * space;
+        let externalSystemNodesRowWidth = this.externalSystemNodes.length * ExternalSystemNode.width + (this.externalSystemNodes.length - 1) * space;
+
+        var actorNodeX = Math.abs(middleX - actorNodesRowWith / 2);
+        var y = 0;
+        this.actorNodes.forEach(n => {
+            n.x = actorNodeX;
+            n.y = y;
+            actorNodeX += ActorNode.width + space;
+        });
+
+        var containerNodeX = Math.abs(middleX - containerNodesRowWidth / 2);
+        if (this.actorNodes.length > 0) {
+            y += ActorNode.height + space;
+        }
+        this.containerNodes.forEach(c => {
+            c.x = containerNodeX;
+            c.y = y;
+            containerNodeX += ContainerNode.width + space;
+        });
+
+        var externalSystemNodeX = Math.abs(middleX - externalSystemNodesRowWidth / 2);
+        if (this.containerNodes.length > 0) {
+            y += ExternalSystemNode.height + space;
+        }
+        this.externalSystemNodes.forEach(n => {
+            n.x = externalSystemNodeX;
+            n.y = y;
+            externalSystemNodeX += ExternalSystemNode.width + space;
+        });
     }
 
     getNodes(): NodeBase[] {

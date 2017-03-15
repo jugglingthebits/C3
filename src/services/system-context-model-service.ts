@@ -52,13 +52,6 @@ export class SystemContextModelService {
         };
 
         this.system = system1;
-
-        // this.systemContext = <SystemContextModel>{
-            // actors: [actor1],
-            // system: system1,
-            // externalSystems: [externalSystem1],
-            // usings: [actorSystemUsing1, systemSystemUsing1],
-        // };
     }
 
     get(): Promise<SystemModel> {

@@ -4,10 +4,13 @@ import { ContainerModel } from '../common/model';
 
 @transient()
 export class ContainerNode extends NodeBase {
+    static width = 200;
+    static height = 200;
+
     constructor() {
         super();
-        this.width = 200;
-        this.height = 200;
+        this.width = ContainerNode.width;
+        this.height = ContainerNode.height;
     }
 
     updateFromModel(model: ContainerModel): void {
