@@ -7,10 +7,11 @@ import { SystemNode } from './system-node';
 import { SystemContextDiagram } from './system-context-diagram';
 import { EdgeModel } from '../common/model';
 import { NodeBase } from "../common/node-base";
+import { ContainerDiagram } from "../container-diagram/container-diagram";
 
 @autoinject @transient()
 export class UsingEdge extends EdgeBase {
-    parentDiagram: SystemContextDiagram;
+    parentDiagram: SystemContextDiagram | ContainerDiagram;
     sourceNode: NodeBase;
     targetNode: NodeBase;
 

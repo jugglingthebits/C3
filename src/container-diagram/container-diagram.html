@@ -14,6 +14,9 @@
             <svg repeat.for="externalSystemNode of externalSystemNodes">
                 <compose view-model.bind="externalSystemNode" containerless></compose>
             </svg>
+            <svg repeat.for="usingEdge of usingEdges">
+                <compose view-model.bind="usingEdge" containerless></compose>
+            </svg>
         </svg>
     </section>
 </template>

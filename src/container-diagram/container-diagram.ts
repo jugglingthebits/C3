@@ -10,6 +10,7 @@ import { ModelSelectionChangedEventArgs } from '../nav-bar';
 import { ActorNode } from "../system-context-diagram/actor-node";
 import { ExternalSystemNode } from "../system-context-diagram/external-system-node";
 import { SystemNode } from "../system-context-diagram/system-node";
+import { UsingEdge } from "../system-context-diagram/using-edge";
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
@@ -17,6 +18,7 @@ export class ContainerDiagram extends DiagramBase {
     actorNodes: ActorNode[];
     containerNodes: ContainerNode[];
     externalSystemNodes: ExternalSystemNode[];
+    usingEdges: UsingEdge[];
     private diagramElement: SVGElement;
     private loaded: Promise<void>;
 
@@ -26,16 +28,12 @@ export class ContainerDiagram extends DiagramBase {
         super();
     };
 
-    private load() {
-        return this.systemContextModelService.get().then(system => {
+    activate(){
+        this.loaded = this.systemContextModelService.get().then(system => {
             this.updateFromModel(system);
             let eventArgs = new ModelSelectionChangedEventArgs(system);
             this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
-        })
-    }
-
-    activate(){
-        this.loaded = this.load();
+        });
     }
 
     attached(){
@@ -91,7 +89,7 @@ export class ContainerDiagram extends DiagramBase {
     }
 
     getEdges(): EdgeBase[] {
-        return [];
+        return this.usingEdges;
     }
 
     updateFromModel(systemModel: SystemModel): void {
@@ -116,6 +114,12 @@ export class ContainerDiagram extends DiagramBase {
                 let node = <ExternalSystemNode>this.container.get(ExternalSystemNode);
                 node.updateFromModel(e);
                 return node;
+            });
+        this.usingEdges = systemModel.usings.map(using => {
+                let connector = <UsingEdge>this.container.get(UsingEdge);
+                connector.parentDiagram = this;
+                connector.updateFromModel(using);
+                return connector;
             });
     }
 

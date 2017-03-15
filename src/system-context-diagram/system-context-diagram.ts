@@ -102,16 +102,15 @@ export class SystemContextDiagram extends DiagramBase {
             return node;
         });
         this.usingEdges = systemModel.usings
-            .map((value, index, array) => {
-                let sourceId = systemModel.actors.some(a => a.id === value.sourceId) ? value.sourceId : systemModel.id;
-                let targetId = systemModel.externalSystems.some(e => e.id === value.targetId) ? value.targetId : systemModel.id;
+            .map((using) => {
+                let sourceId = systemModel.actors.some(a => a.id === using.sourceId) ? using.sourceId : systemModel.id;
+                let targetId = systemModel.externalSystems.some(e => e.id === using.targetId) ? using.targetId : systemModel.id;
                 return <EdgeModel>{
                     sourceId: sourceId,
                     targetId: targetId
                 };
-            })
-            .filter((value, index, array) => {
-                let copies = array.filter(u => u.sourceId === value.sourceId && u.targetId === value.targetId);
+            }).filter((using, index, array) => {
+                let copies = array.filter(u => u.sourceId === using.sourceId && u.targetId === using.targetId);
                 if (copies.length === 1)
                     return true;
                 return array.indexOf(copies[0]) === index;
