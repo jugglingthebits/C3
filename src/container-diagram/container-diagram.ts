@@ -7,11 +7,15 @@ import { ContainerNode } from './container-node';
 import { ContainerModel, SystemModel } from '../common/model';
 import { SystemContextModelService } from "../services/system-context-model-service";
 import { ModelSelectionChangedEventArgs } from '../nav-bar';
+import { ActorNode } from "../system-context-diagram/actor-node";
+import { ExternalSystemNode } from "../system-context-diagram/external-system-node";
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
     id: string;
-    private containerNodes: ContainerNode[];
+    actorNodes: ActorNode[];
+    containerNodes: ContainerNode[];
+    externalSystemNodes: ExternalSystemNode[];
     private diagramElement: SVGElement;
 
     constructor(private eventAggregator: EventAggregator,
@@ -44,7 +48,9 @@ export class ContainerDiagram extends DiagramBase {
     }
 
     getNodes(): NodeBase[] {
-        let nodes = this.containerNodes;
+        let nodes = (<NodeBase[]>this.actorNodes)
+            .concat(this.containerNodes)
+            .concat(<NodeBase[]>this.externalSystemNodes);
         return nodes;
     }
 

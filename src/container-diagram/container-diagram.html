@@ -5,8 +5,14 @@
         <h2>${id}: container</h2>
         
         <svg class="diagram" element.ref="diagramElement">
+            <svg repeat.for="actorNode of actorNodes">
+                <compose view-model.bind="actorNode" containerless></compose>
+            </svg>
             <svg repeat.for="containerNode of containerNodes" >
                 <compose view-model.bind="containerNode" containerless></compose>
+            </svg>
+            <svg repeat.for="externalSystemNode of externalSystemNodes">
+                <compose view-model.bind="externalSystemNode" containerless></compose>
             </svg>
         </svg>
     </section>
