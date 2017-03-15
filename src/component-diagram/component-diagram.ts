@@ -6,7 +6,7 @@ import { EdgeBase } from '../common/edge-base';
 import { ComponentNode } from './component-node';
 import { ComponentModel, ContainerModel } from '../common/model';
 import { SystemContextModelService } from '../services/system-context-model-service';
-import { ModelSelectionChangedEventArgs } from "../nav-bar";
+import { DiagramSelectionChangedEventArgs } from "../nav-bar";
 
 function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
     return [].concat(...array.map(callbackfn));
@@ -33,7 +33,7 @@ export class ComponentDiagram extends DiagramBase {
             this.updateEdgePaths();
             this.positionNodes();
 
-            let eventArgs = new ModelSelectionChangedEventArgs(systemContext, system, container);
+            let eventArgs = new DiagramSelectionChangedEventArgs(systemContext, system, container);
             this.eventAggregator.publish('ModelSelectionChanged', eventArgs);
         });
     }

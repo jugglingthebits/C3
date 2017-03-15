@@ -6,7 +6,7 @@ import { EdgeBase } from '../common/edge-base';
 import { ContainerNode } from './container-node';
 import { ContainerModel, SystemModel } from '../common/model';
 import { SystemContextModelService } from "../services/system-context-model-service";
-import { ModelSelectionChangedEventArgs } from '../nav-bar';
+import { DiagramSelectionChangedEventArgs } from '../nav-bar';
 import { ActorNode } from "../system-context-diagram/actor-node";
 import { ExternalSystemNode } from "../system-context-diagram/external-system-node";
 import { SystemNode } from "../system-context-diagram/system-node";
@@ -31,8 +31,8 @@ export class ContainerDiagram extends DiagramBase {
     activate(){
         this.loaded = this.systemContextModelService.get().then(system => {
             this.updateFromModel(system);
-            let eventArgs = new ModelSelectionChangedEventArgs(system);
-            this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
+            let eventArgs = new DiagramSelectionChangedEventArgs(system);
+            this.eventAggregator.publish("DiagramSelectionChanged", eventArgs);
         });
     }
 

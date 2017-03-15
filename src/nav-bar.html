@@ -7,24 +7,23 @@
         </a>
 
         <ol class="breadcrumb">
-            <li if.bind="currentSystemContext">
+            <li if.bind="currentRouteConfigName === 'system-context-diagram' || currentRouteConfigName === 'container-diagram'">
                 <a route-href="route: system-context-diagram">
-                    ${currentSystemContext.system.id}
+                    ${currentSystem.id}
+                </a>
+            </li>
+
+            <li if.bind="currentRouteConfigName === 'container-diagram'">
+                <a route-href="route: container-diagram">
+                    ${currentSystem.id}
                 </a>
             </li>
 
             <li if.bind="currentContainer">
-                <a route-href="route: container-diagram; params.bind: {id: currentContainer.id}">
+                <a route-href="route: component-diagram; params.bind: {id: currentContainer.id}">
                     ${currentContainer.id}
                 </a>
             </li>
-
-            <li if.bind="currentComponent">
-                <a route-href="route: component-diagram; params.bind: {id: currentComponent.id}">
-                    ${currentComponent.id}
-                </a>
-            </li>
-
         </ol>
 
         <!--<li class="loader" if.bind="router.isNavigating">

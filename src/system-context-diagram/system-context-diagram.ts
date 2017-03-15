@@ -8,7 +8,7 @@ import { DiagramBase } from '../common/diagram-base';
 import { NodeBase } from '../common/node-base';
 import { EdgeBase } from '../common/edge-base';
 import { SystemContextModelService } from '../services/system-context-model-service';
-import { ModelSelectionChangedEventArgs } from '../nav-bar';
+import { DiagramSelectionChangedEventArgs } from '../nav-bar';
 import { ExternalSystemNode } from "./external-system-node";
 import { SystemModel, EdgeModel } from "../common/model";
 
@@ -34,8 +34,8 @@ export class SystemContextDiagram extends DiagramBase {
             this.positionNodes();
             this.updateEdgePaths();
 
-            let eventArgs = new ModelSelectionChangedEventArgs(system);
-            this.eventAggregator.publish("ModelSelectionChanged", eventArgs);
+            let eventArgs = new DiagramSelectionChangedEventArgs(system);
+            this.eventAggregator.publish("DiagramSelectionChanged", eventArgs);
         });
     }
 

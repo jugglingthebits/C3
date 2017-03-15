@@ -1,29 +1,33 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { SystemContextModel, SystemModel, ContainerModel } from './common/model';
+import { SystemModel, ContainerModel } from './common/model';
 import { SystemContextModelService } from './services/system-context-model-service';
 
 @autoinject
 export class NavBar {
-    private currentSystemContext: SystemContextModel = null;
-    private currentContainer: SystemModel = null;
-    private currentComponent: ContainerModel = null;
+    currentRouteConfigName: string;
+    currentSystem: SystemModel = null;
+    currentContainer: ContainerModel = null;
 
     constructor(private router: Router,
         private eventAggregator: EventAggregator,
         private systemContextModelService: SystemContextModelService) {
 
-        eventAggregator.subscribe("ModelSelectionChanged", (eventArgs: ModelSelectionChangedEventArgs) => {
-            this.currentSystemContext = eventArgs.systemContext;
-            this.currentContainer = eventArgs.system;
-            this.currentComponent = eventArgs.container;
+        eventAggregator.subscribe("DiagramSelectionChanged", (eventArgs: DiagramSelectionChangedEventArgs) => {
+            this.currentSystem = eventArgs.system;
+            this.currentContainer = eventArgs.container;
         });
+
+        this.router.
+    }
+
+    attached() {
+        this.currentRouteConfigName = this.router.currentInstruction.config.name;
     }
 }
 
-export class ModelSelectionChangedEventArgs {
-    constructor(public systemContext: SystemContextModel,
-        public system: SystemModel = null,
+export class DiagramSelectionChangedEventArgs {
+    constructor(public system: SystemModel,
         public container: ContainerModel = null) { }
 }
