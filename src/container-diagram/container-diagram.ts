@@ -31,7 +31,7 @@ export class ContainerDiagram extends DiagramBase {
     activate(){
         this.loaded = this.systemContextModelService.get().then(system => {
             this.updateFromModel(system);
-            let eventArgs = new DiagramSelectionChangedEventArgs(system);
+            let eventArgs = new DiagramSelectionChangedEventArgs("Container");
             this.eventAggregator.publish("DiagramSelectionChanged", eventArgs);
         });
     }

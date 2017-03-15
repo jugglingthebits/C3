@@ -34,7 +34,7 @@ export class SystemContextDiagram extends DiagramBase {
             this.positionNodes();
             this.updateEdgePaths();
 
-            let eventArgs = new DiagramSelectionChangedEventArgs(system);
+            let eventArgs = new DiagramSelectionChangedEventArgs("SystemContext");
             this.eventAggregator.publish("DiagramSelectionChanged", eventArgs);
         });
     }

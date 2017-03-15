@@ -6,8 +6,7 @@ import { SystemContextModelService } from './services/system-context-model-servi
 
 @autoinject
 export class NavBar {
-    currentRouteConfigName: string;
-    currentSystem: SystemModel = null;
+    currentDiagramType: string;
     currentContainer: ContainerModel = null;
 
     constructor(private router: Router,
@@ -15,19 +14,12 @@ export class NavBar {
         private systemContextModelService: SystemContextModelService) {
 
         eventAggregator.subscribe("DiagramSelectionChanged", (eventArgs: DiagramSelectionChangedEventArgs) => {
-            this.currentSystem = eventArgs.system;
+            this.currentDiagramType = eventArgs.diagramType;
             this.currentContainer = eventArgs.container;
         });
-
-        this.router.
-    }
-
-    attached() {
-        this.currentRouteConfigName = this.router.currentInstruction.config.name;
     }
 }
 
 export class DiagramSelectionChangedEventArgs {
-    constructor(public system: SystemModel,
-        public container: ContainerModel = null) { }
+    constructor(public diagramType: string, public container: ContainerModel = null) { }
 }
