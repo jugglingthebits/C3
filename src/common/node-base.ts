@@ -22,24 +22,19 @@ export class NodeBase {
             x: this.x + this.width / 2,
             y: this.y
         }
-
         const bottomCenter: Point = {
             x: this.x + this.width / 2,
             y: this.y + this.height - 1
         }
-
         const leftCenter: Point = {
             x: this.x,
             y: this.y + this.height / 2
         }
-
         const rightCenter: Point = {
             x: this.x + this.width - 1,
             y: this.y + this.height / 2
         }
-        
-        // Only use center for now.
-        return [topCenter, bottomCenter];
+        return [topCenter, bottomCenter, leftCenter, rightCenter];
     }
     
     private getCenter(): Point {
