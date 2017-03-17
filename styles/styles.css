@@ -1,92 +1,110 @@
+* {
+    font-family: "Source Sans Pro", sans-serif;
+}
+
 html {
     height: 100%;
 }
 
 body {
-  margin: 0;
-  height: 100%;
+    margin: 0;
+    height: 100%;
 }
 
-.splash {
-  text-align: center;
-  margin: 10% 0 0 0;
-  box-sizing: border-box;
+a {
+    text-decoration: none;
 }
 
-.splash .message {
-  font-size: 72px;
-  line-height: 72px;
-  text-shadow: rgba(0, 0, 0, 0.5) 0 0 15px;
-  text-transform: uppercase;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+body {
+    margin: 0;
+    height: 100%;
 }
 
-.splash .fa-spinner {
-  text-align: center;
-  display: inline-block;
-  font-size: 72px;
-  margin-top: 50px;
+div.splash {
+    text-align: center;
+    margin: 10% 0 0 0;
+    box-sizing: border-box;
 }
+
+div.splash div.message {
+    font-size: 72px;
+    line-height: 72px;
+    text-shadow: rgba(0, 0, 0, 0.5) 0 0 15px;
+    text-transform: uppercase;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div.splash div.fa-spinner {
+    text-align: center;
+    display: inline-block;
+    font-size: 72px;
+    margin-top: 50px;
+}
+
 
 /*section {
   margin: 0 20px;
 }*/
 
+
 /* animate page transitions */
+
 section.au-enter-active {
-  -webkit-animation: fadeInRight 1s;
-  animation: fadeInRight 1s;
+    -webkit-animation: fadeInRight 1s;
+    animation: fadeInRight 1s;
 }
 
 div.au-stagger {
-  /* 50ms will be applied between each successive enter operation */
-  -webkit-animation-delay: 50ms;
-  animation-delay: 50ms;
+    /* 50ms will be applied between each successive enter operation */
+    -webkit-animation-delay: 50ms;
+    animation-delay: 50ms;
 }
 
+
 /* animation definitions */
+
 @-webkit-keyframes fadeInRight {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0)
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none
-  }
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none
+    }
 }
 
 @keyframes fadeInRight {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(100%, 0, 0);
-    -ms-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0)
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    -ms-transform: none;
-    transform: none
-  }
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        -ms-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none
+    }
 }
 
 @-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

@@ -2,5 +2,6 @@ node_modules
 .idea
 .DS_STORE
 test/e2e/dist
-/typings
+/typings/
 scripts/*
+npm-debug.log

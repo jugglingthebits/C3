@@ -1,0 +1,44 @@
+{
+    "id": "system1",
+    "actors": [
+        {
+            "id": "actor1"
+        }
+    ],
+    "containers": [
+        {
+            "id": "container1",
+            "components": [
+                {
+                    "id": "component1"
+                },
+                {
+                    "id": "component2"
+                }
+            ]
+        },
+        {
+            "id": "container2",
+            "components": []
+        }
+    ],
+    "externalSystems": [
+        {
+            "id": "externalSystem1"
+        }
+    ],
+    "usings": [
+        {
+            "sourceId": "actor1",
+            "targetId": "container1"
+        },
+        {
+            "sourceId": "container1",
+            "targetId": "container2"
+        },
+        {
+            "sourceId": "container2",
+            "targetId": "externalSystem1"
+        }
+    ]
+}

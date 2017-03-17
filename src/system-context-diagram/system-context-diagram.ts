@@ -1,4 +1,5 @@
-import { autoinject, Container } from 'aurelia-framework';
+import { autoinject, Container, bindable, computedFrom, bindingMode } from 'aurelia-framework';
+import { BindingSignaler, SignalBindingBehavior } from 'aurelia-templating-resources';
 import { Router } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { SystemNode } from './system-node';
@@ -15,16 +16,17 @@ import { SystemModel, EdgeModel } from "../common/model";
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
     id: string;
-    actorNodes: ActorNode[];
-    systemNode: SystemNode;
-    externalSystemNodes: ExternalSystemNode[];
-    usingEdges: UsingEdge[];
+    actorNodes: ActorNode[] = [];
+    systemNode: SystemNode = null;
+    externalSystemNodes: ExternalSystemNode[] = [];
+    usingEdges: UsingEdge[] = [];
     private diagramElement: SVGElement;
 
     constructor(private eventAggregator: EventAggregator,
         private router: Router,
         private container: Container,
-        private systemContextModelService: SystemContextModelService) {
+        private systemContextModelService: SystemContextModelService,
+        private bindingSignaler: BindingSignaler) {
         super();
     }
 
@@ -34,9 +36,17 @@ export class SystemContextDiagram extends DiagramBase {
             this.positionNodes();
             this.updateEdgePaths();
 
+            this.bindingSignaler.signal('diagramLoaded');
             let eventArgs = new DiagramSelectionChangedEventArgs("SystemContext");
             this.eventAggregator.publish("DiagramSelectionChanged", eventArgs);
         });
+    }
+
+    get style() {
+        let boundingBox = this.getBoundingBox();
+        return {
+            height: `${boundingBox.height}px`
+        }
     }
 
     private positionNodes() {
@@ -76,7 +86,7 @@ export class SystemContextDiagram extends DiagramBase {
 
     getNodes(): NodeBase[] {
         let nodes = (<NodeBase[]>this.actorNodes)
-            .concat(<NodeBase>this.systemNode)
+            .concat(<NodeBase>this.systemNode ? [<NodeBase>this.systemNode] : [])
             .concat(<NodeBase[]>this.externalSystemNodes);
         return nodes;
     }

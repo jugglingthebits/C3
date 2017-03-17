@@ -1,5 +1,5 @@
 import { transient } from 'aurelia-framework';
-import { SystemModel } from '../common/model';
+import { ContainerModel } from '../common/model';
 import { NodeBase } from '../common/node-base';
 import { SystemContextDiagram } from './system-context-diagram';
 
@@ -14,12 +14,12 @@ export class ExternalSystemNode extends NodeBase {
         this.height = ExternalSystemNode.height;
     }
 
-    updateFromModel(model: SystemModel): void {
+    updateFromModel(model: ContainerModel): void {
         this.id = model.id;
     }
 
-    copyToModel(): SystemModel {
-        let model = <SystemModel>{};
+    copyToModel(): ContainerModel {
+        let model = <ContainerModel>{};
         model.id = this.id;
         return model;
     }

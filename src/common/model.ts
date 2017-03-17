@@ -10,8 +10,8 @@ export interface EdgeModel {
 export interface SystemModel extends EntityModel {
     actors: ActorModel[];
     containers: ContainerModel[];
+    externalSystems: ContainerModel[];
     usings: EdgeModel[];
-    externalSystems: SystemModel[];
 }
 
 export interface ActorModel extends EntityModel {
