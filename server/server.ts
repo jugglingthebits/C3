@@ -44,7 +44,7 @@ export default function startServer(done) {
         });
         server.route({
             method: 'GET',
-            path: '/api/system-context/current',
+            path: '/api/system/current',
             handler: function (request, reply) {
                 reply.file('c3.json');
             }

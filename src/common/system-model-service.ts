@@ -3,7 +3,7 @@ import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-http-client';
 
 @autoinject
-export class SystemContextModelService {
+export class SystemModelService {
     private system: SystemModel;
 
     constructor(private httpClient: HttpClient) {
@@ -11,7 +11,7 @@ export class SystemContextModelService {
     }
 
     get(): Promise<SystemModel> {
-        return this.httpClient.get('/system-context/current')
+        return this.httpClient.get('/system/current')
             .then(response => {
                 let model = <SystemModel>response.content;
                 return model;

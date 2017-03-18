@@ -8,9 +8,9 @@ import { UsingEdge } from './using-edge';
 import { DiagramBase } from '../common/diagram-base';
 import { NodeBase } from '../common/node-base';
 import { EdgeBase } from '../common/edge-base';
-import { SystemContextModelService } from '../services/system-context-model-service';
 import { ExternalSystemNode } from "./external-system-node";
 import { SystemModel, EdgeModel } from "../common/model";
+import { SystemModelService } from "../common/system-model-service";
 
 @autoinject
 export class SystemContextDiagram extends DiagramBase {
@@ -24,7 +24,7 @@ export class SystemContextDiagram extends DiagramBase {
     constructor(private eventAggregator: EventAggregator,
         private router: Router,
         private container: Container,
-        private systemContextModelService: SystemContextModelService,
+        private systemContextModelService: SystemModelService,
         private bindingSignaler: BindingSignaler) {
         super();
     }

@@ -5,11 +5,11 @@ import { NodeBase } from '../common/node-base';
 import { EdgeBase } from '../common/edge-base';
 import { ContainerNode } from './container-node';
 import { ContainerModel, SystemModel } from '../common/model';
-import { SystemContextModelService } from "../services/system-context-model-service";
 import { ActorNode } from "../system-context-diagram/actor-node";
 import { ExternalSystemNode } from "../system-context-diagram/external-system-node";
 import { SystemNode } from "../system-context-diagram/system-node";
 import { UsingEdge } from "../system-context-diagram/using-edge";
+import { SystemModelService } from "../common/system-model-service";
 
 @autoinject
 export class ContainerDiagram extends DiagramBase {
@@ -23,7 +23,7 @@ export class ContainerDiagram extends DiagramBase {
 
     constructor(private eventAggregator: EventAggregator,
         private container: Container,
-        private systemContextModelService: SystemContextModelService) {
+        private systemContextModelService: SystemModelService) {
         super();
     };
 
