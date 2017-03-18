@@ -26,14 +26,13 @@ export class ComponentDiagram extends DiagramBase {
 
     activate(params): void {
         let containerId = params.id;
-        this.systemContextModelService.get().then(systemContext => {
-            let system = systemContext.system;
+        this.systemContextModelService.get().then(system => {
             let container = system.containers.find(m => m.id === containerId);
             this.updateFromModel(container);
             this.updateEdgePaths();
             this.positionNodes();
 
-            let eventArgs = new DiagramSelectionChangedEventArgs(systemContext, system, container);
+            let eventArgs = new DiagramSelectionChangedEventArgs("Component", container);
             this.eventAggregator.publish('ModelSelectionChanged', eventArgs);
         });
     }
