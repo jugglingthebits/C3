@@ -13,15 +13,9 @@
                 </a>
             </li>
 
-            <li if.bind="currentDiagramType === 'Container' || currentDiagramType === 'Component'">
+            <li if.bind="currentDiagramType === 'Container'">
                 <a route-href="route: container-diagram">
                     Containers
-                </a>
-            </li>
-
-            <li if.bind="currentDiagramType === 'Component'">
-                <a route-href="route: component-diagram; params.bind: {id: currentContainer.id}">
-                    Components in container ${currentContainer.id}
                 </a>
             </li>
         </ol>

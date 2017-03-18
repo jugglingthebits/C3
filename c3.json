@@ -7,15 +7,7 @@
     ],
     "containers": [
         {
-            "id": "container1",
-            "components": [
-                {
-                    "id": "component1"
-                },
-                {
-                    "id": "component2"
-                }
-            ]
+            "id": "container1"
         },
         {
             "id": "container2",

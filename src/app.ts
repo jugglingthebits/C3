@@ -9,9 +9,7 @@ export class App {
             { route: ['', 'system-context-diagram'], name: 'system-context-diagram', 
               moduleId: 'system-context-diagram/system-context-diagram', title: 'System Context Diagram' },
             { route: 'container-diagram', name: 'container-diagram', 
-              moduleId: 'container-diagram/container-diagram', title: 'Container Diagram' },
-            { route: 'component-diagram/:id', name: 'component-diagram', 
-              moduleId: 'component-diagram/component-diagram', title: 'Component Diagram' }
+              moduleId: 'container-diagram/container-diagram', title: 'Container Diagram' }
         ]);
 
         this.router = router;

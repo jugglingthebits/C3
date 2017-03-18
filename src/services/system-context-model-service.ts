@@ -10,7 +10,7 @@ export class SystemContextModelService {
         this.httpClient.configure(config => config.withBaseUrl('api'));
     }
 
-    get(): Promise<SystemModel | null> {
+    get(): Promise<SystemModel> {
         return this.httpClient.get('/system-context/current')
             .then(response => {
                 let model = <SystemModel>response.content;
