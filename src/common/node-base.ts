@@ -10,14 +10,10 @@ export class NodeBase {
     isHit(x: number, y: number): boolean {
         var hit = !(x < this.x || x >= this.x + this.width ||
                   y < this.y || y >= this.y + this.height);
-        // var hit = x >= this.x && x < this.x + this.width &&
-        //           y >= this.y && y < this.y + this.height;
         return hit;
     }
     
     getConnectionPoints(): Point[] {
-        const center = this.getCenter();
-        
         const topCenter: Point = {
             x: this.x + this.width / 2,
             y: this.y
@@ -35,11 +31,5 @@ export class NodeBase {
             y: this.y + this.height / 2
         }
         return [topCenter, bottomCenter, leftCenter, rightCenter];
-    }
-    
-    private getCenter(): Point {
-        const centerX = this.x + this.width / 2;
-        const centerY = this.y + this.height / 2;
-        return {x: centerX, y: centerY}
     }
 }
