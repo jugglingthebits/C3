@@ -19,7 +19,7 @@ export class SystemContextDiagram extends DiagramBase {
     systemNode: SystemNode = null;
     externalSystemNodes: ExternalSystemNode[] = [];
     usingEdges: UsingEdge[] = [];
-    private diagramElement: SVGElement;
+    private diagramElement: SVGSVGElement;
 
     constructor(private eventAggregator: EventAggregator,
         private router: Router,

@@ -18,7 +18,7 @@ export class ContainerDiagram extends DiagramBase {
     containerNodes: ContainerNode[];
     externalSystemNodes: ExternalSystemNode[];
     usingEdges: UsingEdge[];
-    diagramElement: SVGElement;
+    diagramElement: SVGSVGElement;
     private loaded: Promise<void>;
 
     constructor(private eventAggregator: EventAggregator,

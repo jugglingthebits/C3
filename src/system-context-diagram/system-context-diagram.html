@@ -6,18 +6,18 @@
         <h2>${id}: context</h2>
 
         <svg class="diagram" element.ref="diagramElement" style.bind="style & signal:'diagramLoaded' & oneTime" >
-            <svg repeat.for="actorNode of actorNodes">
+            <g repeat.for="actorNode of actorNodes">
                 <compose view-model.bind="actorNode" containerless></compose>
-            </svg>
-            <svg>
+            </g>
+            <g>
                 <compose view-model.bind="systemNode" containerless></compose>
-            </svg>
-            <svg repeat.for="externalSystemNode of externalSystemNodes">
+            </g>
+            <g repeat.for="externalSystemNode of externalSystemNodes">
                 <compose view-model.bind="externalSystemNode" containerless></compose>
-            </svg>
-            <svg repeat.for="usingEdge of usingEdges">
+            </g>
+            <g repeat.for="usingEdge of usingEdges">
                 <compose view-model.bind="usingEdge" containerless></compose>
-            </svg>
+            </g>
         </svg>
     </section>
 </template>
