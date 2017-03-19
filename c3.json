@@ -10,8 +10,7 @@
             "id": "container1"
         },
         {
-            "id": "container2",
-            "components": []
+            "id": "container2"
         }
     ],
     "externalSystems": [
