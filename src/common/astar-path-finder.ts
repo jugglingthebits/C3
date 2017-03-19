@@ -82,7 +82,7 @@ export class AstarPathFinder implements PathFinder {
             }
         }
 
-        // TODO: error
+        throw ("No path found");
     }
         
     private getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
