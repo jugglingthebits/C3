@@ -80,13 +80,17 @@ class GraphForDiagram {
             path.unshift(point);
             currentNode = currentNode.parent;
         }
+        const point = <Point>{x: currentNode.x + this.diagramBoundingBox.x, 
+                              y: currentNode.y + this.diagramBoundingBox.y};
+
+        path.unshift(point);
         return path;
     }
     
     private toGrid(value: number): number {
         if (value % gridSpacing !== 0)
             //throw `{value} is not within the grid`;
-            value = value - value % gridSpacing; // TODO: Use round of something more clever.
+            value = Math.round(value / gridSpacing) * gridSpacing;
 
         return value/gridSpacing;
     }
@@ -122,9 +126,7 @@ class GraphForDiagram {
             let row = [];
             for (var j=0; j <= this.diagramBoundingBox.width; j=j+gridSpacing) {
                 const node = new Node({x: j, y: i});
-
-                node.isOccupied = this.isDiagramNodeHit(node);
-
+                node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
                 row.push(node);
             }
             this.grid.push(row);
@@ -138,6 +140,18 @@ class GraphForDiagram {
         const diagramNodes = this.diagram.getNodes();
         for (var diagramNode of diagramNodes) {
             if (diagramNode.isHit(diagramX, diagramY))
+                return true;
+        }
+        return false;
+    }
+
+    private isDiagramEdgeHit(node: Node) {
+        const diagramX = node.x + this.diagramBoundingBox.x;
+        const diagramY = node.y + this.diagramBoundingBox.y;
+
+        const diagramEdges = this.diagram.getEdges();
+        for (var diagramEdge of diagramEdges) {
+            if (diagramEdge.isHit(diagramX, diagramY))
                 return true;
         }
         return false;
@@ -167,9 +181,9 @@ export class AstarPathFinder implements PathFinder {
             const shorterPath = (currentLength < previousLength) ? currentConnectionPoints : previousShortestConnectionPoints;
             return shorterPath;
         });
+        logger.info(`Using connection points [${shortestConnectionPointCombination[0].x},${shortestConnectionPointCombination[0].y}] and [${shortestConnectionPointCombination[1].x},${shortestConnectionPointCombination[1].y}]`);
         
         const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
-        
         return path;
     }
     
@@ -193,7 +207,7 @@ export class AstarPathFinder implements PathFinder {
             let currentNode = openHeap.pop();
             
             if (currentNode === endNode) {
-                console.debug("It took " +  numTries + " tries");
+                //console.debug("It took " +  numTries + " tries");
                 return graph.getFullPath(currentNode);
             }
             currentNode.closed = true;
