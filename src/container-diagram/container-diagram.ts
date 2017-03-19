@@ -50,7 +50,7 @@ export class ContainerDiagram extends DiagramBase {
         let containerNodesRowWidth = this.containerNodes.length * ContainerNode.width + (this.containerNodes.length - 1) * space;
         let externalSystemNodesRowWidth = this.externalSystemNodes.length * ExternalSystemNode.width + (this.externalSystemNodes.length - 1) * space;
 
-        var actorNodeX = Math.abs(middleX - actorNodesRowWith / 2);
+        var actorNodeX = Math.abs(middleX - actorNodesRowWith / 2) - Math.abs(middleX - actorNodesRowWith / 2) % 10;
         var y = 0;
         this.actorNodes.forEach(n => {
             n.x = actorNodeX;
@@ -58,7 +58,7 @@ export class ContainerDiagram extends DiagramBase {
             actorNodeX += ActorNode.width + space;
         });
 
-        var containerNodeX = Math.abs(middleX - containerNodesRowWidth / 2);
+        var containerNodeX = Math.abs(middleX - containerNodesRowWidth / 2) - Math.abs(middleX - containerNodesRowWidth / 2) % 10;
         if (this.actorNodes.length > 0) {
             y += ActorNode.height + space;
         }
@@ -68,7 +68,7 @@ export class ContainerDiagram extends DiagramBase {
             containerNodeX += ContainerNode.width + space;
         });
 
-        var externalSystemNodeX = Math.abs(middleX - externalSystemNodesRowWidth / 2);
+        var externalSystemNodeX = Math.abs(middleX - externalSystemNodesRowWidth / 2) - Math.abs(middleX - externalSystemNodesRowWidth / 2) % 10;
         if (this.containerNodes.length > 0) {
             y += ExternalSystemNode.height + space;
         }
