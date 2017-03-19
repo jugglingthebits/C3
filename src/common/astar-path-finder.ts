@@ -51,7 +51,7 @@ export class AstarPathFinder implements PathFinder {
 
             if (currentNode === endNode) {
                 //console.debug("It took " +  numTries + " tries");
-                return graph.getFullPath(currentNode);
+                return this.getFullPath(currentNode, diagram);
             }
             currentNode.closed = true;
 
@@ -61,7 +61,7 @@ export class AstarPathFinder implements PathFinder {
                 if (neighborNode.closed)
                     continue;
 
-                const tentative_gScore = currentNode.gScore + graph.getCost(neighborNode, currentNode, currentNode.parent);
+                const tentative_gScore = currentNode.gScore + this.getCost(neighborNode, currentNode, currentNode.parent);
                 const neighborVisited = neighborNode.visited;
 
                 if (!neighborVisited || tentative_gScore < neighborNode.gScore) {
@@ -84,5 +84,39 @@ export class AstarPathFinder implements PathFinder {
 
         // TODO: error
     }
+        
+    private getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
+        // Does the node intersect with a different node?
+        if (node.isOccupied) {
+            return 1000;
+        }
+        
+        // Is the node in line with the last ones?
+        if (!previousNode || !penultimateNode
+         || node.x === previousNode.x && previousNode.x === penultimateNode.x 
+         || node.y === previousNode.y && previousNode.y === penultimateNode.y )
+            return 1;
+        
+        // Take a turn.
+        return 10;
+    }
 
+    private getFullPath(endNode: Node, diagram: DiagramBase): Point[] {
+        const diagramBoundingBox = diagram.getBoundingBox();
+
+        let currentNode = endNode;
+        const path: Point[] = [];
+        while (currentNode.parent) {
+            const point = <Point>{x: currentNode.x + diagramBoundingBox.x, 
+                                  y: currentNode.y + diagramBoundingBox.y};
+            
+            path.unshift(point);
+            currentNode = currentNode.parent;
+        }
+        const point = <Point>{x: currentNode.x + diagramBoundingBox.x, 
+                              y: currentNode.y + diagramBoundingBox.y};
+
+        path.unshift(point);
+        return path;
+    }
 }

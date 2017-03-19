@@ -56,39 +56,6 @@ export class GraphForDiagram {
         return node;
     }
     
-    getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
-        // Does the node intersect with a different node?
-        if (node.isOccupied) {
-            return 1000;
-        }
-        
-        // Is the node in line with the last ones?
-        if (!previousNode || !penultimateNode
-         || node.x === previousNode.x && previousNode.x === penultimateNode.x 
-         || node.y === previousNode.y && previousNode.y === penultimateNode.y )
-            return 1;
-        
-        // Take a turn.
-        return 10;
-    }
-    
-    getFullPath(endNode: Node): Point[] {
-        let currentNode = endNode;
-        const path: Point[] = [];
-        while (currentNode.parent) {
-            const point = <Point>{x: currentNode.x + this.diagramBoundingBox.x, 
-                                  y: currentNode.y + this.diagramBoundingBox.y};
-            
-            path.unshift(point);
-            currentNode = currentNode.parent;
-        }
-        const point = <Point>{x: currentNode.x + this.diagramBoundingBox.x, 
-                              y: currentNode.y + this.diagramBoundingBox.y};
-
-        path.unshift(point);
-        return path;
-    }
-    
     getNeighbors(node: Node): Node[] {
         if (this.diagramBoundingBox.width === 0 || this.diagramBoundingBox.height === 0)
             return [];
@@ -123,7 +90,7 @@ export class GraphForDiagram {
 
         return value/gridSpacing;
     }
-        
+
     private buildGrid() {
         this.grid = [];
         for (var i=0; i <= this.diagramBoundingBox.height; i=i+gridSpacing) {
