@@ -36,12 +36,15 @@ class Node implements Point {
 
 class GraphForDiagram {
     // TODO: It would probably be much more efficient to use a sparse matrix 
-    private grid: Node[][];
+    // private grid: Node[][];
+
+    private entries = {};
+
     private diagramBoundingBox: BoundingBox;
     
     constructor(private diagram: DiagramBase) {
         this.diagramBoundingBox = this.diagram.getBoundingBox();
-        this.buildGrid();
+        // this.buildGrid();
     }
     
     getNode(point: Point): Node {
@@ -50,8 +53,26 @@ class GraphForDiagram {
         
         const gridY = this.toGrid(y);
         const gridX = this.toGrid(x);
-        const node = this.grid[gridY][gridX];
+        let node = this.getEntry(gridX, gridY);
         return node;
+    }
+
+    private getEntry(gridX: number, gridY: number) {
+        if (gridX < 0) 
+            throw ("Invalid gridX: " + gridX);
+        if (gridY < 0) 
+            throw ("Invalid gridY: " + gridY);
+
+        let node = this.entries[`${gridX}_${gridY}`];
+        if (!node) {
+            node = new Node({x: gridX, y: gridY});
+            node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
+            this.entries[`${gridX}_${gridY}`] = node;
+            return node;
+        }
+        else {
+            return node;
+        }
     }
     
     getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
@@ -101,37 +122,42 @@ class GraphForDiagram {
         
         let neighbors: Node[] = [];
         
-        if (node.x > 0) {
-            const leftNeighbor = this.grid[this.toGrid(node.y)][this.toGrid(node.x) - 1];
+        const gridX = this.toGrid(node.x);
+        const gridY = this.toGrid(node.y);
+        const gridWidth = this.toGrid(this.diagramBoundingBox.width);
+        const gridHeight = this.toGrid(this.diagramBoundingBox.height);
+
+        if (gridX > 0) {
+            const leftNeighbor = this.getEntry(gridX - 1, gridY);
             neighbors.push(leftNeighbor);
         }
-        if (node.x < this.diagramBoundingBox.width - 1) {
-            const rightNeighbor = this.grid[this.toGrid(node.y)][this.toGrid(node.x) + 1];
+        if (gridX < gridWidth - 1) {
+            const rightNeighbor = this.getEntry(gridX + 1, gridY);
             neighbors.push(rightNeighbor);
         }
-        if (node.y > 0) {
-            const topNeighbor = this.grid[this.toGrid(node.y) - 1][this.toGrid(node.x)];
+        if (gridY > 0) {
+            const topNeighbor = this.getEntry(gridX, gridY - 1);
             neighbors.push(topNeighbor);
         }
-        if (node.y < this.diagramBoundingBox.height - 1) {
-            const bottomNeighbor = this.grid[this.toGrid(node.y) + 1][this.toGrid(node.x)];
+        if (gridY < gridHeight - 1) {
+            const bottomNeighbor = this.getEntry(gridX, gridY + 1);
             neighbors.push(bottomNeighbor);
         }
         return neighbors;
     }
     
-    private buildGrid() {
-        this.grid = [];
-        for (var i=0; i <= this.diagramBoundingBox.height; i=i+gridSpacing) {
-            let row = [];
-            for (var j=0; j <= this.diagramBoundingBox.width; j=j+gridSpacing) {
-                const node = new Node({x: j, y: i});
-                node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
-                row.push(node);
-            }
-            this.grid.push(row);
-        }
-    }
+    // private buildGrid() {
+    //     this.grid = [];
+    //     for (var i=0; i <= this.diagramBoundingBox.height; i=i+gridSpacing) {
+    //         let row = [];
+    //         for (var j=0; j <= this.diagramBoundingBox.width; j=j+gridSpacing) {
+    //             const node = new Node({x: j, y: i});
+    //             node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
+    //             row.push(node);
+    //         }
+    //         this.grid.push(row);
+    //     }
+    // }
 
     private isDiagramNodeHit(node: Node) {
         const diagramX = node.x + this.diagramBoundingBox.x;
@@ -238,8 +264,6 @@ export class AstarPathFinder implements PathFinder {
                 }
             }
         }
-        
-        // TODO: error
+        throw("No path found!");
     }
-
 }
