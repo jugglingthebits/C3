@@ -4,9 +4,9 @@ import { BoundingBox, DiagramBase } from "./diagram-base";
 const gridSpacing = 10;
 
 export function manhattanHeuristic(pos0: Point, pos1: Point): number {
-      var d1 = Math.abs(pos1.x - pos0.x);
-      var d2 = Math.abs(pos1.y - pos0.y);
-      return d1 + d2;
+    var d1 = Math.abs(pos1.x - pos0.x);
+    var d2 = Math.abs(pos1.y - pos0.y);
+    return d1 + d2;
 }
 
 export class Node implements Point {
@@ -17,17 +17,17 @@ export class Node implements Point {
     parent: Node;
     gScore = 0;
     isOccupied = false
-    
+
     constructor(point: Point) {
         this.x = point.x;
         this.y = point.y;
     }
-    
+
     fScore(endNode: Node): number {
         const fScore = this.gScore + this.hScore(endNode);
         return fScore;
     };
-    
+
     private _hScore;
     private hScore(endNode: Node): number {
         if (!this._hScore)
@@ -37,71 +37,65 @@ export class Node implements Point {
 }
 
 export class GraphForDiagram {
-    // TODO: It would probably be much more efficient to use a sparse matrix 
-    private grid: Node[][];
+    private entries = {};
     private diagramBoundingBox: BoundingBox;
-    
+
     constructor(private diagram: DiagramBase) {
         this.diagramBoundingBox = this.diagram.getBoundingBox();
-        this.buildGrid();
     }
-    
+
     getNode(point: Point): Node {
-        const x = point.x - this.diagramBoundingBox.x;
-        const y = point.y - this.diagramBoundingBox.y;
-        
-        const gridY = this.toGrid(y);
-        const gridX = this.toGrid(x);
-        const node = this.grid[gridY][gridX];
+        const diagramX = point.x - this.diagramBoundingBox.x;
+        const diagramY = point.y - this.diagramBoundingBox.y;
+        const gridY = this.toGridCoordinate(diagramY);
+        const gridX = this.toGridCoordinate(diagramX);
+        const node = this.getEntry(gridX, gridY);
         return node;
     }
-    
+
     getNeighbors(node: Node): Node[] {
         if (this.diagramBoundingBox.width === 0 || this.diagramBoundingBox.height === 0)
             return [];
-        
+
         let neighbors: Node[] = [];
-        const gridX = this.toGrid(node.x);
-        const gridY = this.toGrid(node.y);
-        
+        const gridX = this.toGridCoordinate(node.x);
+        const gridY = this.toGridCoordinate(node.y);
+
         if (node.x > 0) {
-            const leftNeighbor = this.grid[gridY][gridX - 1];
+            const leftNeighbor = this.getEntry(gridX - 1, gridY);
             neighbors.push(leftNeighbor);
         }
         if (node.x < this.diagramBoundingBox.width - 1) {
-            const rightNeighbor = this.grid[gridY][gridX + 1];
+            const rightNeighbor = this.getEntry(gridX + 1, gridY);
             neighbors.push(rightNeighbor);
         }
         if (node.y > 0) {
-            const topNeighbor = this.grid[gridY - 1][gridX];
+            const topNeighbor = this.getEntry(gridX, gridY - 1);
             neighbors.push(topNeighbor);
         }
         if (node.y < this.diagramBoundingBox.height - 1) {
-            const bottomNeighbor = this.grid[gridY + 1][gridX];
+            const bottomNeighbor = this.getEntry(gridX, gridY + 1);
             neighbors.push(bottomNeighbor);
         }
         return neighbors;
     }
-    
-    private toGrid(value: number): number {
+
+    private getEntry(x, y): Node {
+        let node = this.entries[`${x}_${y}`];
+        if (!node) {
+            node = new Node({ x: x * gridSpacing, y: y * gridSpacing });
+            node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
+            this.entries[`${x}_${y}`] = node;
+        }
+        return node;
+    }
+
+    private toGridCoordinate(value: number): number {
         if (value % gridSpacing !== 0)
             //throw `{value} is not within the grid`;
             value = Math.round(value / gridSpacing) * gridSpacing;
 
-        return value/gridSpacing;
-    }
-
-    private buildGrid() {
-        this.grid = [];
-        for (var i=0; i <= this.diagramBoundingBox.height; i=i+gridSpacing) {
-            let row = [];
-            for (var j=0; j <= this.diagramBoundingBox.width; j=j+gridSpacing) {
-                const node = new Node({x: j, y: i});
-                node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
-                row.push(node);
-            }
-            this.grid.push(row);
-        }
+        return value / gridSpacing;
     }
 
     private isDiagramNodeHit(node: Node) {
