@@ -9,6 +9,9 @@ const logger = LogManager.getLogger('astar');
 
 // Code adapted from https://github.com/bgrins/javascript-astar/blob/master/astar.js
 export class AstarPathFinder implements PathFinder {
+    private diagram: DiagramBase = null;
+    private graph: GraphForDiagram = null;
+
     findPath(sourceConnectionPoints: Point[],
         targetConnectionPoints: Point[], diagram: DiagramBase): Point[] {
 
@@ -31,11 +34,21 @@ export class AstarPathFinder implements PathFinder {
     }
 
     private findAPath(sourcePoint: Point, targetPoint: Point, diagram: DiagramBase): Point[] {
-        const graph = new GraphForDiagram(diagram);
+        if (diagram !== this.diagram) {
+            this.diagram = diagram;
+            this.graph = null;
+        }
+        if (this.graph) {
+            this.graph.reset();
+        } else {
+            this.graph = new GraphForDiagram(diagram);
+        }
+
+
         const heuristic = manhattanHeuristic;
 
-        const startNode = graph.getNode(sourcePoint);
-        const endNode = graph.getNode(targetPoint);
+        const startNode = this.graph.getNode(sourcePoint);
+        const endNode = this.graph.getNode(targetPoint);
         const openHeap = new BinaryHeap<Node>(n => n.fScore(endNode));
         let closestNode = startNode;
 
@@ -55,7 +68,7 @@ export class AstarPathFinder implements PathFinder {
             }
             currentNode.closed = true;
 
-            const neighborNodes = graph.getNeighbors(currentNode);
+            const neighborNodes = this.graph.getNeighbors(currentNode);
 
             for (let neighborNode of neighborNodes) {
                 if (neighborNode.closed)
@@ -83,19 +96,19 @@ export class AstarPathFinder implements PathFinder {
         }
         throw ("No path found");
     }
-        
+
     private getCost(node: Node, previousNode: Node, penultimateNode: Node): number {
         // Does the node intersect with a different node?
         if (node.isOccupied) {
             return 1000;
         }
-        
+
         // Is the node in line with the last ones?
         if (!previousNode || !penultimateNode
-         || node.x === previousNode.x && previousNode.x === penultimateNode.x 
-         || node.y === previousNode.y && previousNode.y === penultimateNode.y )
+            || node.x === previousNode.x && previousNode.x === penultimateNode.x
+            || node.y === previousNode.y && previousNode.y === penultimateNode.y)
             return 1;
-        
+
         // Take a turn.
         return 10;
     }
@@ -106,14 +119,18 @@ export class AstarPathFinder implements PathFinder {
         let currentNode = endNode;
         const path: Point[] = [];
         while (currentNode.parent) {
-            const point = <Point>{x: currentNode.x + diagramBoundingBox.x, 
-                                  y: currentNode.y + diagramBoundingBox.y};
-            
+            const point = <Point>{
+                x: currentNode.x + diagramBoundingBox.x,
+                y: currentNode.y + diagramBoundingBox.y
+            };
+
             path.unshift(point);
             currentNode = currentNode.parent;
         }
-        const point = <Point>{x: currentNode.x + diagramBoundingBox.x, 
-                              y: currentNode.y + diagramBoundingBox.y};
+        const point = <Point>{
+            x: currentNode.x + diagramBoundingBox.x,
+            y: currentNode.y + diagramBoundingBox.y
+        };
 
         path.unshift(point);
         return path;
