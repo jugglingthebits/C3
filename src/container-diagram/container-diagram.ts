@@ -79,11 +79,16 @@ export class ContainerDiagram extends DiagramBase {
         });
     }
 
+    private allNodes: NodeBase[] = null;
+
     getNodes(): NodeBase[] {
-        let nodes = (<NodeBase[]>this.actorNodes)
+        if (this.allNodes)
+            return this.allNodes;
+
+        this.allNodes = (<NodeBase[]>this.actorNodes)
             .concat(this.containerNodes)
             .concat(<NodeBase[]>this.externalSystemNodes);
-        return nodes;
+        return this.allNodes;
     }
 
     getEdges(): EdgeBase[] {
@@ -113,6 +118,7 @@ export class ContainerDiagram extends DiagramBase {
                 node.updateFromModel(e);
                 return node;
             });
+        this.allNodes = null;
         this.usingEdges = systemModel.usings.map(using => {
                 let connector = <UsingEdge>this.container.get(UsingEdge);
                 connector.parentDiagram = this;
