@@ -23,6 +23,13 @@ export class Node implements Point {
         this.y = point.y;
     }
 
+    reset() {
+        this.visited = false;
+        this.closed = false;
+        this.parent = undefined;
+        this.gScore = 0;
+    }
+
     fScore(endNode: Node): number {
         const fScore = this.gScore + this.hScore(endNode);
         return fScore;
@@ -37,11 +44,25 @@ export class Node implements Point {
 }
 
 export class GraphForDiagram {
-    private entries = {};
+    private entries;
     private diagramBoundingBox: BoundingBox;
 
     constructor(private diagram: DiagramBase) {
         this.diagramBoundingBox = this.diagram.getBoundingBox();
+
+        this.entries = [];
+        for(let i=0, j=0; i<=this.diagramBoundingBox.height; i+=gridSpacing, j++) {
+            this.entries[j] = [];
+        }
+    }
+
+    reset() {
+        for (let yEntry of this.entries) {
+            for (let xEntry of yEntry) {
+                if (xEntry)
+                    xEntry.reset();
+            }
+        }
     }
 
     getNode(point: Point): Node {
@@ -81,11 +102,11 @@ export class GraphForDiagram {
     }
 
     private getEntry(x, y): Node {
-        let node = this.entries[`${x}_${y}`];
+        let node = this.entries[y][x];
         if (!node) {
             node = new Node({ x: x * gridSpacing, y: y * gridSpacing });
             node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
-            this.entries[`${x}_${y}`] = node;
+            this.entries[y][x] = node;
         }
         return node;
     }
