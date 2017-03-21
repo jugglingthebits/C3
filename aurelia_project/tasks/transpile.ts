@@ -5,9 +5,10 @@ import * as sourcemaps from 'gulp-sourcemaps';
 import * as notify from 'gulp-notify';
 import * as rename from 'gulp-rename';
 import * as ts from 'gulp-typescript';
-import * as project from '../aurelia.json';
 import {CLIOptions, build} from 'aurelia-cli';
 import * as eventStream from 'event-stream';
+
+const project = require('../aurelia.json');
 
 function configureEnvironment() {
   let env = CLIOptions.getEnvironment();
@@ -25,12 +26,10 @@ function buildTypeScript() {
     "typescript": require('typescript')
   });
 
-  let dts = gulp.src(project.transpiler.dtsSource);
-
   let src = gulp.src(project.transpiler.source)
     .pipe(changedInPlace({firstPass: true}));
 
-  return eventStream.merge(dts, src)
+  return src
     .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
     .pipe(sourcemaps.init())
     .pipe(typescriptCompiler())

@@ -11,9 +11,6 @@
     "id": "typescript",
     "displayName": "TypeScript",
     "fileExtension": ".ts",
-    "dtsSource": [
-      "./custom_typings/**/*.d.ts"
-    ],
     "source": "src/**/*.ts"
   },
   "markupProcessor": {
