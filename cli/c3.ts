@@ -14,24 +14,30 @@ program
     .version(packageJson.version)
     .option('-n, --new', 'Create example c3.json')
     .option('-s, --show', 'Open web app')
-    // .option('-P, --pineapple', 'Add pineapple')
-    // .option('-b, --bbq-sauce', 'Add bbq sauce')
-    // .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
     .parse(process.argv);
 
-// console.log('you ordered a pizza with:');
-if (program.new) {
-    const workingDir = process.cwd();
-    fs.createReadStream(`${__dirname}/../c3.json`)
-        .pipe(fs.createWriteStream(`${workingDir}/c3.json`));
-} else if (program.show) {
+const workingDir = process.cwd();
+const userC3jsonPath = `${workingDir}/c3.json`;
+
+function startWebApp() {
     startServer(() => {
         opn('http://localhost:3000');
     });
-} else {
-    program.outputHelp();
 }
 
-// if (program.pineapple) console.log('  - pineapple');
-// if (program.bbqSauce) console.log('  - bbq');
-// console.log('  - %s cheese', program.cheese);
+if (program.new) {
+    fs.createReadStream(`${__dirname}/../c3.json`)
+        .pipe(fs.createWriteStream(userC3jsonPath));
+} else if (program.show) {
+    if (!fs.existsSync(userC3jsonPath)) {
+        console.error("c3.json file not found");
+        process.exit(1);
+    }
+    startWebApp();
+} else {
+    if (fs.existsSync(userC3jsonPath)) {
+        startWebApp();
+    } else {
+        program.outputHelp();
+    }
+}
