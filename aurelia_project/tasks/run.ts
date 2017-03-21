@@ -2,9 +2,10 @@ import * as gulp from 'gulp';
 import * as browserSync from 'browser-sync';
 import * as historyApiFallback from 'connect-history-api-fallback/lib';
 import build from './build';
-import {CLIOptions} from 'aurelia-cli';
+import { CLIOptions } from 'aurelia-cli';
 import startServer from '../../server/server';
-let project = require('../aurelia.json');
+
+const project = require('../aurelia.json');
 
 function onChange(path) {
   console.log(`File Changed: ${path}`);
@@ -29,11 +30,11 @@ let serve = gulp.series(
       logLevel: 'silent',
       proxy: {
         target: 'localhost:3000',
-        middleware: [function(req, res, next) { //TODO: historyApiFallback(), 
+        middleware: [function (req, res, next) { //TODO: historyApiFallback(), 
           res.setHeader('Access-Control-Allow-Origin', '*');
           next();
         }]
-      } 
+      }
     }, function (err, bs) {
       let urls = bs.options.get('urls').toJS();
       console.log(`Application Available At: ${urls.local}`);
@@ -48,8 +49,8 @@ let refresh = gulp.series(
   reload
 );
 
-let watch = function(refreshCb, onChangeCb) {
-  return function(done) {
+let watch = function (refreshCb, onChangeCb) {
+  return function (done) {
     gulp.watch(project.transpiler.source, refreshCb).on('change', onChangeCb);
     gulp.watch(project.markupProcessor.source, refreshCb).on('change', onChangeCb);
     gulp.watch(project.cssProcessor.source, refreshCb).on('change', onChangeCb);

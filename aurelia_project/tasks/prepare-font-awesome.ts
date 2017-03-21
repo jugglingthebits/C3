@@ -1,7 +1,8 @@
 import * as gulp from 'gulp';
 import * as merge from 'merge-stream';
 import * as changedInPlace from 'gulp-changed-in-place';
-import * as project from '../aurelia.json';
+
+const project = require('../aurelia.json');
 
 export default function prepareFontAwesome() {
   const source = 'node_modules/font-awesome';

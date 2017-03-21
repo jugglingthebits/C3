@@ -1,8 +1,8 @@
 import * as gulp from 'gulp';
-import {Server as Karma} from 'karma';
-import {CLIOptions} from 'aurelia-cli';
+import { Server as Karma } from 'karma';
+import { CLIOptions } from 'aurelia-cli';
 import build from './build';
-import {watch} from './run';
+import { watch } from './run';
 
 function log(message) {
   console.log(message); //eslint-disable-line no-console
