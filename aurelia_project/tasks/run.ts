@@ -3,7 +3,7 @@ import * as browserSync from 'browser-sync';
 import * as historyApiFallback from 'connect-history-api-fallback/lib';
 import build from './build';
 import { CLIOptions } from 'aurelia-cli';
-import startServer from '../../server/server';
+import startServer from '../../cli/server';
 
 const project = require('../aurelia.json');
 
