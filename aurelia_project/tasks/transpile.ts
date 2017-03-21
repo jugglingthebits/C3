@@ -22,7 +22,7 @@ function configureEnvironment() {
 var typescriptCompiler = typescriptCompiler || null;
 
 function buildTypeScript() {
-  typescriptCompiler = ts.createProject('tsconfig.json', {
+  typescriptCompiler = ts.createProject('tsconfig.frontend.json', {
     "typescript": require('typescript')
   });
 

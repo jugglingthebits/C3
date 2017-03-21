@@ -5,8 +5,9 @@ import * as Path from 'path';
 import * as Hapi from 'hapi';
 import * as Inert from 'inert';
 import * as opn from 'opn';
+import startServer from './server';
+
 let packageJson = require('../package.json');
-import startServer from '../server/server';
 
 program
     .version(packageJson.version)
