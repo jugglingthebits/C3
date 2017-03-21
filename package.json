@@ -33,7 +33,7 @@
     "@types/hapi": "^16.0.0",
     "@types/inert": "^4.0.0",
     "@types/jasmine": "^2.5.46",
-    "@types/node": "^6.0.45",
+    "@types/node": "^7.0.8",
     "@types/selenium-webdriver": "^3.0.0",
     "aurelia-animator-css": "^1.0.1",
     "aurelia-cli": "^0.26.1",
