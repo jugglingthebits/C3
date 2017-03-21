@@ -43,25 +43,49 @@ export class Node implements Point {
     }
 }
 
-export class GraphForDiagram {
-    private entries;
-    private diagramBoundingBox: BoundingBox;
+class SparseMatrix<T> {
+    private entries = [];
 
-    constructor(private diagram: DiagramBase) {
-        this.diagramBoundingBox = this.diagram.getBoundingBox();
-
-        this.entries = [];
-        for(let i=0, j=0; i<=this.diagramBoundingBox.height; i+=gridSpacing, j++) {
+    constructor(height: number) {
+        for (let i = 0, j = 0; i <= height; i += gridSpacing, j++) {
             this.entries[j] = [];
         }
     }
 
-    reset() {
+    getEntry(x: number, y: number): T {
+        let node = this.entries[y][x];
+        return node;
+    }
+
+    addEntry(x: number, y: number, entry: T) {
+        this.entries[y][x] = entry;
+    }
+
+    getAllEntries(): T[] {
+        const entries = [];
         for (let yEntry of this.entries) {
             for (let xEntry of yEntry) {
                 if (xEntry)
-                    xEntry.reset();
+                    entries.push(xEntry);
             }
+        }
+        return entries;
+    }
+}
+
+export class GraphForDiagram {
+    private sparseMatrix: SparseMatrix<Node>;
+    private diagramBoundingBox: BoundingBox;
+
+    constructor(private diagram: DiagramBase) {
+        this.diagramBoundingBox = this.diagram.getBoundingBox();
+        this.sparseMatrix = new SparseMatrix<Node>(this.diagramBoundingBox.height);
+    }
+
+    reset() {
+        const nodes = this.sparseMatrix.getAllEntries();
+        for (let node of nodes) {
+            node.reset();
         }
     }
 
@@ -101,12 +125,12 @@ export class GraphForDiagram {
         return neighbors;
     }
 
-    private getEntry(x, y): Node {
-        let node = this.entries[y][x];
+    private getEntry(x: number, y: number): Node {
+        let node = this.sparseMatrix.getEntry(x, y);
         if (!node) {
             node = new Node({ x: x * gridSpacing, y: y * gridSpacing });
             node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
-            this.entries[y][x] = node;
+            this.sparseMatrix.addEntry(x, y, node);
         }
         return node;
     }
