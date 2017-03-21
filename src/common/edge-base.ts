@@ -26,7 +26,7 @@ export abstract class EdgeBase {
         const targetConnectionPoints = this.targetNode.getConnectionPoints();
 
         logger.info(`Searching for path between ${this.sourceNode.id} and ${this.targetNode.id}.`);
-        this.path = this.pathFinder.findPath(sourceConnectionPoints, targetConnectionPoints, this.parentDiagram);
+        this.path = this.pathFinder.findShortestPath(sourceConnectionPoints, targetConnectionPoints, this.parentDiagram);
         logger.info("Found path: ", this.path.reduce((prev, current) => prev + `[${current.x},${current.y}];`, ""));
     }
     

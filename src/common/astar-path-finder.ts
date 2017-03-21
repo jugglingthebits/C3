@@ -3,7 +3,7 @@ import { PathFinder, cartesianProduct, lengthOf } from './path-finder';
 import { Point } from './edge-base';
 import { BinaryHeap } from './binary-heap';
 import { DiagramBase, BoundingBox } from './diagram-base';
-import { Node, GraphForDiagram, manhattanHeuristic } from "./graph-for-diagram";
+import { Node, GraphForDiagram } from "./graph-for-diagram";
 
 const logger = LogManager.getLogger('astar');
 
@@ -12,14 +12,14 @@ export class AstarPathFinder implements PathFinder {
     private diagram: DiagramBase = null;
     private graph: GraphForDiagram = null;
 
-    findPath(sourceConnectionPoints: Point[],
+    findShortestPath(sourceConnectionPoints: Point[],
         targetConnectionPoints: Point[], diagram: DiagramBase): Point[] {
 
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
         const shortestConnectionPointCombination = connectionPointCombinations.reduce((previousShortestConnectionPoints, currentConnectionPoints) => {
-            const previousPath = this.findAPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
-            const currentPath = this.findAPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
+            const previousPath = this.findPath(previousShortestConnectionPoints[0], previousShortestConnectionPoints[1], diagram);
+            const currentPath = this.findPath(currentConnectionPoints[0], currentConnectionPoints[1], diagram);
 
             const previousLength = lengthOf(previousPath);
             const currentLength = lengthOf(currentPath);
@@ -29,11 +29,11 @@ export class AstarPathFinder implements PathFinder {
         });
         logger.info(`Using connection points [${shortestConnectionPointCombination[0].x},${shortestConnectionPointCombination[0].y}] and [${shortestConnectionPointCombination[1].x},${shortestConnectionPointCombination[1].y}]`);
 
-        const path = this.findAPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
+        const path = this.findPath(shortestConnectionPointCombination[0], shortestConnectionPointCombination[1], diagram);
         return path;
     }
 
-    private findAPath(sourcePoint: Point, targetPoint: Point, diagram: DiagramBase): Point[] {
+    private findPath(sourcePoint: Point, targetPoint: Point, diagram: DiagramBase): Point[] {
         if (diagram !== this.diagram) {
             this.diagram = diagram;
             this.graph = null;
@@ -44,15 +44,10 @@ export class AstarPathFinder implements PathFinder {
             this.graph = new GraphForDiagram(diagram);
         }
 
-
-        const heuristic = manhattanHeuristic;
-
         const startNode = this.graph.getNode(sourcePoint);
         const endNode = this.graph.getNode(targetPoint);
         const openHeap = new BinaryHeap<Node>(n => n.fScore(endNode));
         let closestNode = startNode;
-
-        // startNode.h = heuristic(sourcePoint, targetPoint);
 
         openHeap.push(startNode);
 

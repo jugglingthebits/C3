@@ -4,7 +4,7 @@ import {Point} from './edge-base';
 const logger = LogManager.getLogger('pathFinder');
 
 export interface PathFinder {
-    findPath(sourceConnectionPoints: Point[], 
+    findShortestPath(sourceConnectionPoints: Point[], 
              targetConnectionPoints: Point[], diagram): Point[];
 }
 
@@ -45,7 +45,7 @@ export function lengthOf(path: Point[]): number {
 }
 
 export class StraightPathFinder implements PathFinder {
-    findPath(sourceConnectionPoints: Point[], 
+    findShortestPath(sourceConnectionPoints: Point[], 
              targetConnectionPoints: Point[], diagram): Point[] {
         
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
@@ -74,7 +74,7 @@ export class StraightPathFinder implements PathFinder {
 export class PerpendicularPathFinder implements PathFinder {
     private veryLongPath = [{x: 0, y: 0}, {x: 10000, y: 10000}];
     
-    findPath(sourceConnectionPoints: Point[], 
+    findShortestPath(sourceConnectionPoints: Point[], 
              targetConnectionPoints: Point[], diagram): Point[] {
         const connectionPointCombinations = cartesianProduct([sourceConnectionPoints, targetConnectionPoints]);
 
