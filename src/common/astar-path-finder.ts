@@ -59,7 +59,7 @@ export class AstarPathFinder implements PathFinder {
 
             if (currentNode === endNode) {
                 //console.debug("It took " +  numTries + " tries");
-                return this.getFullPath(currentNode, diagram);
+                return this.getFullPath(currentNode);
             }
             currentNode.closed = true;
 
@@ -108,25 +108,15 @@ export class AstarPathFinder implements PathFinder {
         return 10;
     }
 
-    private getFullPath(endNode: Node, diagram: DiagramBase): Point[] {
-        const diagramBoundingBox = diagram.getBoundingBox();
-
+    private getFullPath(endNode: Node): Point[] {
         let currentNode = endNode;
         const path: Point[] = [];
         while (currentNode.parent) {
-            const point = <Point>{
-                x: currentNode.x + diagramBoundingBox.x,
-                y: currentNode.y + diagramBoundingBox.y
-            };
-
+            const point = this.graph.toDiagramCoordinate(currentNode.parent);
             path.unshift(point);
             currentNode = currentNode.parent;
         }
-        const point = <Point>{
-            x: currentNode.x + diagramBoundingBox.x,
-            y: currentNode.y + diagramBoundingBox.y
-        };
-
+        const point = this.graph.toDiagramCoordinate(currentNode);
         path.unshift(point);
         return path;
     }

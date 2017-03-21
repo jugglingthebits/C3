@@ -47,8 +47,8 @@ class SparseMatrix<T> {
     private entries = [];
 
     constructor(height: number) {
-        for (let i = 0, j = 0; i <= height; i += gridSpacing, j++) {
-            this.entries[j] = [];
+        for (let i = 0; i <= height; i++) {
+            this.entries[i] = [];
         }
     }
 
@@ -79,7 +79,7 @@ export class GraphForDiagram {
 
     constructor(private diagram: DiagramBase) {
         this.diagramBoundingBox = this.diagram.getBoundingBox();
-        this.sparseMatrix = new SparseMatrix<Node>(this.diagramBoundingBox.height);
+        this.sparseMatrix = new SparseMatrix<Node>(this.diagramBoundingBox.height / gridSpacing);
     }
 
     reset() {
@@ -90,11 +90,8 @@ export class GraphForDiagram {
     }
 
     getNode(point: Point): Node {
-        const diagramX = point.x - this.diagramBoundingBox.x;
-        const diagramY = point.y - this.diagramBoundingBox.y;
-        const gridY = this.toGridCoordinate(diagramY);
-        const gridX = this.toGridCoordinate(diagramX);
-        const node = this.getEntry(gridX, gridY);
+        const nodePosition = this.toMatrixCoordinate(point);
+        const node = this.getOrBuildNode(nodePosition.x, nodePosition.y);
         return node;
     }
 
@@ -103,65 +100,71 @@ export class GraphForDiagram {
             return [];
 
         let neighbors: Node[] = [];
-        const gridX = this.toGridCoordinate(node.x);
-        const gridY = this.toGridCoordinate(node.y);
-
-        if (node.x > 0) {
-            const leftNeighbor = this.getEntry(gridX - 1, gridY);
+        if (node.x * gridSpacing > 0) {
+            const leftNeighbor = this.getOrBuildNode(node.x - 1, node.y);
             neighbors.push(leftNeighbor);
         }
-        if (node.x < this.diagramBoundingBox.width - 1) {
-            const rightNeighbor = this.getEntry(gridX + 1, gridY);
+        if (node.x * gridSpacing < this.diagramBoundingBox.width - 1) {
+            const rightNeighbor = this.getOrBuildNode(node.x + 1, node.y);
             neighbors.push(rightNeighbor);
         }
-        if (node.y > 0) {
-            const topNeighbor = this.getEntry(gridX, gridY - 1);
+        if (node.y * gridSpacing > 0) {
+            const topNeighbor = this.getOrBuildNode(node.x, node.y - 1);
             neighbors.push(topNeighbor);
         }
-        if (node.y < this.diagramBoundingBox.height - 1) {
-            const bottomNeighbor = this.getEntry(gridX, gridY + 1);
+        if (node.y * gridSpacing < this.diagramBoundingBox.height - 1) {
+            const bottomNeighbor = this.getOrBuildNode(node.x, node.y + 1);
             neighbors.push(bottomNeighbor);
         }
         return neighbors;
     }
 
-    private getEntry(x: number, y: number): Node {
+    private getOrBuildNode(x: number, y: number): Node {
         let node = this.sparseMatrix.getEntry(x, y);
         if (!node) {
-            node = new Node({ x: x * gridSpacing, y: y * gridSpacing });
+            node = new Node({ x: x, y: y });
             node.isOccupied = this.isDiagramNodeHit(node) || this.isDiagramEdgeHit(node);
             this.sparseMatrix.addEntry(x, y, node);
         }
         return node;
     }
 
-    private toGridCoordinate(value: number): number {
-        if (value % gridSpacing !== 0)
-            //throw `{value} is not within the grid`;
-            value = Math.round(value / gridSpacing) * gridSpacing;
+    toMatrixCoordinate(point: Point): Point {
+        let matrixX = point.x - this.diagramBoundingBox.x;
+        let matrixY = point.y - this.diagramBoundingBox.y;
 
-        return value / gridSpacing;
+        if (matrixX % gridSpacing !== 0)
+            matrixX = Math.round(matrixX / gridSpacing) * gridSpacing;
+        if (matrixY % gridSpacing !== 0)
+            matrixY = Math.round(matrixY / gridSpacing) * gridSpacing;
+
+        matrixX = matrixX / gridSpacing;
+        matrixY = matrixY / gridSpacing;
+
+        return { x: matrixX, y: matrixY };
     }
 
-    private isDiagramNodeHit(node: Node) {
-        const diagramX = node.x + this.diagramBoundingBox.x;
-        const diagramY = node.y + this.diagramBoundingBox.y;
+    toDiagramCoordinate(point: Point): Point {
+        const diagramX = point.x * gridSpacing + this.diagramBoundingBox.x;
+        const diagramY = point.y * gridSpacing + this.diagramBoundingBox.y;
+        return { x: diagramX, y: diagramY };
+    }
 
+    private isDiagramNodeHit(point: Point) {
+        const diagramPoint = this.toDiagramCoordinate(point);
         const diagramNodes = this.diagram.getNodes();
         for (var diagramNode of diagramNodes) {
-            if (diagramNode.isHit(diagramX, diagramY))
+            if (diagramNode.isHit(diagramPoint.x, diagramPoint.y))
                 return true;
         }
         return false;
     }
 
-    private isDiagramEdgeHit(node: Node) {
-        const diagramX = node.x + this.diagramBoundingBox.x;
-        const diagramY = node.y + this.diagramBoundingBox.y;
-
+    private isDiagramEdgeHit(point: Point) {
+        const diagramPoint = this.toDiagramCoordinate(point);
         const diagramEdges = this.diagram.getEdges();
         for (var diagramEdge of diagramEdges) {
-            if (diagramEdge.isHit(diagramX, diagramY))
+            if (diagramEdge.isHit(diagramPoint.x, diagramPoint.y))
                 return true;
         }
         return false;
